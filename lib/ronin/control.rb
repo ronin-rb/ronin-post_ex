@@ -19,10 +19,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-require 'ronin/database'
+require 'ronin/database/migrations/control'
 
-module Ronin
-  Database.upgrade do
-    require 'ronin/control/behavior'
-  end
-end
+require 'ronin/control/behavior'
+require 'ronin/control/api'
