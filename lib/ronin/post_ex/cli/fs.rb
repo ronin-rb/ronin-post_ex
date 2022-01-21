@@ -23,7 +23,7 @@ require 'ronin/core/cli/command_shell'
 
 module Ronin
   module PostEx
-    module Shells
+    module CLI
       #
       # A shell for {Resources::FS}.
       #
