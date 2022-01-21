@@ -33,19 +33,19 @@ module Ronin
     # Define the client which defines the Post-Exploitation API methods:
     #
     #     class RATClient
-    #
+    #     
     #       # ...
-    #
+    #     
     #       def fs_read(path)
     #         rpc_call("fs_read",path)
     #       end
-    #
+    #     
     #       def shell_exec(command)
     #         rpc_call("shell_exec",command)
     #       end
     #
     #       # ...
-    #
+    #     
     #     end
     #
     # Initialize a new {System} object that wraps around the client:
