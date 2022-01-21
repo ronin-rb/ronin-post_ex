@@ -119,7 +119,7 @@ module Ronin
       #
       # Starts an interactive API shell.
       #
-      def console
+      def interact
         CLI::SystemCommandShell.start(self)
       end
 

@@ -912,7 +912,7 @@ module Ronin
         #
         # Starts an interactive Shell console.
         #
-        def console
+        def interact
           CLI::ShellShell.start(self)
         end
 
