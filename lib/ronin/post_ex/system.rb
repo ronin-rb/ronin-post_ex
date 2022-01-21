@@ -19,6 +19,7 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+require 'ronin/post_ex/resource'
 require 'ronin/post_ex/system/fs'
 require 'ronin/post_ex/system/process'
 require 'ronin/post_ex/system/shell'
@@ -30,6 +31,10 @@ module Ronin
     # Represents an successfully compromised system. The {System} class will
     # wraps around another object which defines syscall-like Post-Exploitation
     # API to read/write files, run commands, etc.
+    #
+    # ## Supported API Functions
+    #
+    # * `sys_time -> Integer`
     #
     # ## Example
     #
@@ -82,7 +87,7 @@ module Ronin
     #       puts "Found XLS file: #{path}"
     #     end
     #
-    class System
+    class System < Resource
 
       # The object which defines the Post-Exploitation API methods.
       #
@@ -117,6 +122,21 @@ module Ronin
         @process = Process.new(@api)
         @shell   = Shell.new(@api)
       end
+
+      #
+      # Gets the current time.
+      #
+      # @return [Time]
+      #   The current time.
+      #
+      # @note
+      #   Requires the `sys_time` method be defined by the API object.
+      #
+      def time
+        Time.at(@api.sys_time.to_i)
+      end
+      resource_method :time, [:sys_time]
+
 
       #
       # Starts an interactive API shell.

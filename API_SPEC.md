@@ -1,5 +1,11 @@
 # Post-Exploitation API Specification
 
+## Sys Functions
+
+### `sys_time -> Integer`
+
+Gets the current time and returns the UNIX timestamp.
+
 ## File Functions
 
 ### `file_open(path : String, mode : String) -> Integer`
@@ -195,10 +201,6 @@ Gets the process's current working directory.
 ### `process_chdir(path : String)`
 
 Changes the process's current working directory.
-
-### `process_time -> Integer`
-
-Gets the current time and returns the UNIX timestamp.
 
 ### `process_spawn(program : String, *arguments : Array[String]) -> Integer`
 

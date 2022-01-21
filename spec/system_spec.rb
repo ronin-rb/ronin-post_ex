@@ -45,4 +45,15 @@ describe System do
       expect(subject.shell).to be_kind_of(System::Shell)
     end
   end
+
+  describe "#time" do
+    let(:unix_timestamp) { 1642775495 }
+    let(:time)           { Time.at(unix_timestamp) }
+
+    it "must call the 'sys_time' API function and return a Time object" do
+      expect(api).to receive(:sys_time).and_return(unix_timestamp)
+
+      expect(subject.time).to eq(time)
+    end
+  end
 end

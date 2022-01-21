@@ -25,7 +25,7 @@ require 'time'
 
 module Ronin
   module PostEx
-    class System
+    class System < Resource
       #
       # Controls the Process resource.
       #
@@ -53,7 +53,6 @@ module Ronin
       # * `process_kill(pid : Integer, signal : Integer)`
       # * `process_getcwd -> String`
       # * `process_chdir(path : String)`
-      # * `process_time -> Integer`
       # * `process_spawn(program : String, *arguments : Array[String]) -> Integer`
       # * `process_exit`
       #
@@ -378,20 +377,6 @@ module Ronin
         resource_method :chdir, [:process_chdir]
 
         alias cwd= chdir
-
-        #
-        # Gets the current time.
-        #
-        # @return [Time]
-        #   The current time.
-        #
-        # @note
-        #   Requires the `process_time` method be defined by the API object.
-        #
-        def time
-          Time.at(@api.process_time.to_i)
-        end
-        resource_method :time, [:process_time]
 
         #
         # Executes a program as a separate child process.
