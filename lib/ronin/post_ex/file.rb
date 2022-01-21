@@ -254,7 +254,7 @@ module Ronin
         "#<#{self.class}:#{@path}>"
       end
 
-      protected
+      private
 
       #
       # Attempts calling `file_open` from the API object to open the remote

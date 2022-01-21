@@ -88,7 +88,7 @@ module Ronin
         raise(NotImplementedError,"#{self.class} does not provide a console")
       end
 
-      protected
+      private
 
       #
       # The defined Resource methods.
