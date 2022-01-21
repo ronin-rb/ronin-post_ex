@@ -20,6 +20,7 @@
 #
 
 require 'ronin/post_ex/resources'
+require 'ronin/post_ex/cli/system_command_shell'
 
 module Ronin
   module PostEx
@@ -113,6 +114,13 @@ module Ronin
         @fs      = Resources::FS.new(@api)
         @process = Resources::Process.new(@api)
         @shell   = Resources::Shell.new(@api)
+      end
+
+      #
+      # Starts an interactive API shell.
+      #
+      def console
+        CLI::SystemCommandShell.start(self)
       end
 
     end

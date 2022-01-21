@@ -23,7 +23,6 @@ require 'ronin/post_ex/resource'
 require 'ronin/post_ex/file'
 require 'ronin/post_ex/file/stat'
 require 'ronin/post_ex/dir'
-require 'ronin/post_ex/cli/fs'
 
 require 'hexdump'
 
@@ -655,13 +654,6 @@ module Ronin
         resource_method :zero?, [:fs_stat]
 
         alias empty? zero?
-
-        #
-        # Starts an interactive File System console.
-        #
-        def console
-          CLI::FS.start(self)
-        end
 
       end
     end

@@ -27,24 +27,24 @@ module Ronin
       #
       # A shell for {Resources::FS}.
       #
-      class FS < Core::CLI::CommandShell
+      class SystemCommandShell < Core::CLI::CommandShell
 
-        shell_name 'fs'
+        shell_name 'ronin-post_ex'
 
         #
         # Initializes the file-system shell.
         #
-        # @param [Resources::FS] fs
+        # @param [System] system
         #   The file-system resource.
         #
-        def initialize(fs)
-          @fs = fs
+        def initialize(system)
+          @system = system
         end
 
         private
 
-        command :cd, usage: 'DIR',
-                     summary: 'Changes the current working directory'
+        command 'fs.cd', usage: 'DIR',
+                             summary: 'Changes the current working directory'
 
         #
         # Changes the working directory.
@@ -55,11 +55,11 @@ module Ronin
         # @see Resources::FS#chdir
         #
         def cd(path)
-          @fs.chdir(path)
-          puts "Current working directory is now: #{@fs.pwd}"
+          @system.fs.chdir(path)
+          puts "Current working directory is now: #{@system.fs.pwd}"
         end
 
-        command :pwd, summary: 'Prints the current working directory'
+        command 'fs.pwd', summary: 'Prints the current working directory'
 
         #
         # Prints the current working directory.
@@ -67,11 +67,11 @@ module Ronin
         # @see Resources::FS#getcwd
         #
         def pwd
-          puts "Current working directory: #{@fs.getcwd}"
+          puts "Current working directory: #{@system.fs.getcwd}"
         end
 
-        command :cat, usage: 'FILE',
-                      summary: 'Reads the contents of a given FILE'
+        command 'fs.cat', usage: 'FILE',
+                          summary: 'Reads the contents of a given FILE'
 
         #
         # Reads data from a file.
@@ -82,11 +82,11 @@ module Ronin
         # @see Resources::FS#read
         #
         def cat(path)
-          write(@fs.read(path))
+          write(@system.fs.read(path))
         end
 
-        command :readlink, usage: 'SYMLINK',
-                           summary: 'Reads the destination path of a symlink'
+        command 'fs.readlink', usage: 'SYMLINK',
+                               summary: 'Reads the destination path of a symlink'
 
         #
         # Reads the destination of a link.
@@ -97,11 +97,11 @@ module Ronin
         # @see Resources::FS#readlink
         #
         def readlink(path)
-          puts @fs.readlink(path)
+          puts @system.fs.readlink(path)
         end
 
-        command :dir, usage: 'DIR',
-                      summary: 'Reads the contents of a given directory'
+        command 'fs.dir', usage: 'DIR',
+                          summary: 'Reads the contents of a given directory'
 
         #
         # Reads the entries of a directory.
@@ -112,13 +112,13 @@ module Ronin
         # @see Resources::FS#readdir
         #
         def dir(path)
-          @fs.readdir(path).each do |entry|
+          @system.fs.readdir(path).each do |entry|
             puts entry
           end
         end
 
-        command :hexdump, usage: 'FILE',
-                          summary: 'Hexdumps a given file'
+        command 'hexdump', usage: 'FILE',
+                           summary: 'Hexdumps a given file'
 
         #
         # Hexdumps a file.
@@ -129,11 +129,11 @@ module Ronin
         # @see Resources::FS#hexdump
         #
         def hexdump(path)
-          @fs.hexdump(path,self)
+          @system.fs.hexdump(path,self)
         end
 
-        command :cp, usage: 'SRC DEST',
-                     summary: 'Copies the SRC file to the DEST path'
+        command 'fs.cp', usage: 'SRC DEST',
+                         summary: 'Copies the SRC file to the DEST path'
 
         #
         # Copies a file to a destination.
@@ -147,13 +147,13 @@ module Ronin
         # @see Resources::FS#copy
         #
         def cp(src,dest)
-          @fs.copy(src,dest)
+          @system.fs.copy(src,dest)
 
-          puts "Copied #{@fs.join(src)} -> #{@fs.join(dest)}"
+          puts "Copied #{@system.fs.join(src)} -> #{@fs.join(dest)}"
         end
 
-        command :rm, usage: 'FILE',
-                     summary: 'Removes a given file'
+        command 'fs.rm', usage: 'FILE',
+                         summary: 'Removes a given file'
 
         #
         # Removes a file.
@@ -164,13 +164,13 @@ module Ronin
         # @see Resources::FS#unlink
         #
         def rm(path)
-          @fs.unlink(path)
+          @system.fs.unlink(path)
 
-          puts "Removed #{@fs.join(path)}"
+          puts "Removed #{@system.fs.join(path)}"
         end
 
-        command :rmdir, usage: 'DIR',
-                        summary: 'Removes a given directory'
+        command 'fs.rmdir', usage: 'DIR',
+                            summary: 'Removes a given directory'
 
         #
         # Removes an empty directory.
@@ -181,13 +181,13 @@ module Ronin
         # @see Resources::FS#rmdir
         #
         def rmdir(path)
-          @fs.rmdir(path)
+          @system.fs.rmdir(path)
 
-          puts "Removed directory #{@fs.join(path)}"
+          puts "Removed directory #{@system.fs.join(path)}"
         end
 
-        command :mv, usage: 'SRC DEST',
-                     summary: 'Moves or renames a given file or directory'
+        command 'fs.mv', usage: 'SRC DEST',
+                         summary: 'Moves or renames a given file or directory'
 
         #
         # Moves a file or directory.
@@ -201,13 +201,13 @@ module Ronin
         # @see Resources::FS#move
         #
         def mv(src,dest)
-          @fs.move(src,dest)
+          @system.fs.move(src,dest)
 
-          puts "Moved #{@fs.join(src)} -> #{@fs.join(dest)}"
+          puts "Moved #{@system.fs.join(src)} -> #{@fs.join(dest)}"
         end
 
-        command :ln, usage: 'SRC DEST',
-                     summary: 'Creates a link from the source to the destination'
+        command 'fs.ln', usage: 'SRC DEST',
+                         summary: 'Creates a link from the source to the destination'
 
         #
         # Creates a link to a file or directory.
@@ -221,13 +221,13 @@ module Ronin
         # @see Resources::FS#link
         #
         def ln(src,dest)
-          @fs.link(src,dest)
+          @system.fs.link(src,dest)
 
-          puts "Linked #{@fs.join(src)} -> #{@fs.join(dest)}"
+          puts "Linked #{@system.fs.join(src)} -> #{@fs.join(dest)}"
         end
 
-        command :chown, usage: 'USER PATH',
-                        summary: 'Changes the owner of a given file or directory'
+        command 'fs.chown', usage: 'USER PATH',
+                            summary: 'Changes the owner of a given file or directory'
 
         #
         # Changes ownership of a file or directory.
@@ -241,13 +241,13 @@ module Ronin
         # @see Resources::FS#chown
         #
         def chown(user,path)
-          @fs.chown(user,path)
+          @system.fs.chown(user,path)
 
-          puts "Changed ownership of #{@fs.join(path)} to #{user}"
+          puts "Changed ownership of #{@system.fs.join(path)} to #{user}"
         end
 
-        command :chgrp, usage: 'GROUP PATH',
-                        summary: 'Changes the group of a given file or directory'
+        command 'fs.chgrp', usage: 'GROUP PATH',
+                            summary: 'Changes the group of a given file or directory'
 
         #
         # Changes group ownership of a file or directory.
@@ -261,13 +261,13 @@ module Ronin
         # @see Resources::FS#chgrp
         #
         def chgrp(group,path)
-          @fs.chgrp(group,path)
+          @system.fs.chgrp(group,path)
 
-          puts "Changed group ownership of #{@fs.join(path)} to #{group}"
+          puts "Changed group ownership of #{@system.fs.join(path)} to #{group}"
         end
 
-        command :chmod, usage: 'MODE PATH',
-                        summary: 'Changes the permission mode of a given file or directory'
+        command 'fs.chmod', usage: 'MODE PATH',
+                            summary: 'Changes the permission mode of a given file or directory'
 
         #
         # Changes the permissions of a file or directory.
@@ -281,13 +281,13 @@ module Ronin
         # @see Resources::FS#chmod
         #
         def chmod(mode,path)
-          @fs.chmod(mode.to_i(8),path)
+          @system.fs.chmod(mode.to_i(8),path)
 
-          puts "Changed permissions on #{@fs.join(path)} to #{mode}"
+          puts "Changed permissions on #{@system.fs.join(path)} to #{mode}"
         end
 
-        command :stat, usage: 'PATH',
-                       summary: 'Prints file system information about a given file or directory'
+        command 'fs.stat', usage: 'PATH',
+                           summary: 'Prints file system information about a given file or directory'
 
         #
         # Stats a file or directory.
@@ -298,7 +298,7 @@ module Ronin
         # @see Resources::FS#stat
         #
         def stat(path)
-          stat = @fs.stat(path)
+          stat = @system.fs.stat(path)
         end
 
       end
