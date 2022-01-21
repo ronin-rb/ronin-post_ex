@@ -27,7 +27,7 @@ module Ronin
   module PostEx
     class System < Resource
       #
-      # Controls the Process resource.
+      # Provides access to the current process and managing child processes.
       #
       # # Supported Control Methods
       #

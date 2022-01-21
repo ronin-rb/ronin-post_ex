@@ -30,7 +30,7 @@ module Ronin
   module PostEx
     class System < Resource
       #
-      # Controls the resources of a File System.
+      # Provides access to a system's a File System (FS).
       #
       # # Supported API Methods
       #

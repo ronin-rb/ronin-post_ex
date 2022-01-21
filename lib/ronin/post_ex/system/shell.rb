@@ -29,7 +29,7 @@ module Ronin
   module PostEx
     class System < Resource
       #
-      # Controls the resources of a Shell.
+      # Provides access to an interactive shell and executing shell commands.
       #
       # ## Supported API Methods
       #
