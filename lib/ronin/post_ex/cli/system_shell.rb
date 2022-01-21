@@ -343,6 +343,58 @@ module Ronin
           puts "Opened file #{file.path}"
         end
 
+        command 'file.read', method_name: 'file_read',
+                             usage: 'FILE_ID LENGTH',
+                             summary: 'Reads LENGTH of data from an opened file'
+
+        #
+        # Reads data from an opened file.
+        #
+        # @param [String] file_id
+        #   The file ID number.
+        #
+        # @param [String] length
+        #   The length of data to read.
+        #
+        # @see File#read
+        #
+        def file_read(file_id,length)
+          file_id = file_id.to_i
+          length  = length.to_i
+
+          if (file = @files[file_id])
+            write(file.read(length))
+          else
+            print_error "unknown file id"
+          end
+        end
+
+        command 'file.write', method_name: 'file_write',
+                              usage: 'FILE_ID DATA',
+                              summary: 'Writes data to an opened file'
+
+        #
+        # Writes data from to an opened file.
+        #
+        # @param [String] file_id
+        #   The file ID number.
+        #
+        # @param [String] data
+        #   The data to write.
+        #
+        # @see File#write
+        #
+        def file_write(file_id,data)
+          file_id = file_id.to_i
+          length  = length.to_i
+
+          if (file = @files[file_id])
+            puts file.write(length)
+          else
+            print_error "unknown file id"
+          end
+        end
+
       end
     end
   end
