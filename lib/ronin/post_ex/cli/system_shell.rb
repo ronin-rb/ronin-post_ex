@@ -343,6 +343,21 @@ module Ronin
           puts "Opened file #{file.path}"
         end
 
+        command 'files', summary: 'Lists opened files'
+
+        #
+        # Lists opened files.
+        #
+        def files
+          @files.each_with_index do |file,index|
+            if file
+              id = index + 1
+
+              puts "  [#{id}] #{file.path}"
+            end
+          end
+        end
+
         command 'file.read', method_name: 'file_read',
                              usage: 'FILE_ID LENGTH',
                              summary: 'Reads LENGTH of data from an opened file'
