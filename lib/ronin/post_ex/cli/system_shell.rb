@@ -359,7 +359,7 @@ module Ronin
         end
 
         command 'file.seek', method_name: 'file_seek',
-                             usage: 'FILE_ID POS [SET|CUR|END|DATA|HOLE]',
+                             usage: 'FILE_ID POS [WHENCE]',
                              summary: 'Seeks to a position within the file'
 
         WHENCE = {
