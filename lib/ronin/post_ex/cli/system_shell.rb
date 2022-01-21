@@ -384,7 +384,7 @@ module Ronin
         #
         # @see File#seek
         #
-        def file_seek(file_id,pos,whence)
+        def file_seek(file_id,pos,whence='SET')
           unless WHENCE.has_key?(whence)
             print_error "unknown file.seek whence value (#{whence})"
           end
