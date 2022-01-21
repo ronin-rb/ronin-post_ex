@@ -19,7 +19,9 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/resources'
+require 'ronin/post_ex/system/fs'
+require 'ronin/post_ex/system/process'
+require 'ronin/post_ex/system/shell'
 require 'ronin/post_ex/cli/system_command_shell'
 
 module Ronin
@@ -111,9 +113,9 @@ module Ronin
       def initialize(api)
         @api = api
 
-        @fs      = Resources::FS.new(@api)
-        @process = Resources::Process.new(@api)
-        @shell   = Resources::Shell.new(@api)
+        @fs      = FS.new(@api)
+        @process = Process.new(@api)
+        @shell   = Shell.new(@api)
       end
 
       #

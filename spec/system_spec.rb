@@ -16,33 +16,33 @@ describe System do
     end
 
     it "must initialize #fs" do
-      expect(subject.fs).to be_kind_of(Resources::FS)
+      expect(subject.fs).to be_kind_of(System::FS)
     end
 
     it "must initialize #process" do
-      expect(subject.process).to be_kind_of(Resources::Process)
+      expect(subject.process).to be_kind_of(System::Process)
     end
 
     it "must initialize #shell" do
-      expect(subject.shell).to be_kind_of(Resources::Shell)
+      expect(subject.shell).to be_kind_of(System::Shell)
     end
   end
 
   describe "#fs" do
-    it "must return a Resources::FS object" do
-      expect(subject.fs).to be_kind_of(Resources::FS)
+    it "must return a System::FS object" do
+      expect(subject.fs).to be_kind_of(System::FS)
     end
   end
 
   describe "#process" do
-    it "must return a Resources::Process object" do
-      expect(subject.process).to be_kind_of(Resources::Process)
+    it "must return a System::Process object" do
+      expect(subject.process).to be_kind_of(System::Process)
     end
   end
 
   describe "#shell" do
-    it "must return a Resources::Shell object" do
-      expect(subject.shell).to be_kind_of(Resources::Shell)
+    it "must return a System::Shell object" do
+      expect(subject.shell).to be_kind_of(System::Shell)
     end
   end
 end

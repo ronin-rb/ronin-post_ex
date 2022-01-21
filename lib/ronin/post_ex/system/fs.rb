@@ -28,7 +28,7 @@ require 'hexdump'
 
 module Ronin
   module PostEx
-    module Resources
+    class System
       #
       # Controls the resources of a File System.
       #

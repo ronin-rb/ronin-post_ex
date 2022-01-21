@@ -27,7 +27,7 @@ require 'date'
 
 module Ronin
   module PostEx
-    module Resources
+    class System
       #
       # Controls the resources of a Shell.
       #

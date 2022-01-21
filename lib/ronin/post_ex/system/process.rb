@@ -25,7 +25,7 @@ require 'time'
 
 module Ronin
   module PostEx
-    module Resources
+    class System
       #
       # Controls the Process resource.
       #
