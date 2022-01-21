@@ -19,12 +19,6 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'open_namespace'
-
-module Ronin
-  module PostEx
-    module Resources
-      include OpenNamespace
-    end
-  end
-end
+require 'ronin/post_ex/resources/fs'
+require 'ronin/post_ex/resources/process'
+require 'ronin/post_ex/resources/shell'
