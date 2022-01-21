@@ -53,12 +53,12 @@ module Ronin
       # @param [Array] arguments
       #   The arguments to run with.
       #
-      # @raise [RuntimeError]
+      # @raise [NotImplementedError]
       #   The API object does not define `shell_exec`.
       #
       def initialize(api,program,*arguments)
         unless api.respond_to?(:shell_exec)
-          raise(RuntimeError,"#{api.inspect} must define shell_exec for #{self.class}")
+          raise(NotImplementedError,"#{api.inspect} must define #shell_exec for #{self.class}")
         end
 
         @api       = api
