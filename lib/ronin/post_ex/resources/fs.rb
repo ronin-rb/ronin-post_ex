@@ -53,6 +53,7 @@ module Ronin
       # * `fs_chown(user : String, path : String)`
       # * `fs_chmod(mode : Integer, path : String)`
       # * `fs_compare(file1 : String, file2 : String) -> Boolean`
+      # * `fs_stat(path : String) => Hash[Symbol, Object] | nil`
       #
       class FS < Resource
 
