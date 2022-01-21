@@ -29,9 +29,9 @@ module Ronin
   module PostEx
     #
     # The {File} class represents files on a remote system. {File} requires
-    # the API object to define either `fs_read` and/or `fs_write`.
-    # Additionally, {File} can optionally use the `fs_open`, `fs_close`,
-    # `fs_tell`, `fs_seek` and `fs_stat` methods.
+    # the API object to define either `file_read` and/or `file_write`.
+    # Additionally, {File} can optionally use the `file_open`, `file_close`,
+    # `file_tell`, `file_seek` and `file_stat` methods.
     #
     class File < Resource
 
@@ -40,8 +40,8 @@ module Ronin
       #
       # Creates a new remote controlled File object.
       #
-      # @param [#fs_read, #fs_write] api
-      #   The API object that defines the `fs_read` and `fs_write` methods.
+      # @param [#file_read, #file_write] api
+      #   The API object that defines the `file_read` and `file_write` methods.
       #
       # @param [String] path
       #   The path of the remote file.
@@ -57,7 +57,7 @@ module Ronin
       #
       # Opens a file.
       #
-      # @param [#fs_read] api
+      # @param [#file_read] api
       #   The object controlling remote files.
       #
       # @param [String] path
@@ -95,8 +95,8 @@ module Ronin
       def seek(new_pos,whence=SEEK_SET)
         clear_buffer!
 
-        if @api.respond_to?(:fs_seek)
-          @api.fs_seek(@fd,new_pos,whence)
+        if @api.respond_to?(:file_seek)
+          @api.file_seek(@fd,new_pos,whence)
         end
 
         @pos = new_pos
@@ -110,8 +110,8 @@ module Ronin
       #   The current offset in bytes.
       #
       def tell
-        if @api.respond_to?(:fs_tell)
-          @pos = @api.fs_tell(@fd)
+        if @api.respond_to?(:file_tell)
+          @pos = @api.file_tell(@fd)
         else
           @pos
         end
@@ -128,16 +128,16 @@ module Ronin
       #   Argument of the command.
       #
       # @raise [RuntimeError]
-      #   The API object does not define `fs_ioctl`.
+      #   The API object does not define `file_ioctl`.
       #
       def ioctl(command,argument)
-        unless @api.respond_to?(:fs_ioctl)
-          raise(RuntimeError,"#{@api.inspect} does not define fs_ioctl")
+        unless @api.respond_to?(:file_ioctl)
+          raise(RuntimeError,"#{@api.inspect} does not define file_ioctl")
         end
 
-        return @api.fs_ioctl(command,argument)
+        return @api.file_ioctl(command,argument)
       end
-      resource_method :ioctl, [:fs_ioctl]
+      resource_method :ioctl, [:file_ioctl]
 
       #
       # Executes a low-level command to control or query the file stream.
@@ -149,16 +149,16 @@ module Ronin
       #   Argument of the command.
       #
       # @raise [RuntimeError]
-      #   The API object does not define `fs_fcntl`.
+      #   The API object does not define `file_fcntl`.
       #
       def fcntl(command,argument)
-        unless @api.respond_to?(:fs_fcntl)
-          raise(RuntimeError,"#{@api.inspect} does not define fs_fcntl")
+        unless @api.respond_to?(:file_fcntl)
+          raise(RuntimeError,"#{@api.inspect} does not define file_fcntl")
         end
 
-        return @api.fs_fcntl(command,argument)
+        return @api.file_fcntl(command,argument)
       end
-      resource_method :fcntl, [:fs_fcntl]
+      resource_method :fcntl, [:file_fcntl]
 
       #
       # Re-opens the file.
@@ -186,7 +186,7 @@ module Ronin
       def stat
         File::Stat.new(@api,@path)
       end
-      resource_method :stat, [:fs_stat]
+      resource_method :stat, [:file_stat]
 
       #
       # Inspects the open file.
@@ -201,14 +201,14 @@ module Ronin
       protected
 
       #
-      # Attempts calling `fs_open` from the API object to open the remote file.
+      # Attempts calling `file_open` from the API object to open the remote file.
       #
       # @return [Object]
-      #   The file descriptor returned by `fs_open`.
+      #   The file descriptor returned by `file_open`.
       #
       def io_open
-        if @api.respond_to?(:fs_open)
-          @api.fs_open(@path,@mode)
+        if @api.respond_to?(:file_open)
+          @api.file_open(@path,@mode)
         else
           @path
         end
@@ -216,29 +216,29 @@ module Ronin
       resource_method :open
 
       #
-      # Reads a block from the remote file by calling `fs_read` or
-      # `fs_readfile` from the API object.
+      # Reads a block from the remote file by calling `file_read` or
+      # `file_readfile` from the API object.
       #
       # @return [String, nil]
       #   A block of data from the file.
       #
       # @raise [IOError]
-      #   The API object does not define `fs_read` or `fs_readfile`.
+      #   The API object does not define `file_read` or `file_readfile`.
       #
       def io_read
-        if @api.respond_to?(:fs_readfile)
+        if @api.respond_to?(:file_readfile)
           @eof = true
-          @api.fs_readfile(@path)
-        elsif @api.respond_to?(:fs_read)
-          @api.fs_read(@fd,@pos)
+          @api.file_readfile(@path)
+        elsif @api.respond_to?(:file_read)
+          @api.file_read(@fd,@pos)
         else
           raise(IOError,"#{@api.inspect} does not support reading")
         end
       end
-      resource_method :read, [:fs_read]
+      resource_method :read, [:file_read]
 
       #
-      # Writes data to the remote file by calling `fs_write` from the
+      # Writes data to the remote file by calling `file_write` from the
       # API object.
       #
       # @param [String] data
@@ -248,24 +248,24 @@ module Ronin
       #   The number of bytes writen.
       #
       # @raise [IOError]
-      #   The API object does not define `fs_write`.
+      #   The API object does not define `file_write`.
       #
       def io_write(data)
-        if @api.respond_to?(:fs_write)
-          @pos += @api.fs_write(@fd,@pos,data)
+        if @api.respond_to?(:file_write)
+          @pos += @api.file_write(@fd,@pos,data)
         else
           raise(IOError,"#{@api.inspect} does not support writing to files")
         end
       end
-      resource_method :write, [:fs_write]
+      resource_method :write, [:file_write]
 
       #
-      # Attempts calling `fs_close` from the API object to close
+      # Attempts calling `file_close` from the API object to close
       # the file.
       #
       def io_close
-        if @api.respond_to?(:fs_close)
-          @api.fs_close(@fd)
+        if @api.respond_to?(:file_close)
+          @api.file_close(@fd)
         end
       end
       resource_method :close
