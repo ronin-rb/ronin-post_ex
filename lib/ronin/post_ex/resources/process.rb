@@ -47,7 +47,7 @@ module Ronin
       # * `process_getsid -> Integer`
       # * `process_setsid(sid : Integer) -> Integer`
       # * `process_environ -> Hash[String, String]`
-      # * `process_getenv(name : String) -> String`
+      # * `process_getenv(name : String) -> String | env`
       # * `process_setenv(name : String, value : String)`
       # * `process_unsetenv(name : String)`
       # * `process_kill(pid : Integer, signal : Integer)`
