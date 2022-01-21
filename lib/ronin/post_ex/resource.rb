@@ -19,8 +19,6 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/ui/printing'
-
 module Ronin
   module PostEx
     #
@@ -29,8 +27,6 @@ module Ronin
     # @since 1.0.0
     #
     class Resource
-
-      include UI::Printing
 
       # The object providing control of the Resource
       attr_reader :controller

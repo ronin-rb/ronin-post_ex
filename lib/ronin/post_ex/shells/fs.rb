@@ -55,7 +55,7 @@ module Ronin
         #
         def chdir(path)
           @fs.chdir(path)
-          print_info "Current working directory is now: #{@fs.pwd}"
+          puts "Current working directory is now: #{@fs.pwd}"
         end
         alias cd chdir
 
@@ -65,7 +65,7 @@ module Ronin
         # @see Resources::FS#getcwd
         #
         def cwd
-          print_info "Current working directory: #{@fs.getcwd}"
+          puts "Current working directory: #{@fs.getcwd}"
         end
         alias pwd cwd
 
@@ -135,7 +135,7 @@ module Ronin
         def copy(src,dest)
           @fs.copy(src,dest)
 
-          print_info "Copied #{@fs.join(src)} -> #{@fs.join(dest)}"
+          puts "Copied #{@fs.join(src)} -> #{@fs.join(dest)}"
         end
         alias cp copy
 
@@ -150,7 +150,7 @@ module Ronin
         def unlink(path)
           @fs.unlink(path)
 
-          print_info "Removed #{@fs.join(path)}"
+          puts "Removed #{@fs.join(path)}"
         end
         alias rm unlink
 
@@ -165,7 +165,7 @@ module Ronin
         def rmdir(path)
           @fs.rmdir(path)
 
-          print_info "Removed directory #{@fs.join(path)}"
+          puts "Removed directory #{@fs.join(path)}"
         end
 
         #
@@ -182,7 +182,7 @@ module Ronin
         def move(src,dest)
           @fs.move(src,dest)
 
-          print_info "Moved #{@fs.join(src)} -> #{@fs.join(dest)}"
+          puts "Moved #{@fs.join(src)} -> #{@fs.join(dest)}"
         end
         alias mv move
 
@@ -200,7 +200,7 @@ module Ronin
         def link(src,dest)
           @fs.link(src,dest)
 
-          print_info "Linked #{@fs.join(src)} -> #{@fs.join(dest)}"
+          puts "Linked #{@fs.join(src)} -> #{@fs.join(dest)}"
         end
         alias ln link
 
@@ -215,7 +215,7 @@ module Ronin
         def chown(*args)
           @fs.chown(*args)
 
-          print_info "Changed ownership of #{@fs.join(args.first)}"
+          puts "Changed ownership of #{@fs.join(args.first)}"
         end
 
         #
@@ -229,7 +229,7 @@ module Ronin
         def chgrp(*args)
           @fs.chgrp(*args)
 
-          print_info "Changed group ownership of #{@fs.join(args.first)}"
+          puts "Changed group ownership of #{@fs.join(args.first)}"
         end
 
         #
@@ -243,7 +243,7 @@ module Ronin
         def chmod(*args)
           @fs.chmod(*args)
 
-          print_info "Changed permissions on #{@fs.join(args.first)}"
+          puts "Changed permissions on #{@fs.join(args.first)}"
         end
 
         #
