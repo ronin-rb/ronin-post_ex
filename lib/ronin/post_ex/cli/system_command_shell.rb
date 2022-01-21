@@ -72,9 +72,9 @@ module Ronin
           puts "Current working directory: #{@system.fs.getcwd}"
         end
 
-        command 'fs.read', method_name: 'fs_read',
-                           usage: 'FILE',
-                           summary: 'Reads the contents of a given FILE'
+        command 'fs.readfile', method_name: 'fs_readfile',
+                               usage: 'FILE',
+                               summary: 'Reads the contents of a given FILE'
 
         #
         # Reads data from a file.
@@ -84,8 +84,8 @@ module Ronin
         #
         # @see Resources::FS#read
         #
-        def fs_read(path)
-          write(@system.fs.read(path))
+        def fs_readfile(path)
+          write(@system.fs.readfile(path))
         end
 
         command 'fs.readlink', method_name: 'fs_readlink',

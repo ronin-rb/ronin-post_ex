@@ -127,6 +127,23 @@ module Ronin
         end
 
         #
+        # Reads the full contents of a file.
+        #
+        # @param [String] path
+        #   The path to the file.
+        #
+        # @return [String]
+        #   The contents of the file.
+        #
+        # @note
+        #   Requires the `fs_readfile` method be defined by the API object.
+        #
+        def readfile(path)
+          @api.fs_readfile(path)
+        end
+        resource_method :readlink, [:fs_readfile]
+
+        #
         # Reads the destination of a link.
         #
         # @param [String] path
@@ -220,20 +237,6 @@ module Ronin
           File.open(@api,join(path),&block)
         end
         resource_method :open
-
-        #
-        # Reads the contents of a file.
-        #
-        # @param [String] path
-        #   The path of the file.
-        #
-        # @return [String]
-        #   The contents of the file.
-        #
-        def read(path)
-          open(path).read
-        end
-        resource_method :read, [:fs_read]
 
         #
         # Hexdumps the contents of a file.

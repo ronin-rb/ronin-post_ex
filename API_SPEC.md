@@ -56,13 +56,13 @@ Gets the current working directory and returns the directory path.
 
 Changes the current working directory.
 
-### `fs_readlink(path : String) -> String`
-
-Reads the destination path of a symbolic link.
-
 ### `fs_readfile(path : String) -> String | nil`
 
 Reads the entire file at the given path and returns the full file's contents.
+
+### `fs_readlink(path : String) -> String`
+
+Reads the destination path of a symbolic link.
 
 ### `fs_readdir(path : String) -> Array[String]`
 
