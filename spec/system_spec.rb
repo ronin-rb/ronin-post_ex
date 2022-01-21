@@ -2,13 +2,9 @@ require 'spec_helper'
 require 'ronin/post_ex/system'
 
 describe System do
-  module TestSystem
-    class DummyAPI
-    end
-  end
+  let(:api) { double('Post-Exploitation API Object') }
 
-  let(:api) { TestSystem::DummyAPI.new }
-  subject { described_class.new(api)   }
+  subject { described_class.new(api) }
 
   describe "#initialize" do
     it "must set #api" do
