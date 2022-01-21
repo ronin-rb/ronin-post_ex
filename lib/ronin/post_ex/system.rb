@@ -23,7 +23,7 @@ require 'ronin/post_ex/resource'
 require 'ronin/post_ex/system/fs'
 require 'ronin/post_ex/system/process'
 require 'ronin/post_ex/system/shell'
-require 'ronin/post_ex/cli/system_command_shell'
+require 'ronin/post_ex/cli/system_shell'
 
 module Ronin
   module PostEx
@@ -142,7 +142,7 @@ module Ronin
       # Starts an interactive API shell.
       #
       def interact
-        CLI::SystemCommandShell.start(self)
+        CLI::SystemShell.start(self)
       end
 
     end

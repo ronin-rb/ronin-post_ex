@@ -27,7 +27,7 @@ module Ronin
       #
       # A shell for {System}.
       #
-      class SystemCommandShell < Core::CLI::CommandShell
+      class SystemShell < Core::CLI::CommandShell
 
         shell_name 'ronin-post_ex'
 
