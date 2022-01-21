@@ -245,6 +245,32 @@ module Ronin
       resource_method :stat, [:file_stat]
 
       #
+      # Flushes the file.
+      #
+      # @return [self]
+      #
+      # @note This method may use the `file_flush` API method, if it is defined
+      # by {#api}.
+      #
+      def flush
+        if @api.respond_to?(:file_flush)
+          @api.file_flush
+        end
+
+        return self
+      end
+
+      #
+      # Flushes the file before closing it.
+      #
+      # @return [nil]
+      #
+      def close
+        flush
+        super()
+      end
+
+      #
       # Inspects the open file.
       #
       # @return [String]
