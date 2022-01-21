@@ -172,7 +172,7 @@ module Ronin
         # @yield [path]
         #   The given block, will be passed each matching path.
         #
-        # @yieldparam [String] path
+        # @return [String] path
         #   A path in the file-system that matches the pattern.
         #
         # @return [Array<String>]
@@ -191,13 +191,11 @@ module Ronin
         #   Requires the `fs_glob` method be defined by the API object.
         #
         def glob(pattern,&block)
-          path = join(pattern)
+          path  = join(pattern)
+          paths = @api.fs_glob(pattern)
 
-          if block
-            @api.fs_glob(pattern,&block)
-          else
-            @api.enum_for(:fs_glob,pattern).to_a
-          end
+          paths.each(&block) if block
+          return paths
         end
         resource_method :glob, [:fs_glob]
 
