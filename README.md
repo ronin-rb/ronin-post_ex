@@ -29,6 +29,71 @@ ronin-post_ex is a Ruby API for Post-Exploitation.
   * {Ronin::PostEx::Dir} - allows reading the contents of directories.
 * Supports interacting with interactive shell commands.
 
+## Examples
+
+Define the client which defines the [Post-Exploitation API methods][API Spec]:
+
+```ruby
+class RATClient
+
+  # ...
+
+  def fs_read(path)
+    rpc_call("fs_read",path)
+  end
+
+  def shell_exec(command)
+    rpc_call("shell_exec",command)
+  end
+
+  # ...
+
+end
+```
+
+Initialize a new {Ronin::PostEx::System} object that wraps around the client:
+
+```ruby
+rat_client = RATClient.new(host,port)
+system = Ronin::PostEx::System.new(rat_client)
+```
+
+Interact with the system's remote files as if they were local files:
+
+```ruby
+file = system.fs.open('/etc/passwd')
+
+file.each_line do |line|
+  user, x, uid, gid, name, home_dir, shell = line.split(':')
+
+  puts "User Detected: #{user} (id=#{uid})"
+end
+```
+
+Get information about the current process:
+
+```ruby
+system.process.pid
+# => 1234
+
+system.process.getuid
+# => 1001
+
+system.process.environ
+# => {"HOME"=>"...", "PATH"=>"...", ...}
+```
+
+Execute commands on the remote system:
+
+```ruby
+system.shell.ls('/')
+# => "bin\nboot\ndev\netc\nhome\nlib\nlib64\nlost+found\nmedia\nmnt\nopt\nproc\nroot\nrun\nsbin\nsnap\nsrv\nsys\ntmp\nusr\nvar\n"
+
+system.shell.exec("find -type f -name '*.xls' /srv") do |path|
+  puts "Found XLS file: #{path}"
+end
+```
+
 ## Requirements
 
 * [Ruby] >= 2.7.0
