@@ -19,7 +19,7 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/core/cli/shell'
+require 'ronin/core/cli/command_shell'
 
 module Ronin
   module PostEx
@@ -29,7 +29,7 @@ module Ronin
       #
       # @since 1.0.0
       #
-      class FS < Core::CLI::Shell
+      class FS < Core::CLI::CommandShell
 
         shell_name 'fs'
 
