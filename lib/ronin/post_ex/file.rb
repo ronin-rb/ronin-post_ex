@@ -46,6 +46,9 @@ module Ronin
       # @param [String] path
       #   The path of the remote file.
       #
+      # @note
+      #   This method may use the `file_open` method, if it is defined by `api`.
+      #
       def initialize(api,path,mode='r')
         @api  = api
         @path = path.to_s
@@ -92,6 +95,9 @@ module Ronin
       # @return [Integer]
       #   The new position within the file.
       #
+      # @note This method may use the `file_seek` API method, if it is defined
+      # by {#api}.
+      #
       def seek(new_pos,whence=SEEK_SET)
         clear_buffer!
 
@@ -101,13 +107,17 @@ module Ronin
 
         @pos = new_pos
       end
-      resource_method :seek
+      resource_method :seek, [:file_seek]
 
       #
       # The current offset in the file.
       #
       # @return [Integer]
       #   The current offset in bytes.
+      #
+      # @note
+      #   This method may use the `file_tell` API method, if it is defined by
+      #   {#api}.
       #
       def tell
         if @api.respond_to?(:file_tell)
@@ -116,7 +126,7 @@ module Ronin
           @pos
         end
       end
-      resource_method :tell
+      resource_method :tell, [:file_tell]
 
       #
       # Executes a low-level command to control or query the IO stream.
@@ -129,6 +139,8 @@ module Ronin
       #
       # @raise [RuntimeError]
       #   The API object does not define `file_ioctl`.
+      #
+      # @note This method requires the `file_ioctl` API method.
       #
       def ioctl(command,argument)
         unless @api.respond_to?(:file_ioctl)
@@ -151,6 +163,8 @@ module Ronin
       # @raise [RuntimeError]
       #   The API object does not define `file_fcntl`.
       #
+      # @note This method requires the `file_fnctl` API method.
+      #
       def fcntl(command,argument)
         unless @api.respond_to?(:file_fcntl)
           raise(RuntimeError,"#{@api.inspect} does not define file_fcntl")
@@ -169,19 +183,25 @@ module Ronin
       # @return [File]
       #   The re-opened the file.
       #
+      # @note
+      #   This method may use the `file_close` and `file_open` API methods,
+      #   if they are defined by {#api}.
+      #
       def reopen(path)
         close
 
         @path = path.to_s
         return open
       end
-      resource_method :reopen
+      resource_method :reopen, [:file_close, :file_open]
 
       #
       # The status information for the file.
       #
       # @return [Stat]
       #   The status information.
+      #
+      # @note This method relies on the `fs_stat` API method.
       #
       def stat
         File::Stat.new(@api,@path)
@@ -201,10 +221,14 @@ module Ronin
       protected
 
       #
-      # Attempts calling `file_open` from the API object to open the remote file.
+      # Attempts calling `file_open` from the API object to open the remote
+      # file.
       #
       # @return [Object]
       #   The file descriptor returned by `file_open`.
+      #
+      # @note
+      #   This method may use the `file_open` API method, if {#api} defines it.
       #
       def io_open
         if @api.respond_to?(:file_open)
@@ -224,6 +248,10 @@ module Ronin
       #
       # @raise [IOError]
       #   The API object does not define `file_read` or `file_readfile`.
+      #
+      # @note
+      #   This method requires either the `file_readfile` or `file_read` API
+      #   methods.
       #
       def io_read
         if @api.respond_to?(:file_readfile)
@@ -250,6 +278,8 @@ module Ronin
       # @raise [IOError]
       #   The API object does not define `file_write`.
       #
+      # @note This method requires the `file_write` API method.
+      #
       def io_write(data)
         if @api.respond_to?(:file_write)
           @pos += @api.file_write(@fd,@pos,data)
@@ -262,6 +292,8 @@ module Ronin
       #
       # Attempts calling `file_close` from the API object to close
       # the file.
+      #
+      # @note This method may use the `file_close` method, if {#api} defines it.
       #
       def io_close
         if @api.respond_to?(:file_close)

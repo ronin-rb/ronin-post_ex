@@ -68,6 +68,9 @@ module Ronin
         # @raise [Errno::ENOENT]
         #   The remote file does not exist.
         #
+        # @note
+        #   This method requires `api` define the `fs_stat` API method.
+        #
         def initialize(api,path)
           unless api.respond_to?(:fs_stat)
             raise(RuntimeError,"#{api.inspect} does not define fs_stat")
