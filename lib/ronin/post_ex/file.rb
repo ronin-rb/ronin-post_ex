@@ -61,6 +61,9 @@ module Ronin
       # @param [String] path
       #   The path of the remote file.
       #
+      # @param [String] mode
+      #   The mode to open the file in.
+      #
       # @note
       #   This method may use the `file_open` method, if it is defined by `api`.
       #
@@ -266,7 +269,7 @@ module Ronin
       # @return [nil]
       #
       def close
-        flush
+        flush if @mode.include?('w')
         super()
       end
 
