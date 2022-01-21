@@ -96,6 +96,37 @@ system.shell.exec("find -type f -name '*.xls' /srv") do |path|
 end
 ```
 
+Spawn an interactive command shell:
+
+```ruby
+system.shell.interact
+$ 
+```
+
+Spawn an interactive API command shell:
+
+```ruby
+system.interact
+ronin-post_ex> help
+  help [COMMAND]     	Prints the list of commands or additional help
+  fs.chdir DIR       	Changes the current working directory
+  fs.pwd             	Prints the current working directory
+  fs.readfile FILE   	Reads the contents of a given FILE
+  fs.readlink SYMLINK	Reads the destination path of a symlink
+  fs.readdir DIR     	Reads the contents of a given directory
+  fs.hexdump FILE    	Hexdumps a given file
+  fs.copy SRC DEST   	Copies the SRC file to the DEST path
+  fs.unlink FILE     	Deletes a given file
+  fs.rmdir DIR       	Removes a given directory
+  fs.mv SRC DEST     	Moves or renames a given file or directory
+  fs.link SRC DEST   	Creates a link from the source to the destination
+  fs.chown USER PATH 	Changes the owner of a given file or directory
+  fs.chgrp GROUP PATH	Changes the group of a given file or directory
+  fs.chmod MODE PATH 	Changes the permission mode of a given file or directory
+  fs.stat PATH       	Prints file system information about a given file or directory
+ronin-post_ex> 
+```
+
 ## Requirements
 
 * [Ruby] >= 2.7.0
