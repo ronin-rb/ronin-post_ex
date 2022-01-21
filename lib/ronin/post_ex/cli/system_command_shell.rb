@@ -25,7 +25,7 @@ module Ronin
   module PostEx
     module CLI
       #
-      # A shell for {Resources::FS}.
+      # A shell for {System}.
       #
       class SystemCommandShell < Core::CLI::CommandShell
 
@@ -53,7 +53,7 @@ module Ronin
         # @param [String] path
         #   The new working directory.
         #
-        # @see Resources::FS#chdir
+        # @see System::FS#chdir
         #
         def fs_chdir(path)
           @system.fs.chdir(path)
@@ -66,7 +66,7 @@ module Ronin
         #
         # Prints the current working directory.
         #
-        # @see Resources::FS#getcwd
+        # @see System::FS#getcwd
         #
         def fs_pwd
           puts "Current working directory: #{@system.fs.getcwd}"
@@ -82,7 +82,7 @@ module Ronin
         # @param [String] path
         #   The file to read from.
         #
-        # @see Resources::FS#read
+        # @see System::FS#read
         #
         def fs_readfile(path)
           write(@system.fs.readfile(path))
@@ -98,7 +98,7 @@ module Ronin
         # @param [String] path
         #   The path to the link.
         #
-        # @see Resources::FS#readlink
+        # @see System::FS#readlink
         #
         def fs_readlink(path)
           puts @system.fs.readlink(path)
@@ -114,7 +114,7 @@ module Ronin
         # @param [String] path
         #   The path to the directory.
         #
-        # @see Resources::FS#readdir
+        # @see System::FS#readdir
         #
         def fs_readdir(path)
           @system.fs.readdir(path).each do |entry|
@@ -131,7 +131,7 @@ module Ronin
         # @param [String] path
         #   The file to hexdump.
         #
-        # @see Resources::FS#hexdump
+        # @see System::FS#hexdump
         #
         def hexdump(path)
           @system.fs.hexdump(path,self)
@@ -150,7 +150,7 @@ module Ronin
         # @param [String] dest
         #   The destination to copy the file to.
         #
-        # @see Resources::FS#copy
+        # @see System::FS#copy
         #
         def fs_copy(src,dest)
           @system.fs.copy(src,dest)
@@ -168,7 +168,7 @@ module Ronin
         # @param [String] path
         #   The file to be removed.
         #
-        # @see Resources::FS#unlink
+        # @see System::FS#unlink
         #
         def file_unlink(path)
           @system.fs.unlink(path)
@@ -186,7 +186,7 @@ module Ronin
         # @param [String] path
         #   The file to be removed.
         #
-        # @see Resources::FS#rmdir
+        # @see System::FS#rmdir
         #
         def fs_rmdir(path)
           @system.fs.rmdir(path)
@@ -207,7 +207,7 @@ module Ronin
         # @param [String] dest
         #   The destination to move the file or directory to.
         #
-        # @see Resources::FS#move
+        # @see System::FS#move
         #
         def fs_mv(src,dest)
           @system.fs.move(src,dest)
@@ -228,7 +228,7 @@ module Ronin
         # @param [String] dest
         #   The path of the new link.
         #
-        # @see Resources::FS#link
+        # @see System::FS#link
         #
         def fs_link(src,dest)
           @system.fs.link(src,dest)
@@ -249,7 +249,7 @@ module Ronin
         # @param [String] path
         #   The path of the file or directory.
         #
-        # @see Resources::FS#chown
+        # @see System::FS#chown
         #
         def fs_chown(user,path)
           @system.fs.chown(user,path)
@@ -270,7 +270,7 @@ module Ronin
         # @param [String] path
         #   The path of the file or directory.
         #
-        # @see Resources::FS#chgrp
+        # @see System::FS#chgrp
         #
         def fs_chgrp(group,path)
           @system.fs.chgrp(group,path)
@@ -291,7 +291,7 @@ module Ronin
         # @param [String] path
         #   The path of the file or directory.
         #
-        # @see Resources::FS#chmod
+        # @see System::FS#chmod
         #
         def fs_chmod(mode,path)
           @system.fs.chmod(mode.to_i(8),path)
@@ -309,7 +309,7 @@ module Ronin
         # @param [String] path
         #   The file or directory to stat.
         #
-        # @see Resources::FS#stat
+        # @see System::FS#stat
         #
         def fs_stat(path)
           stat = @system.fs.stat(path)
