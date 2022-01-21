@@ -25,6 +25,7 @@ ronin-post_ex is a Ruby API for Post-Exploitation.
 ## Requirements
 
 * [Ruby] >= 2.7.0
+* [fake_io] ~> 0.1
 * [ronin-core] ~> 0.1
 
 ## Install
@@ -76,4 +77,5 @@ You should have received a copy of the GNU Lesser General Public License
 along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 
 [Ruby]: https://www.ruby-lang.org
+[fake_io]: https://github.com/postmodern/fake_io.rb#readme
 [ronin-core]: https://github.com/ronin-rb/ronin-core#readme

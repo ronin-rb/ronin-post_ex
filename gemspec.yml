@@ -18,6 +18,7 @@ metadata:
 required_ruby_version: ">= 2.7.0"
 
 dependencies:
+  fake_io: ~> 0.1
   # Ronin dependencies:
   ronin-core: ~> 0.1
 

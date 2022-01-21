@@ -20,7 +20,8 @@
 #
 
 require 'ronin/post_ex/resource'
-require 'ronin/post_ex/io'
+
+require 'fake_io'
 
 module Ronin
   module PostEx
@@ -33,7 +34,7 @@ module Ronin
     #
     class Command < Resource
 
-      include IO
+      include FakeIO
       include Enumerable
 
       # The program name
@@ -66,7 +67,7 @@ module Ronin
         @program    = program
         @arguments  = arguments
 
-        io_initialize
+        super()
       end
 
       #
@@ -111,7 +112,7 @@ module Ronin
         "#<#{self.class}: #{self}>"
       end
 
-      protected
+      private
 
       #
       # Executes and opens the command for reading.

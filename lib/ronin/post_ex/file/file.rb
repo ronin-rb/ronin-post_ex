@@ -21,8 +21,8 @@
 
 require 'ronin/post_ex/file/stat'
 require 'ronin/post_ex/resource'
-require 'ronin/post_ex/io'
 
+require 'fake_io'
 require 'set'
 
 module Ronin
@@ -37,7 +37,7 @@ module Ronin
     #
     class File < Resource
 
-      include IO
+      include FakeIO
 
       #
       # Creates a new remote controlled File object.
@@ -53,7 +53,7 @@ module Ronin
         @path       = path.to_s
         @mode       = mode.to_s
 
-        io_initialize
+        super()
       end
 
       #
