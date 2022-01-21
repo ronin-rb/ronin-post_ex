@@ -26,8 +26,8 @@ module Ronin
     class File < Resource
       #
       # Represents the status information of a remote file. The {Stat} class
-      # using the `fs_stat` method defined by the API object to request the
-      # remote status information.
+      # using the `fs_stat` or `file_stat` method defined by the API object to
+      # request the remote status information.
       #
       class Stat
 
@@ -59,11 +59,17 @@ module Ronin
         #   The object controlling file-system stat.
         #
         # @param [String] path
-        #   The path of the remote.
+        #   The path to stat.
         #
-        # @raise [RuntimeError]
-        #   The leveraging object does not define `fs_stat` needed by
-        #   {Stat}.
+        # @param [Integer] fd
+        #   The file description to stat.
+        #
+        # @raise [ArgumentError]
+        #   Neither the `path:` or `fd:` keyword arguments were given.
+        #
+        # @raise [NotImplementedError]
+        #   The leveraging object does not define `fs_stat` or `file_stat`
+        #   needed by {Stat}.
         #
         # @raise [Errno::ENOENT]
         #   The remote file does not exist.
@@ -71,9 +77,17 @@ module Ronin
         # @note
         #   This method requires `api` define the `fs_stat` API method.
         #
-        def initialize(api,path)
-          unless api.respond_to?(:fs_stat)
-            raise(RuntimeError,"#{api.inspect} does not define fs_stat")
+        def initialize(api,path: nil, fd: nil)
+          if path
+            unless api.respond_to?(:fs_stat)
+              raise(NotImplementedError,"#{api.inspect} does not define #fs_stat")
+            end
+          elsif fd
+            unless api.respond_to?(:file_stat)
+              raise(NotImplementedError,"#{api.inspect} does not define #file_stat")
+            end
+          else
+            raise(ArgumentError,"#{self.class}#initialize must be given either the path: or fd: keyword argument")
           end
 
           @api  = api

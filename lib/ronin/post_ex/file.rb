@@ -43,7 +43,7 @@ module Ronin
     # * `file_tell(fd : Integer) => Integer`
     # * `file_ioctl(command : String | Array<Integer, argument : OBject) => Integer`
     # * `file_fcntl(command : String | Array<Integer, argument : OBject) => Integer`
-    # * `file_stat(path : String) => Hash{Symbol => Object}`
+    # * `file_stat(path : String) => Hash{Symbol => Object} | nil`
 
     # * `file_close(fd : Integer)`
     #
@@ -224,7 +224,7 @@ module Ronin
       # @note This method relies on the `fs_stat` API method.
       #
       def stat
-        File::Stat.new(@api,@path)
+        File::Stat.new(@api,path: @path)
       end
       resource_method :stat, [:file_stat]
 
