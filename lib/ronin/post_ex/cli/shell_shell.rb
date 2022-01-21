@@ -27,7 +27,7 @@ module Ronin
       #
       # A shell for {Resources::Shell}.
       #
-      class Shell < Core::CLI::Shell
+      class ShellShell < Core::CLI::Shell
 
         prompt_sigil '$'
 
