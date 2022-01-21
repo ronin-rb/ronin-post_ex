@@ -26,11 +26,11 @@ require 'fake_io'
 module Ronin
   module PostEx
     #
-    # The {Command} class represents commands being executed on remote
-    # systems. The {Command} class wraps around the `shell_exec` and
+    # The {RemoteCommand} class represents commands being executed on remote
+    # systems. The {RemoteCommand} class wraps around the `shell_exec` and
     # `shell_write` methods defined in the API object.
     #
-    class Command < Resource
+    class RemoteCommand < Resource
 
       include FakeIO
       include Enumerable
@@ -77,7 +77,7 @@ module Ronin
       # @param [Array] arguments
       #   The new arguments to run with.
       #
-      # @return [Command]
+      # @return [RemoteCommand]
       #   The new command.
       #
       def reopen(program,*arguments)

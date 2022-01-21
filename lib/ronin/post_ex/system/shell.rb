@@ -20,7 +20,7 @@
 #
 
 require 'ronin/post_ex/resource'
-require 'ronin/post_ex/command'
+require 'ronin/post_ex/remote_command'
 require 'ronin/post_ex/cli/shell_shell'
 
 require 'date'
@@ -61,13 +61,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to run the program with.
         #
-        # @return [Command]
+        # @return [RemoteCommand]
         #   The newly created command.
         #
         def command(program,*arguments)
           program = (@paths[program.scan(/^[^\s]+/).first] || program)
 
-          return Command.new(@api,program,*arguments)
+          return RemoteCommand.new(@api,program,*arguments)
         end
         resource_method :command, [:shell_exec]
 
