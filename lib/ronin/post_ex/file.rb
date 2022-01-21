@@ -224,7 +224,11 @@ module Ronin
       # @note This method relies on the `fs_stat` API method.
       #
       def stat
-        File::Stat.new(@api,path: @path)
+        if @fd
+          File::Stat.new(@api, fd: @fd)
+        else
+          File::Stat.new(@api, path: @path)
+        end
       end
       resource_method :stat, [:file_stat]
 
@@ -253,8 +257,6 @@ module Ronin
       def io_open
         if @api.respond_to?(:file_open)
           @api.file_open(@path,@mode)
-        else
-          @path
         end
       end
       resource_method :open
