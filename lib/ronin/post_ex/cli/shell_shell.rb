@@ -25,7 +25,7 @@ module Ronin
   module PostEx
     module CLI
       #
-      # A shell for {Resources::Shell}.
+      # A shell for {System::Shell}.
       #
       class ShellShell < Core::CLI::Shell
 
@@ -34,7 +34,7 @@ module Ronin
         #
         # Initializes the shell.
         #
-        # @param [Resources::Shell] shell
+        # @param [System::Shell] shell
         #   The shell resource.
         #
         def initialize(shell, **kwargs)
