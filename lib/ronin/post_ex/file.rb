@@ -43,7 +43,8 @@ module Ronin
     # * `file_tell(fd : Integer) => Integer`
     # * `file_ioctl(command : String | Array<Integer, argument : OBject) => Integer`
     # * `file_fcntl(command : String | Array<Integer, argument : OBject) => Integer`
-    # * `file_stat(path : String) => Hash{Symbol => Object} | nil`
+    # * `file_stat(fd : Integer) => Hash{Symbol => Object} | nil`
+    # * `fs_stat(path : String) => Hash{Symbol => Object} | nil`
 
     # * `file_close(fd : Integer)`
     #
