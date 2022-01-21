@@ -395,6 +395,30 @@ module Ronin
           end
         end
 
+        command 'file.close', method_name: 'file_close',
+                              usage: 'FILE_ID',
+                              summary: 'Closes an open file'
+
+        #
+        # Closes an opened file.
+        #
+        # @param [String] file_id
+        #   The file ID number.
+        #
+        # @see File#close
+        #
+        def file_close(file_id)
+          file_id = file_id.to_i
+          length  = length.to_i
+
+          if (file = @files[file_id])
+            @files[file_id] = nil
+            puts "Closed file ##{file_id}"
+          else
+            print_error "unknown file id"
+          end
+        end
+
       end
     end
   end
