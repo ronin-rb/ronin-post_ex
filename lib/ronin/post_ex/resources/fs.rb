@@ -55,8 +55,6 @@ module Ronin
       # * `fs_chmod(mode,path)`
       # * `fs_compare(file1,file2) # => Boolean`
       #
-      # @since 1.0.0
-      #
       class FS < Resource
 
         #

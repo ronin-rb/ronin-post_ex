@@ -33,8 +33,6 @@ module Ronin
     # Additionally, {File} can optionally use the `fs_open`, `fs_close`,
     # `fs_tell`, `fs_seek` and `fs_stat` methods.
     #
-    # @since 1.0.0
-    #
     class File < Resource
 
       include FakeIO

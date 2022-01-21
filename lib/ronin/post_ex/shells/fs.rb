@@ -27,8 +27,6 @@ module Ronin
       #
       # A shell for {Resources::FS}.
       #
-      # @since 1.0.0
-      #
       class FS < Core::CLI::CommandShell
 
         shell_name 'fs'

@@ -79,8 +79,6 @@ module Ronin
     #       puts "Found XLS file: #{path}"
     #     end
     #
-    # @since 1.0.0
-    #
     class System
 
       # The object which defines the Post-Exploitation API methods.

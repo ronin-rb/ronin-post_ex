@@ -29,8 +29,6 @@ module Ronin
       # using the `fs_stat` method defined by the controller object to
       # request the remote status information.
       #
-      # @since 1.0.0
-      #
       class Stat
 
         # The path of the file

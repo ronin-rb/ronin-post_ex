@@ -24,8 +24,6 @@ module Ronin
     #
     # A base-class for all Post-Exploitation Resources.
     #
-    # @since 1.0.0
-    #
     class Resource
 
       # The object providing control of the Resource

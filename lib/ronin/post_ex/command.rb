@@ -30,8 +30,6 @@ module Ronin
     # systems. The {Command} class wraps around the `shell_exec` method
     # defined in the object controller shell access.
     #
-    # @since 1.0.0
-    #
     class Command < Resource
 
       include FakeIO

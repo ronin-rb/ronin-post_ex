@@ -31,8 +31,6 @@ module Ronin
       #
       # Controls the resources of a Shell.
       #
-      # @since 1.0.0
-      #
       class Shell < Resource
 
         attr_reader :paths

@@ -57,8 +57,6 @@ module Ronin
       # * `process_spawn(program,*arguments) # => Integer`
       # * `process_exit`
       #
-      # @since 1.0.0
-      #
       class Process < Resource
 
         #
