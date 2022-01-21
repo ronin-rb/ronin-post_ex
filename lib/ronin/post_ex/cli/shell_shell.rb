@@ -43,6 +43,12 @@ module Ronin
           @shell = shell
         end
 
+        #
+        # Executes a command and prints it's output.
+        #
+        # @param [String] command
+        #   The command string.
+        #
         def exec(command)
           @shell.command(command).each_chunk do |chunk|
             write(chunk)
