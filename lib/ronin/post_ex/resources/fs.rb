@@ -36,7 +36,7 @@ module Ronin
       # # Supported Control Methods
       #
       # The File System resource uses the following control methods,
-      # defined by the controller object:
+      # defined by the API object:
       #
       # * `fs_getcwd() # => String`
       # * `fs_chdir(path)`
@@ -64,12 +64,11 @@ module Ronin
         #   The path of the current working directory.
         #
         # @note
-        #   May call the `fs_getcwd` method, if defined by the controller
-        #   object.
+        #   May call the `fs_getcwd` method, if defined by the API object.
         #
         def getcwd
-          if @controller.respond_to?(:fs_getcwd)
-            @cwd = @controller.fs_getcwd
+          if @api.respond_to?(:fs_getcwd)
+            @cwd = @api.fs_getcwd
           end
 
           return @cwd
@@ -89,15 +88,14 @@ module Ronin
         #   The new current working directory.
         #
         # @note
-        #   May call the `fs_chdir` method, if defined by the controller
-        #   object.
+        #   May call the `fs_chdir` method, if defined by the API object.
         #
         def chdir(path)
           path = join(path)
           old_cwd = @cwd
 
-          @cwd = if @controller.respond_to?(:fs_chdir)
-                   @controller.fs_chdir(path)
+          @cwd = if @api.respond_to?(:fs_chdir)
+                   @api.fs_chdir(path)
                  else
                    path
                  end
@@ -138,11 +136,10 @@ module Ronin
         #   The destination of the link.
         #
         # @note
-        #   Requires the `fs_readlink` method be defined by the controller
-        #   object.
+        #   Requires the `fs_readlink` method be defined by the API object.
         #
         def readlink(path)
-          @controller.fs_readlink(path)
+          @api.fs_readlink(path)
         end
         resource_method :readlink, [:fs_readlink]
 
@@ -156,12 +153,11 @@ module Ronin
         #   The opened directory.
         #
         # @note
-        #   Requires the `fs_readdir` method be defined by the controller
-        #   object.
+        #   Requires the `fs_readdir` method be defined by the API object.
         #
         def readdir(path)
           path    = join(path)
-          entries = @controller.fs_readdir(path)
+          entries = @api.fs_readdir(path)
 
           return Dir.new(path,entries)
         end
@@ -192,16 +188,15 @@ module Ronin
         #   end
         #
         # @note
-        #   Requires the `fs_glob` method be defined by the controller
-        #   object.
+        #   Requires the `fs_glob` method be defined by the API object.
         #
         def glob(pattern,&block)
           path = join(pattern)
 
           if block
-            @controller.fs_glob(pattern,&block)
+            @api.fs_glob(pattern,&block)
           else
-            @controller.enum_for(:fs_glob,pattern).to_a
+            @api.enum_for(:fs_glob,pattern).to_a
           end
         end
         resource_method :glob, [:fs_glob]
@@ -224,7 +219,7 @@ module Ronin
         #   The newly opened file.
         #
         def open(path,&block)
-          File.open(@controller,join(path),&block)
+          File.open(@api,join(path),&block)
         end
         resource_method :open
 
@@ -305,11 +300,10 @@ module Ronin
         #   The newly opened tempfile.
         #
         # @note
-        #   Requires the `fs_mktemp` method be defined by the controller
-        #   object.
+        #   Requires the `fs_mktemp` method be defined by the API object.
         #
         def tmpfile(basename,&block)
-          open(@controller.fs_mktemp(basename),&block)
+          open(@api.fs_mktemp(basename),&block)
         end
         resource_method :tmpfile, [:fs_mktemp]
 
@@ -323,11 +317,10 @@ module Ronin
         #   Specifies that the directory was successfully created.
         #
         # @note
-        #   Requires the `fs_mkdir` method be defined by the controller
-        #   object.
+        #   Requires the `fs_mkdir` method be defined by the API object.
         #
         def mkdir(path)
-          @controller.fs_mkdir(path)
+          @api.fs_mkdir(path)
           return true
         end
         resource_method :mkdir, [:fs_mkdir]
@@ -345,11 +338,10 @@ module Ronin
         #   Specifies that the file was successfully copied.
         #
         # @note
-        #   Requires the `fs_copy` method be defined by the controller
-        #   object.
+        #   Requires the `fs_copy` method be defined by the API object.
         #
         def copy(path,new_path)
-          @controller.fs_copy(join(path),join(new_path))
+          @api.fs_copy(join(path),join(new_path))
           return true
         end
         resource_method :copy, [:fs_copy]
@@ -364,11 +356,10 @@ module Ronin
         #   Specifies that the file was successfully removed.
         #
         # @note
-        #   Requires the `fs_unlink` method be defined by the controller
-        #   object.
+        #   Requires the `fs_unlink` method be defined by the API object.
         #
         def unlink(path)
-          @controller.fs_unlink(join(path))
+          @api.fs_unlink(join(path))
           return true
         end
         resource_method :unlink, [:fs_unlink]
@@ -385,11 +376,10 @@ module Ronin
         #   Specifies that the directory was successfully removed.
         #
         # @note
-        #   Requires the `fs_rmdir` method be defined by the controller
-        #   object.
+        #   Requires the `fs_rmdir` method be defined by the API object.
         #
         def rmdir(path)
-          @controller.fs_rmdir(join(path))
+          @api.fs_rmdir(join(path))
           return true
         end
         resource_method :rmdir, [:fs_rmdir]
@@ -407,11 +397,10 @@ module Ronin
         #   Specifies that the file or directory was successfully moved.
         #
         # @note
-        #   Requires the `fs_move` method be defined by the controller
-        #   object.
+        #   Requires the `fs_move` method be defined by the API object.
         #
         def move(path,new_path)
-          @controller.fs_move(join(path),join(new_path))
+          @api.fs_move(join(path),join(new_path))
           return true
         end
         resource_method :move, [:fs_move]
@@ -431,11 +420,10 @@ module Ronin
         #   Specifies that the symbolic link was successfully created.
         #
         # @note
-        #   Requires the `fs_link` method be defined by the controller
-        #   object.
+        #   Requires the `fs_link` method be defined by the API object.
         #
         def link(path,new_path)
-          @controller.fs_link(path,new_path)
+          @api.fs_link(path,new_path)
           return true
         end
         resource_method :link, [:fs_link]
@@ -459,15 +447,14 @@ module Ronin
         #   exploit.fs.chown(['alice', 'users'], 'one.html')
         #
         # @note
-        #   Requires the `fs_chown` method be defined by the controller
-        #   object.
+        #   Requires the `fs_chown` method be defined by the API object.
         #
         def chown(owner,path)
           user, group = owner
 
           chgrp(group,path) if group
 
-          @controller.fs_chown(user,join(path))
+          @api.fs_chown(user,join(path))
           return true
         end
         resource_method :chown, [:fs_chown]
@@ -488,11 +475,10 @@ module Ronin
         #   exploit.fs.chgrp('www', 'one.html')
         #
         # @note
-        #   Requires the `fs_chgrp` method be defined by the controller
-        #   object.
+        #   Requires the `fs_chgrp` method be defined by the API object.
         #
         def chgrp(group,path)
-          @controller.fs_chgrp(group,join(path))
+          @api.fs_chgrp(group,join(path))
           return true
         end
         resource_method :chgrp, [:fs_chgrp]
@@ -513,11 +499,10 @@ module Ronin
         #   exploit.fs.chmod(0665, 'one.html')
         #
         # @note
-        #   Requires the `fs_chmod` method be defined by the controller
-        #   object.
+        #   Requires the `fs_chmod` method be defined by the API object.
         #
         def chmod(mode,path)
-          @controller.fs_chmod(mode,join(path))
+          @api.fs_chmod(mode,join(path))
           return true
         end
         resource_method :chmod, [:fs_chmod]
@@ -534,7 +519,7 @@ module Ronin
         # @see File::Stat.new
         #
         def stat(path)
-          File::Stat.new(@controller,join(path))
+          File::Stat.new(@api,join(path))
         end
         resource_method :stat, [:fs_stat]
 
@@ -551,11 +536,10 @@ module Ronin
         #   Specifies whether the two files are identical.
         #
         # @note
-        #   Requires the `fs_compare` method be defined by the controller
-        #   object.
+        #   Requires the `fs_compare` method be defined by the API object.
         #
         def compare(path,other_path)
-          @controller.fs_compare(path,other_path)
+          @api.fs_compare(path,other_path)
         end
         resource_method :compare, [:fs_compare]
 

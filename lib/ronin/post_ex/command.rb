@@ -28,7 +28,7 @@ module Ronin
     #
     # The {Command} class represents commands being executed on remote
     # systems. The {Command} class wraps around the `shell_exec` method
-    # defined in the object controller shell access.
+    # defined in the API object.
     #
     class Command < Resource
 
@@ -44,7 +44,7 @@ module Ronin
       #
       # Creates a new Command.
       #
-      # @param [#shell_exec] controller
+      # @param [#shell_exec] api
       #   The object controlling command execution.
       #
       # @param [String] program
@@ -54,16 +54,16 @@ module Ronin
       #   The arguments to run with.
       #
       # @raise [RuntimeError]
-      #   The controller object does not define `shell_exec`.
+      #   The API object does not define `shell_exec`.
       #
-      def initialize(controller,program,*arguments)
-        unless controller.respond_to?(:shell_exec)
-          raise(RuntimeError,"#{controller.inspect} must define shell_exec for #{self.class}")
+      def initialize(api,program,*arguments)
+        unless api.respond_to?(:shell_exec)
+          raise(RuntimeError,"#{api.inspect} must define shell_exec for #{self.class}")
         end
 
-        @controller = controller
-        @program    = program
-        @arguments  = arguments
+        @api       = api
+        @program   = program
+        @arguments = arguments
 
         super()
       end
@@ -119,7 +119,7 @@ module Ronin
       #   The enumerator that wraps around `shell_exec`.
       #
       def io_open
-        @controller.enum_for(:shell_exec,@program,*@arguments)
+        @api.enum_for(:shell_exec,@program,*@arguments)
       end
       resource_method :open, [:shell_exec]
 
@@ -151,10 +151,10 @@ module Ronin
       #   The number of bytes writen.
       #
       def io_write(data)
-        if @controller.respond_to?(:shell_write)
-          @controller.shell_write(data)
+        if @api.respond_to?(:shell_write)
+          @api.shell_write(data)
         else
-          raise(IOError,"#{@controller.inspect} does not support writing to the shell")
+          raise(IOError,"#{@api.inspect} does not support writing to the shell")
         end
       end
       resource_method :write, [:shell_write]

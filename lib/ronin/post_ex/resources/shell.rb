@@ -38,11 +38,11 @@ module Ronin
         #
         # Initializes the Shell resource.
         #
-        # @param [#shell_exec] controller
-        #   The object controller the command-execution.
+        # @param [#shell_exec] api
+        #   The API object that defines the `shell_exec` method.
         #
-        def initialize(controller)
-          super(controller)
+        def initialize(api)
+          super(api)
 
           @paths = {}
         end
@@ -62,7 +62,7 @@ module Ronin
         def command(program,*arguments)
           program = (@paths[program.scan(/^[^\s]+/).first] || program)
 
-          return Command.new(@controller,program,*arguments)
+          return Command.new(@api,program,*arguments)
         end
         resource_method :command, [:shell_exec]
 

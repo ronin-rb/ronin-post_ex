@@ -29,7 +29,7 @@ module Ronin
   module PostEx
     #
     # The {File} class represents files on a remote system. {File} requires
-    # the controller object to define either `fs_read` and/or `fs_write`.
+    # the API object to define either `fs_read` and/or `fs_write`.
     # Additionally, {File} can optionally use the `fs_open`, `fs_close`,
     # `fs_tell`, `fs_seek` and `fs_stat` methods.
     #
@@ -40,16 +40,16 @@ module Ronin
       #
       # Creates a new remote controlled File object.
       #
-      # @param [#fs_read, #fs_write] controller
-      #   The object controlling remote files.
+      # @param [#fs_read, #fs_write] api
+      #   The API object that defines the `fs_read` and `fs_write` methods.
       #
       # @param [String] path
       #   The path of the remote file.
       #
-      def initialize(controller,path,mode='r')
-        @controller = controller
-        @path       = path.to_s
-        @mode       = mode.to_s
+      def initialize(api,path,mode='r')
+        @api  = api
+        @path = path.to_s
+        @mode = mode.to_s
 
         super()
       end
@@ -57,7 +57,7 @@ module Ronin
       #
       # Opens a file.
       #
-      # @param [#fs_read] controller
+      # @param [#fs_read] api
       #   The object controlling remote files.
       #
       # @param [String] path
@@ -70,8 +70,8 @@ module Ronin
       # @yieldparam [File]
       #   The newly created file object.
       #
-      def self.open(controller,path)
-        io = new(controller,path)
+      def self.open(api,path)
+        io = new(api,path)
 
         if block_given?
           value = yield(io)
@@ -95,8 +95,8 @@ module Ronin
       def seek(new_pos,whence=SEEK_SET)
         clear_buffer!
 
-        if @controller.respond_to?(:fs_seek)
-          @controller.fs_seek(@fd,new_pos,whence)
+        if @api.respond_to?(:fs_seek)
+          @api.fs_seek(@fd,new_pos,whence)
         end
 
         @pos = new_pos
@@ -110,8 +110,8 @@ module Ronin
       #   The current offset in bytes.
       #
       def tell
-        if @controller.respond_to?(:fs_tell)
-          @pos = @controller.fs_tell(@fd)
+        if @api.respond_to?(:fs_tell)
+          @pos = @api.fs_tell(@fd)
         else
           @pos
         end
@@ -128,14 +128,14 @@ module Ronin
       #   Argument of the command.
       #
       # @raise [RuntimeError]
-      #   The controller object does not define `fs_ioctl`.
+      #   The API object does not define `fs_ioctl`.
       #
       def ioctl(command,argument)
-        unless @controller.respond_to?(:fs_ioctl)
-          raise(RuntimeError,"#{@controller.inspect} does not define fs_ioctl")
+        unless @api.respond_to?(:fs_ioctl)
+          raise(RuntimeError,"#{@api.inspect} does not define fs_ioctl")
         end
 
-        return @controller.fs_ioctl(command,argument)
+        return @api.fs_ioctl(command,argument)
       end
       resource_method :ioctl, [:fs_ioctl]
 
@@ -149,14 +149,14 @@ module Ronin
       #   Argument of the command.
       #
       # @raise [RuntimeError]
-      #   The controller object does not define `fs_fcntl`.
+      #   The API object does not define `fs_fcntl`.
       #
       def fcntl(command,argument)
-        unless @controller.respond_to?(:fs_fcntl)
-          raise(RuntimeError,"#{@controller.inspect} does not define fs_fcntl")
+        unless @api.respond_to?(:fs_fcntl)
+          raise(RuntimeError,"#{@api.inspect} does not define fs_fcntl")
         end
 
-        return @controller.fs_fcntl(command,argument)
+        return @api.fs_fcntl(command,argument)
       end
       resource_method :fcntl, [:fs_fcntl]
 
@@ -184,7 +184,7 @@ module Ronin
       #   The status information.
       #
       def stat
-        File::Stat.new(@controller,@path)
+        File::Stat.new(@api,@path)
       end
       resource_method :stat, [:fs_stat]
 
@@ -201,15 +201,14 @@ module Ronin
       protected
 
       #
-      # Attempts calling `fs_open` from the controller object to open
-      # the remote file.
+      # Attempts calling `fs_open` from the API object to open the remote file.
       #
       # @return [Object]
       #   The file descriptor returned by `fs_open`.
       #
       def io_open
-        if @controller.respond_to?(:fs_open)
-          @controller.fs_open(@path,@mode)
+        if @api.respond_to?(:fs_open)
+          @api.fs_open(@path,@mode)
         else
           @path
         end
@@ -218,29 +217,29 @@ module Ronin
 
       #
       # Reads a block from the remote file by calling `fs_read` or
-      # `fs_readfile` from the controller object.
+      # `fs_readfile` from the API object.
       #
       # @return [String, nil]
       #   A block of data from the file.
       #
       # @raise [IOError]
-      #   The controller object does not define `fs_read` or `fs_readfile`.
+      #   The API object does not define `fs_read` or `fs_readfile`.
       #
       def io_read
-        if @controller.respond_to?(:fs_readfile)
+        if @api.respond_to?(:fs_readfile)
           @eof = true
-          @controller.fs_readfile(@path)
-        elsif @controller.respond_to?(:fs_read)
-          @controller.fs_read(@fd,@pos)
+          @api.fs_readfile(@path)
+        elsif @api.respond_to?(:fs_read)
+          @api.fs_read(@fd,@pos)
         else
-          raise(IOError,"#{@controller.inspect} does not support reading")
+          raise(IOError,"#{@api.inspect} does not support reading")
         end
       end
       resource_method :read, [:fs_read]
 
       #
       # Writes data to the remote file by calling `fs_write` from the
-      # controller object.
+      # API object.
       #
       # @param [String] data
       #   The data to write.
@@ -249,24 +248,24 @@ module Ronin
       #   The number of bytes writen.
       #
       # @raise [IOError]
-      #   The controller object does not define `fs_write`.
+      #   The API object does not define `fs_write`.
       #
       def io_write(data)
-        if @controller.respond_to?(:fs_write)
-          @pos += @controller.fs_write(@fd,@pos,data)
+        if @api.respond_to?(:fs_write)
+          @pos += @api.fs_write(@fd,@pos,data)
         else
-          raise(IOError,"#{@controller.inspect} does not support writing to files")
+          raise(IOError,"#{@api.inspect} does not support writing to files")
         end
       end
       resource_method :write, [:fs_write]
 
       #
-      # Attempts calling `fs_close` from the controller object to close
+      # Attempts calling `fs_close` from the API object to close
       # the file.
       #
       def io_close
-        if @controller.respond_to?(:fs_close)
-          @controller.fs_close(@fd)
+        if @api.respond_to?(:fs_close)
+          @api.fs_close(@fd)
         end
       end
       resource_method :close

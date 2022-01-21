@@ -31,8 +31,8 @@ module Ronin
       #
       # # Supported Control Methods
       #
-      # The Process resource uses the following control methods, defined by the
-      # controller object.
+      # The Process resource uses the following API methods, defined by the
+      # API object.
       #
       # * `process_getpid # => Integer`
       # * `process_getppid # => Integer`
@@ -66,11 +66,10 @@ module Ronin
         #   The current PID.
         #
         # @note
-        #   Requires the `process_getpid` method be defined by the controller
-        #   object.
+        #   Requires the `process_getpid` method be defined by the API object.
         #
         def getpid
-          @controller.process_getpid
+          @api.process_getpid
         end
         resource_method :pid, [:process_getpid]
 
@@ -83,11 +82,10 @@ module Ronin
         #   The parent PID.
         #
         # @note
-        #   Requires the `process_getppid` method be defined by the controller
-        #   object.
+        #   Requires the `process_getppid` method be defined by the API object.
         #
         def getppid
-          @controller.process_getppid
+          @api.process_getppid
         end
         resource_method :ppid, [:process_getppid]
 
@@ -100,11 +98,10 @@ module Ronin
         #   The current UID.
         #
         # @note
-        #   Requires the `process_getuid` method be defined by the controller
-        #   object.
+        #   Requires the `process_getuid` method be defined by the API object.
         #
         def getuid
-          @controller.process_getuid
+          @api.process_getuid
         end
         resource_method :uid, [:process_getuid]
 
@@ -117,11 +114,10 @@ module Ronin
         #   The new UID.
         #
         # @note
-        #   Requires the `process_setuid` method be defined by the controller
-        #   object.
+        #   Requires the `process_setuid` method be defined by the API object.
         #
         def setuid(new_uid)
-          @controller.process_setuid(new_uid)
+          @api.process_setuid(new_uid)
         end
         resource_method :uid=, [:process_setuid]
 
@@ -134,11 +130,10 @@ module Ronin
         #   The effective UID.
         #
         # @note
-        #   Requires the `process_geteuid` method be defined by the controller
-        #   object.
+        #   Requires the `process_geteuid` method be defined by the API object.
         #
         def geteuid
-          @controller.process_geteuid
+          @api.process_geteuid
         end
         resource_method :euid, [:process_geteuid]
 
@@ -151,11 +146,10 @@ module Ronin
         #   The new effective UID.
         #
         # @note
-        #   Requires the `process_seteuid` method be defined by the controller
-        #   object.
+        #   Requires the `process_seteuid` method be defined by the API object.
         #
         def seteuid(new_euid)
-          @controller.process_seteuid(new_euid)
+          @api.process_seteuid(new_euid)
         end
         resource_method :euid=, [:process_seteuid]
 
@@ -168,11 +162,10 @@ module Ronin
         #   The current GID.
         #
         # @note
-        #   Requires the `process_getgid` method be defined by the controller
-        #   object.
+        #   Requires the `process_getgid` method be defined by the API object.
         #
         def getgid
-          @controller.process_getgid
+          @api.process_getgid
         end
         resource_method :gid, [:process_getgid]
 
@@ -185,11 +178,10 @@ module Ronin
         #   The new GID.
         #
         # @note
-        #   Requires the `process_setgid` method be defined by the controller
-        #   object.
+        #   Requires the `process_setgid` method be defined by the API object.
         #
         def setgid(new_gid)
-          @controller.process_setgid(new_gid)
+          @api.process_setgid(new_gid)
         end
         resource_method :gid=, [:process_setgid]
 
@@ -202,11 +194,10 @@ module Ronin
         #   The effective GID.
         #
         # @note
-        #   Requires the `process_getegid` method be defined by the controller
-        #   object.
+        #   Requires the `process_getegid` method be defined by the API object.
         #
         def getegid
-          @controller.process_getegid
+          @api.process_getegid
         end
         resource_method :egid, [:process_getegid]
 
@@ -219,11 +210,10 @@ module Ronin
         #   The new effective GID.
         #
         # @note
-        #   Requires the `process_setegid` method be defined by the controller
-        #   object.
+        #   Requires the `process_setegid` method be defined by the API object.
         #
         def setegid(new_egid)
-          @controller.process_setegid(new_egid)
+          @api.process_setegid(new_egid)
         end
         resource_method :egid=, [:process_setegid]
 
@@ -236,11 +226,10 @@ module Ronin
         #   The current SID.
         #
         # @note
-        #   Requires the `process_getsid` method be defined by the controller
-        #   object.
+        #   Requires the `process_getsid` method be defined by the API object.
         #
         def getsid
-          @controller.process_getsid
+          @api.process_getsid
         end
         resource_method :sid, [:process_getsid]
 
@@ -250,11 +239,10 @@ module Ronin
         # Sets the SID of the current process.
         #
         # @note
-        #   Requires the `process_setsid` method be defined by the controller
-        #   object.
+        #   Requires the `process_setsid` method be defined by the API object.
         #
         def setsid
-          @controller.process_setsid
+          @api.process_setsid
         end
         resource_method :setsid, [:process_setsid]
 
@@ -267,13 +255,12 @@ module Ronin
         #   The Hash of environment variables.
         #
         # @note
-        #   Requires the `process_environ` method be defined by the controller
-        #   object.
+        #   Requires the `process_environ` method be defined by the API object.
         #
         # @api public
         #
         def environ
-          @controller.process_environ
+          @api.process_environ
         end
         resource_method :environ, [:process_environ]
 
@@ -290,17 +277,17 @@ module Ronin
         #
         # @note
         #   Requires `process_getenv` or `process_environ` methods be defined by
-        #   the controller object.
+        #   the API object.
         #
         # @api public
         #
         def getenv(name)
-          if @controller.respond_to?(:process_getenv)
-            @controller.process_getenv(name)
-          elsif @controller.respond_to?(:process_environ)
-            @controller.process_environ[name]
+          if @api.respond_to?(:process_getenv)
+            @api.process_getenv(name)
+          elsif @api.respond_to?(:process_environ)
+            @api.process_environ[name]
           else
-            raise(NoMethodError,"#{@controller} does not define process_getenv or process_environ")
+            raise(NoMethodError,"#{@api} does not define process_getenv or process_environ")
           end
         end
         resource_method :getenv, [:process_getenv]
@@ -315,13 +302,12 @@ module Ronin
         #   The new value for the environment variable.
         #
         # @note
-        #   Requires the `process_setenv` method be defined by the controller
-        #   object.
+        #   Requires the `process_setenv` method be defined by the API object.
         #
         # @api public
         #
         def setenv(name,value)
-          @controller.process_setenv(name,value)
+          @api.process_setenv(name,value)
         end
         resource_method :setenv, [:process_setenv]
 
@@ -332,13 +318,12 @@ module Ronin
         #   The name of the environment variable.
         #
         # @note
-        #   Requires the `process_unsetenv` method be defined by the controller
-        #   object.
+        #   Requires the `process_unsetenv` method be defined by the API object.
         #
         # @api public
         #
         def unsetenv(name)
-          @controller.process_unsetenv(name)
+          @api.process_unsetenv(name)
         end
         resource_method :unsetenv, [:process_unsetenv]
 
@@ -352,11 +337,10 @@ module Ronin
         #   The POSIX signal name to send to the process.
         #
         # @note
-        #   Requires the `process_kill` method be defined by the controller
-        #   object.
+        #   Requires the `process_kill` method be defined by the API object.
         #
         def kill(pid,signal='KILL')
-          @controller.process_kill(pid,signal)
+          @api.process_kill(pid,signal)
         end
         resource_method :kill, [:process_kill]
 
@@ -367,11 +351,10 @@ module Ronin
         #   The current working directory.
         #
         # @note
-        #   Requires the `process_getcwd` method be defined by the controller
-        #   object.
+        #   Requires the `process_getcwd` method be defined by the API object.
         #
         def getcwd
-          @controller.process_getcwd
+          @api.process_getcwd
         end
         resource_method :getcwd, [:process_getcwd]
 
@@ -387,11 +370,10 @@ module Ronin
         #   The new current working directory.
         #
         # @note
-        #   Requires the `process_chdir` method be defined by the controller
-        #   object.
+        #   Requires the `process_chdir` method be defined by the API object.
         #
         def chdir(path)
-          @controller.process_chdir(path)
+          @api.process_chdir(path)
         end
         resource_method :chdir, [:process_chdir]
 
@@ -404,11 +386,10 @@ module Ronin
         #   The current time.
         #
         # @note
-        #   Requires the `process_time` method be defined by the controller
-        #   object.
+        #   Requires the `process_time` method be defined by the API object.
         #
         def time
-          Time.at(@controller.process_time.to_i)
+          Time.at(@api.process_time.to_i)
         end
         resource_method :time, [:process_time]
 
@@ -425,13 +406,12 @@ module Ronin
         #   The pid of the new process.
         #
         # @note
-        #   Requires the `process_spawn` method be defined by the controller
-        #   object.
+        #   Requires the `process_spawn` method be defined by the API object.
         #
         # @api public
         #
         def spawn(program,*arguments)
-          @controller.process_spawn(program,*arguments)
+          @api.process_spawn(program,*arguments)
         end
         resource_method :spawn, [:process_spawn]
 
@@ -439,11 +419,10 @@ module Ronin
         # Exits the current running process.
         #
         # @note
-        #   Requires the `process_exit` method be defined by the controller
-        #   object.
+        #   Requires the `process_exit` method be defined by the API object.
         #
         def exit
-          @controller.process_exit
+          @api.process_exit
         end
         resource_method :exit, [:process_exit]
 

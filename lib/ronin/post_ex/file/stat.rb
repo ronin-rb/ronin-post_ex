@@ -26,8 +26,8 @@ module Ronin
     class File < Resource
       #
       # Represents the status information of a remote file. The {Stat} class
-      # using the `fs_stat` method defined by the controller object to
-      # request the remote status information.
+      # using the `fs_stat` method defined by the API object to request the
+      # remote status information.
       #
       class Stat
 
@@ -55,7 +55,7 @@ module Ronin
         #
         # Creates a new File Stat object.
         #
-        # @param [#fs_stat] controller
+        # @param [#fs_stat] api
         #   The object controlling file-system stat.
         #
         # @param [String] path
@@ -68,15 +68,15 @@ module Ronin
         # @raise [Errno::ENOENT]
         #   The remote file does not exist.
         #
-        def initialize(controller,path)
-          unless controller.respond_to?(:fs_stat)
-            raise(RuntimeError,"#{controller.inspect} does not define fs_stat")
+        def initialize(api,path)
+          unless api.respond_to?(:fs_stat)
+            raise(RuntimeError,"#{api.inspect} does not define fs_stat")
           end
 
-          @controller = controller
-          @path       = path.to_s
+          @api  = api
+          @path = path.to_s
 
-          unless (stat = @controller.fs_stat(@path))
+          unless (stat = @api.fs_stat(@path))
             raise(Errno::ENOENT,"No such file or directory #{@path.dump}")
           end
 
