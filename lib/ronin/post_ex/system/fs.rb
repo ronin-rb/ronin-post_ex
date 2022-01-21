@@ -21,8 +21,8 @@
 
 require 'ronin/post_ex/resource'
 require 'ronin/post_ex/remote_file'
+require 'ronin/post_ex/remote_file/stat'
 require 'ronin/post_ex/captured_file'
-require 'ronin/post_ex/file/stat'
 require 'ronin/post_ex/remote_dir'
 
 require 'hexdump'
