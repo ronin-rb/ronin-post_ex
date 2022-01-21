@@ -21,6 +21,7 @@
 
 require 'ronin/post_ex/resource'
 require 'ronin/post_ex/command'
+require 'ronin/post_ex/shells/shell'
 
 require 'date'
 
@@ -914,9 +915,7 @@ module Ronin
         # Starts an interactive Shell console.
         #
         def console
-          UI::Shell.start(prompt: '$') do |shell,line|
-            command(line).each_block { |block| shell.write(block) }
-          end
+          Shells::Shell.start(self)
         end
 
       end
