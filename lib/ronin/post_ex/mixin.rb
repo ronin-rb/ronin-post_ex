@@ -47,22 +47,6 @@ module Ronin
     #
     module Mixin
       #
-      # The controlled resources.
-      #
-      # @return [Hash{Symbol => Resource}]
-      #   The controlled resources.
-      #
-      # @api semipublic
-      #
-      def resources
-        @resources ||= Hash.new do |hash,key| 
-          if (resource = Resources.require_const(key))
-            hash[key] = resource.new(self)
-          end
-        end
-      end
-
-      #
       # The File-System resource.
       #
       # @return [Resources::FS]
@@ -71,7 +55,7 @@ module Ronin
       # @api public
       #
       def fs
-        resources[:fs]
+        @fs ||= Resources::FS.new(self)
       end
 
       #
@@ -83,7 +67,7 @@ module Ronin
       # @api public
       #
       def process
-        resources[:process]
+        @process ||= Resources::Process.new(self)
       end
 
       #
@@ -95,7 +79,7 @@ module Ronin
       # @api public
       #
       def shell
-        resources[:shell]
+        @shell ||= Resources::Shell.new(self)
       end
 
       #
