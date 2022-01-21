@@ -1,5 +1,6 @@
 lib/**/*.rb
 - 
+API_SPEC.md
 ChangeLog.md
 COPYING.txt
 man/*.md
