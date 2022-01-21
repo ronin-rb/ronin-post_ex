@@ -19,8 +19,15 @@ ronin-post_ex is a Ruby API for Post-Exploitation.
 
 * Defines a syscall-like API for Post-Exploitation.
 * Provides classes for interacting with the Post-Exploitation API.
-* Provides classes for interacting with remote resources (files, directories,
-  commands, etc).
+  * {Ronin::PostEx::System} - allows interacting with a remote system.
+  * {Ronin::PostEx::FS} - allows interacting with the file-system.
+  * {Ronin::PostEx::Process} - allows manipulating the current process or child
+    processes.
+  * {Ronin::PostEx::Shell} - allows interacting with an interactive shell..
+  * {Ronin::PostEx::Command} - allows reading/writing to an running command.
+  * {Ronin::PostEx::File} - allows reading/writing files.
+  * {Ronin::PostEx::Dir} - allows reading the contents of directories.
+* Supports interacting with interactive shell commands.
 
 ## Requirements
 
