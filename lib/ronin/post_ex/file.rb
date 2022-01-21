@@ -37,16 +37,16 @@ module Ronin
     #
     # * `file_open(path : String, mode : String) -> Integer`
     # * `file_read(fd : Integer, pos : Integer) -> String | nil`
-    # * `file_readfile(path : String) -> String | nil`
     # * `file_write(fd : Integer, pos : Integer, data : String) -> Integer`
     # * `file_seek(fd : Integer, new_pos : Integer, whence : File::SEEK_SET | File::SEEK_CUR | File::SEEK_END | File::SEEK_DATA | File::SEEK_HOLE)`
     # * `file_tell(fd : Integer) -> Integer`
     # * `file_ioctl(fd : Integer, command : String | Array[Integer], argument : Object) -> Integer`
     # * `file_fcntl(fd : Integer, command : String | Array[Integer], argument : Object) -> Integer`
     # * `file_stat(fd : Integer) => Hash[Symbol, Object] | nil`
-    # * `fs_stat(path : String) => Hash[Symbol, Object] | nil`
 
     # * `file_close(fd : Integer)`
+    # * `fs_readfile(path : String) -> String | nil`
+    # * `fs_stat(path : String) => Hash[Symbol, Object] | nil`
     #
     class File < Resource
 
@@ -275,23 +275,23 @@ module Ronin
 
       #
       # Reads a block from the remote file by calling `file_read` or
-      # `file_readfile` from the API object.
+      # `fs_readfile` from the API object.
       #
       # @return [String, nil]
       #   A block of data from the file or `nil` if there is no more data to be
       #   read.
       #
       # @raise [IOError]
-      #   The API object does not define `file_read` or `file_readfile`.
+      #   The API object does not define `file_read` or `fs_readfile`.
       #
       # @note
-      #   This method requires either the `file_readfile` or `file_read` API
+      #   This method requires either the `fs_readfile` or `file_read` API
       #   methods.
       #
       def io_read
-        if @api.respond_to?(:file_readfile)
+        if @api.respond_to?(:fs_readfile)
           @eof = true
-          @api.file_readfile(@path)
+          @api.fs_readfile(@path)
         elsif @api.respond_to?(:file_read)
           @api.file_read(@fd,@pos)
         else

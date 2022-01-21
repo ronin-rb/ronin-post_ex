@@ -17,10 +17,6 @@ Opens a file and returns the file-descriptor number.
 Reads from an opened file-descriptor and returns the read data.
 `nil` will be returned if there is no more data to be read.
 
-### `file_readfile(path : String) -> String | nil`
-
-Reads the entire file at the given path and returns the full file's contents.
-
 ### `file_write(fd : Integer, pos : Integer, data : String) -> Integer`
 
 Writes data to the opened file-descriptor.
@@ -63,6 +59,10 @@ Changes the current working directory.
 ### `fs_readlink(path : String) -> String`
 
 Reads the destination path of a symbolic link.
+
+### `fs_readfile(path : String) -> String | nil`
+
+Reads the entire file at the given path and returns the full file's contents.
 
 ### `fs_readdir(path : String) -> Array[String]`
 
