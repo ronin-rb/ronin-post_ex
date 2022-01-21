@@ -17,7 +17,7 @@ ronin-post_ex is a Ruby API for Post-Exploitation.
 
 ## Features
 
-* Defines a syscall-like API for Post-Exploitation.
+* Defines a syscall-like [API for Post-Exploitation][API Spec].
 * Provides classes for interacting with the Post-Exploitation API.
   * {Ronin::PostEx::System} - allows interacting with a remote system.
   * {Ronin::PostEx::Resources::FS} - allows interacting with the file-system.
@@ -88,3 +88,5 @@ along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 [fake_io]: https://github.com/postmodern/fake_io.rb#readme
 [hexdump]: https://github.com/postmodern/hexdump.rb#readme
 [ronin-core]: https://github.com/ronin-rb/ronin-core#readme
+
+[API Spec]: https://github.com/ronin-rb/ronin-post_ex/blob/main/API_SPEC.md
