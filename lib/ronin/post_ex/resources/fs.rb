@@ -32,7 +32,7 @@ module Ronin
       #
       # Controls the resources of a File System.
       #
-      # # Supported Control Methods
+      # # Supported API Methods
       #
       # The File System resource uses the following control methods,
       # defined by the API object:
