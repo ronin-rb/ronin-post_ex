@@ -37,7 +37,12 @@ module Ronin
         # @param [System] system
         #   The file-system resource.
         #
-        def initialize(system)
+        # @param [Hash{Symbol => Object}] kwargs
+        #   Additional keyword arguments.
+        #
+        def initialize(system, **kwargs)
+          super(**kwargs)
+
           @system = system
         end
 
