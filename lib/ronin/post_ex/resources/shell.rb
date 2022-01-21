@@ -31,6 +31,11 @@ module Ronin
       #
       # Controls the resources of a Shell.
       #
+      # ## Supported API Methods
+      #
+      # * `shell_exec(program : String, *arguments : Array[String]) { |data : String| ... }`
+      # * `shell_write(data : String)`
+      #
       class Shell < Resource
 
         attr_reader :paths
