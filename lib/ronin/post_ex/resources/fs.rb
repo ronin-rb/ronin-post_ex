@@ -39,8 +39,8 @@ module Ronin
       #
       # * `fs_getcwd() -> String`
       # * `fs_chdir(path : String)`
-      # * `fs_readlink(path) -> String`
-      # * `fs_readdir(path) -> Array[String]`
+      # * `fs_readlink(path : String) -> String`
+      # * `fs_readdir(path : String) -> Array[String]`
       # * `fs_glob(pattern : String) { |path : String| ... }`
       # * `fs_mktemp(basename : String) -> String`
       # * `fs_mkdir(new_path : String)`
