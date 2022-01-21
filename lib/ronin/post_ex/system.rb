@@ -28,7 +28,7 @@ require 'ronin/post_ex/cli/system_shell'
 module Ronin
   module PostEx
     #
-    # Represents an successfully compromised system. The {System} class will
+    # Represents a successfully compromised system. The {System} class will
     # wraps around another object which defines syscall-like Post-Exploitation
     # API to read/write files, run commands, etc.
     #
