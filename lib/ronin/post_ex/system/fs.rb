@@ -21,6 +21,7 @@
 
 require 'ronin/post_ex/resource'
 require 'ronin/post_ex/file'
+require 'ronin/post_ex/captured_file'
 require 'ronin/post_ex/file/stat'
 require 'ronin/post_ex/dir'
 
@@ -227,14 +228,22 @@ module Ronin
         #   After the block has returned, the file will be closed and
         #   `nil` will be returned.
         #
-        # @yieldparam [File] file
-        #   The temporarily opened file.
+        # @yieldparam [File, CapturedFile] file
+        #   The temporarily opened file. If {#api} defines the `file_open`, then
+        #   a {File} will be returned. If {#api} defines a `fs_readfile` method
+        #   instead, than a {CapturedFile} will be returned.
         #
-        # @return [File, nil]
-        #   The newly opened file.
+        # @return [File, CapturedFile, nil]
+        #   The newly opened file. If {#api} defines the `file_open`, then
+        #   a {File} will be returned. If {#api} defines a `fs_readfile` method
+        #   instead, than a {CapturedFile} will be returned.
         #
         def open(path,&block)
-          File.open(@api,join(path),&block)
+          if @api.respond_to?(:file_open)
+            File.open(@api,join(path),&block)
+          else
+            CapturedFile.new(join(path),readfile(path),&block)
+          end
         end
         resource_method :open
 
