@@ -1,0 +1,25 @@
+name: ronin-post_ex
+summary: Ruby API for Post-Exploitation
+description: |
+  A Ruby API for Post-Exploitation
+
+license: LGPL-3.0
+authors: Postmodern
+email: postmodern.mod3@gmail.com
+homepage: https://ronin-rb.dev/
+has_yard: true
+
+metadata:
+  documentation_uri: https://rubydoc.info/gems/ronin-post_ex
+  source_code_uri:   https://github.com/ronin-rb/ronin-post_ex
+  bug_tracker_uri:   https://github.com/ronin-rb/ronin-post_ex/issues
+  changelog_uri:     https://github.com/ronin-rb/ronin-post_ex/blob/master/ChangeLog.md
+
+required_ruby_version: ">= 2.7.0"
+
+dependencies:
+  # Ronin dependencies:
+  ronin-core: ~> 0.1
+
+development_dependencies:
+  bundler: ~> 2.0
