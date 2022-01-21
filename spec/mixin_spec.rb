@@ -1,23 +1,28 @@
 require 'spec_helper'
 require 'ronin/post_ex/mixin'
 
-describe PostEx::Mixin do
+describe Mixin do
   subject do
     obj = Object.new
-    obj.extend PostEx::Mixin
+    obj.extend described_class
     obj
   end
 
-  it "should lazily initialize controlled resources objects" do
-    expect(subject.resources).to be_empty
-    expect(subject.resources[:shell]).not_to be_nil
+  describe "#fs" do
+    it "must return a Resources::FS object" do
+      expect(subject.fs).to be_kind_of(Resources::FS)
+    end
   end
 
-  it "should not provide access to other resources" do
-    expect(subject.resources[:foo]).to be_nil
+  describe "#process" do
+    it "must return a Resources::Process object" do
+      expect(subject.process).to be_kind_of(Resources::Process)
+    end
   end
 
-  it "should define methods for accessing the resources" do
-    expect(subject).to respond_to(:fs)
+  describe "#shell" do
+    it "must return a Resources::Shell object" do
+      expect(subject.shell).to be_kind_of(Resources::Shell)
+    end
   end
 end
