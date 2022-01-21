@@ -279,6 +279,8 @@ module Ronin
         end
         resource_method :environ, [:process_environ]
 
+        alias env environ
+
         #
         # Retrieves the value of a environment variable.
         #
