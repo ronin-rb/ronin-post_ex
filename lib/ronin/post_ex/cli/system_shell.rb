@@ -367,7 +367,7 @@ module Ronin
           'CUR'  => File::SEEK_CUR,
           'END'  => File::SEEK_END,
           'DATA' => File::SEEK_DATA,
-          'HOLE' => File::SEEK_HOLE,
+          'HOLE' => File::SEEK_HOLE
         }
 
         #
