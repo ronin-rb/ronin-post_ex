@@ -41,8 +41,8 @@ module Ronin
     # * `file_write(fd : Integer, pos : Integer, data : String) -> Integer`
     # * `file_seek(fd : Integer, new_pos : Integer, whence : File::SEEK_SET | File::SEEK_CUR | File::SEEK_END | File::SEEK_DATA | File::SEEK_HOLE)`
     # * `file_tell(fd : Integer) -> Integer`
-    # * `file_ioctl(command : String | Array[Integer], argument : Object) -> Integer`
-    # * `file_fcntl(command : String | Array[Integer], argument : Object) -> Integer`
+    # * `file_ioctl(fd : Integer, command : String | Array[Integer], argument : Object) -> Integer`
+    # * `file_fcntl(fd : Integer, command : String | Array[Integer], argument : Object) -> Integer`
     # * `file_stat(fd : Integer) => Hash[Symbol, Object] | nil`
     # * `fs_stat(path : String) => Hash[Symbol, Object] | nil`
 
@@ -155,17 +155,24 @@ module Ronin
       # @return [Integer]
       #   The return value from the `ioctl`.
       #
-      # @raise [RuntimeError]
+      # @raise [NotImplementedError]
       #   The API object does not define `file_ioctl`.
+      #
+      # @raise [RuntimeError]
+      #   The `file_ioctl` method requires a file-descriptor.
       #
       # @note This method requires the `file_ioctl` API method.
       #
       def ioctl(command,argument)
         unless @api.respond_to?(:file_ioctl)
-          raise(RuntimeError,"#{@api.inspect} does not define file_ioctl")
+          raise(NotImplementedError,"#{@api.inspect} does not define file_ioctl")
         end
 
-        return @api.file_ioctl(command,argument)
+        if @fd == nil
+          raise(RuntimeError,"file_ioctl requires a file-descriptor")
+        end
+
+        return @api.file_ioctl(@fd,command,argument)
       end
       resource_method :ioctl, [:file_ioctl]
 
@@ -181,17 +188,21 @@ module Ronin
       # @return [Integer]
       #   The return value from the `fcntl`.
       #
-      # @raise [RuntimeError]
+      # @raise [NotImplementedError]
       #   The API object does not define `file_fcntl`.
       #
       # @note This method requires the `file_fnctl` API method.
       #
       def fcntl(command,argument)
         unless @api.respond_to?(:file_fcntl)
-          raise(RuntimeError,"#{@api.inspect} does not define file_fcntl")
+          raise(NotImplementedError,"#{@api.inspect} does not define file_fcntl")
         end
 
-        return @api.file_fcntl(command,argument)
+        if @fd == nil
+          raise(RuntimeError,"file_ioctl requires a file-descriptor")
+        end
+
+        return @api.file_fcntl(@fd,command,argument)
       end
       resource_method :fcntl, [:file_fcntl]
 
