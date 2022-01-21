@@ -142,7 +142,7 @@ module Ronin
         def readfile(path)
           @api.fs_readfile(path)
         end
-        resource_method :readlink, [:fs_readfile]
+        resource_method :readfile, [:fs_readfile]
 
         #
         # Reads the destination of a link.
