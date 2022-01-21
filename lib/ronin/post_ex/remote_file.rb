@@ -28,10 +28,10 @@ require 'set'
 module Ronin
   module PostEx
     #
-    # The {File} class represents files on a remote system. {File} requires
-    # the API object to define either `file_read` and/or `file_write`.
-    # Additionally, {File} can optionally use the `file_open`, `file_close`,
-    # `file_tell`, `file_seek` and `file_stat` methods.
+    # The {RemoteFile} class represents files on a remote system. {RemoteFile}
+    # requires the API object to define either `file_read` and/or `file_write`.
+    # Additionally, {RemoteFile} can optionally use the `file_open`,
+    # `file_close`, `file_tell`, `file_seek` and `file_stat` methods.
     #
     # ## Supported API Methods
     #
@@ -48,7 +48,7 @@ module Ronin
     # * `fs_readfile(path : String) -> String | nil`
     # * `fs_stat(path : String) => Hash[Symbol, Object] | nil`
     #
-    class File < Resource
+    class RemoteFile < Resource
 
       include FakeIO
 
@@ -88,7 +88,7 @@ module Ronin
       #   The given block will be passed the newly created file object.
       #   When the block has returned, the File object will be closed.
       #
-      # @yieldparam [File]
+      # @yieldparam [RemoteFile]
       #   The newly created file object.
       #
       def self.open(api,path)
@@ -215,7 +215,7 @@ module Ronin
       # @param [String] path
       #   The new path for the file.
       #
-      # @return [File]
+      # @return [RemoteFile]
       #   The re-opened the file.
       #
       # @note
@@ -240,9 +240,9 @@ module Ronin
       #
       def stat
         if @fd
-          File::Stat.new(@api, fd: @fd)
+          Stat.new(@api, fd: @fd)
         else
-          File::Stat.new(@api, path: @path)
+          Stat.new(@api, path: @path)
         end
       end
       resource_method :stat, [:file_stat]

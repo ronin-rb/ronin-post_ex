@@ -22,9 +22,9 @@
 module Ronin
   module PostEx
     #
-    # The {Dir} class represents directories on a remote system.
+    # The {RemoteDir} class represents directories on a remote system.
     #
-    class Dir
+    class RemoteDir
 
       include Enumerable
 

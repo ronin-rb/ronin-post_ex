@@ -25,8 +25,8 @@ ronin-post_ex is a Ruby API for Post-Exploitation.
     or child processes.
   * {Ronin::PostEx::System::Shell} - allows interacting with an interactive
     shell..
-  * {Ronin::PostEx::File} - allows reading/writing files.
-  * {Ronin::PostEx::Dir} - allows reading the contents of directories.
+  * {Ronin::PostEx::RemoteFile} - allows reading/writing files.
+  * {Ronin::PostEx::RemoteDir} - allows reading the contents of directories.
   * {Ronin::PostEx::Command} - allows reading/writing to an running command.
 * Supports interacting with interactive shell commands.
 * Provides interactive command shells for interacting with systems.

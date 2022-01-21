@@ -23,7 +23,7 @@ require 'ronin/post_ex/resource'
 
 module Ronin
   module PostEx
-    class File < Resource
+    class RemoteFile < Resource
       #
       # Represents the status information of a remote file. The {Stat} class
       # using the `fs_stat` or `file_stat` method defined by the API object to

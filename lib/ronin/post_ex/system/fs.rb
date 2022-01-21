@@ -20,10 +20,10 @@
 #
 
 require 'ronin/post_ex/resource'
-require 'ronin/post_ex/file'
+require 'ronin/post_ex/remote_file'
 require 'ronin/post_ex/captured_file'
 require 'ronin/post_ex/file/stat'
-require 'ronin/post_ex/dir'
+require 'ronin/post_ex/remote_dir'
 
 require 'hexdump'
 
@@ -167,7 +167,7 @@ module Ronin
         # @param [String] path
         #   The path to the directory.
         #
-        # @return [Dir]
+        # @return [RemoteDir]
         #   The opened directory.
         #
         # @note
@@ -177,7 +177,7 @@ module Ronin
           path    = expand_path(path)
           entries = @api.fs_readdir(path)
 
-          return Dir.new(path,entries)
+          return RemoteDir.new(path,entries)
         end
         resource_method :readdir, [:fs_readdir]
 
@@ -228,19 +228,19 @@ module Ronin
         #   After the block has returned, the file will be closed and
         #   `nil` will be returned.
         #
-        # @yieldparam [File, CapturedFile] file
+        # @yieldparam [RemoteFile, CapturedFile] file
         #   The temporarily opened file. If {#api} defines the `file_open`, then
-        #   a {File} will be returned. If {#api} defines a `fs_readfile` method
-        #   instead, than a {CapturedFile} will be returned.
+        #   a {RemoteFile} will be returned. If {#api} defines a `fs_readfile`
+        #   method instead, than a {CapturedFile} will be returned.
         #
-        # @return [File, CapturedFile, nil]
+        # @return [RemoteFile, CapturedFile, nil]
         #   The newly opened file. If {#api} defines the `file_open`, then
-        #   a {File} will be returned. If {#api} defines a `fs_readfile` method
-        #   instead, than a {CapturedFile} will be returned.
+        #   a {RemoteFile} will be returned. If {#api} defines a `fs_readfile`
+        #   method instead, than a {CapturedFile} will be returned.
         #
         def open(path,&block)
           if @api.respond_to?(:file_open)
-            File.open(@api,expand_path(path),&block)
+            RemoteFile.open(@api,expand_path(path),&block)
           else
             CapturedFile.new(expand_path(path),readfile(path),&block)
           end
@@ -303,10 +303,10 @@ module Ronin
         #   After the block has returned, the tempfile will be closed
         #   and `nil` will be returned.
         #
-        # @yieldparam [File] tempfile
+        # @yieldparam [RemoteFile] tempfile
         #   The temporarily opened tempfile.
         #
-        # @return [File, nil]
+        # @return [RemoteFile, nil]
         #   The newly opened tempfile.
         #
         # @note
@@ -523,13 +523,13 @@ module Ronin
         # @param [String] path
         #   The path of the file or directory.
         #
-        # @return [File::Stat]
+        # @return [RemoteFile::Stat]
         #   The statistics on the file or directory.
         #
-        # @see File::Stat.new
+        # @see RemoteFile::Stat#initialize
         #
         def stat(path)
-          File::Stat.new(@api,expand_path(path))
+          RemoteFile::Stat.new(@api,expand_path(path))
         end
         resource_method :stat, [:fs_stat]
 
