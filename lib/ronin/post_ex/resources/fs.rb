@@ -24,7 +24,6 @@ require 'ronin/post_ex/file'
 require 'ronin/post_ex/file/stat'
 require 'ronin/post_ex/dir'
 require 'ronin/post_ex/shells/fs'
-require 'ronin/ui/shell'
 
 require 'hexdump'
 

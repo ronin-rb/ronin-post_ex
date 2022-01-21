@@ -21,7 +21,6 @@
 
 require 'ronin/post_ex/resource'
 require 'ronin/post_ex/command'
-require 'ronin/ui/shell'
 
 require 'date'
 
