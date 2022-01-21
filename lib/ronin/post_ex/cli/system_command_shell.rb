@@ -104,9 +104,9 @@ module Ronin
           puts @system.fs.readlink(path)
         end
 
-        command 'fs.dir', method_name: 'fs_dir',
-                          usage: 'DIR',
-                          summary: 'Reads the contents of a given directory'
+        command 'fs.readdir', method_name: 'fs_readdir',
+                              usage: 'DIR',
+                              summary: 'Reads the contents of a given directory'
 
         #
         # Reads the entries of a directory.
@@ -116,7 +116,7 @@ module Ronin
         #
         # @see Resources::FS#readdir
         #
-        def fs_dir(path)
+        def fs_readdir(path)
           @system.fs.readdir(path).each do |entry|
             puts entry
           end
