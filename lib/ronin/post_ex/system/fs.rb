@@ -92,7 +92,7 @@ module Ronin
         #   May call the `fs_chdir` method, if defined by the API object.
         #
         def chdir(path)
-          path = join(path)
+          path = expand_path(path)
           old_cwd = @cwd
 
           @cwd = if @api.respond_to?(:fs_chdir)
@@ -119,7 +119,7 @@ module Ronin
         # @return [String]
         #   The absolute path.
         #
-        def join(path)
+        def expand_path(path)
           if (@cwd && path[0,1] != '/')
             ::File.expand_path(::File.join(@cwd,path))
           else
@@ -174,7 +174,7 @@ module Ronin
         #   Requires the `fs_readdir` method be defined by the API object.
         #
         def readdir(path)
-          path    = join(path)
+          path    = expand_path(path)
           entries = @api.fs_readdir(path)
 
           return Dir.new(path,entries)
@@ -209,7 +209,7 @@ module Ronin
         #   Requires the `fs_glob` method be defined by the API object.
         #
         def glob(pattern,&block)
-          path  = join(pattern)
+          path  = expand_path(pattern)
           paths = @api.fs_glob(pattern)
 
           paths.each(&block) if block
@@ -240,9 +240,9 @@ module Ronin
         #
         def open(path,&block)
           if @api.respond_to?(:file_open)
-            File.open(@api,join(path),&block)
+            File.open(@api,expand_path(path),&block)
           else
-            CapturedFile.new(join(path),readfile(path),&block)
+            CapturedFile.new(expand_path(path),readfile(path),&block)
           end
         end
         resource_method :open
@@ -351,7 +351,7 @@ module Ronin
         #   Requires the `fs_copy` method be defined by the API object.
         #
         def copy(path,new_path)
-          @api.fs_copy(join(path),join(new_path))
+          @api.fs_copy(expand_path(path),expand_path(new_path))
           return true
         end
         resource_method :copy, [:fs_copy]
@@ -369,7 +369,7 @@ module Ronin
         #   Requires the `fs_unlink` method be defined by the API object.
         #
         def unlink(path)
-          @api.fs_unlink(join(path))
+          @api.fs_unlink(expand_path(path))
           return true
         end
         resource_method :unlink, [:fs_unlink]
@@ -389,7 +389,7 @@ module Ronin
         #   Requires the `fs_rmdir` method be defined by the API object.
         #
         def rmdir(path)
-          @api.fs_rmdir(join(path))
+          @api.fs_rmdir(expand_path(path))
           return true
         end
         resource_method :rmdir, [:fs_rmdir]
@@ -410,7 +410,7 @@ module Ronin
         #   Requires the `fs_move` method be defined by the API object.
         #
         def move(path,new_path)
-          @api.fs_move(join(path),join(new_path))
+          @api.fs_move(expand_path(path),expand_path(new_path))
           return true
         end
         resource_method :move, [:fs_move]
@@ -464,7 +464,7 @@ module Ronin
 
           chgrp(group,path) if group
 
-          @api.fs_chown(user,join(path))
+          @api.fs_chown(user,expand_path(path))
           return true
         end
         resource_method :chown, [:fs_chown]
@@ -488,7 +488,7 @@ module Ronin
         #   Requires the `fs_chgrp` method be defined by the API object.
         #
         def chgrp(group,path)
-          @api.fs_chgrp(group,join(path))
+          @api.fs_chgrp(group,expand_path(path))
           return true
         end
         resource_method :chgrp, [:fs_chgrp]
@@ -512,7 +512,7 @@ module Ronin
         #   Requires the `fs_chmod` method be defined by the API object.
         #
         def chmod(mode,path)
-          @api.fs_chmod(mode,join(path))
+          @api.fs_chmod(mode,expand_path(path))
           return true
         end
         resource_method :chmod, [:fs_chmod]
@@ -529,7 +529,7 @@ module Ronin
         # @see File::Stat.new
         #
         def stat(path)
-          File::Stat.new(@api,join(path))
+          File::Stat.new(@api,expand_path(path))
         end
         resource_method :stat, [:fs_stat]
 

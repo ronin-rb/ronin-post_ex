@@ -161,7 +161,7 @@ module Ronin
         def fs_copy(src,dest)
           @system.fs.copy(src,dest)
 
-          puts "Copied #{@system.fs.join(src)} -> #{@fs.join(dest)}"
+          puts "Copied #{@system.fs.expand_path(src)} -> #{@fs.expand_path(dest)}"
         end
 
         command 'fs.unlink', method_name: 'file_unlink',
@@ -179,7 +179,7 @@ module Ronin
         def file_unlink(path)
           @system.fs.unlink(path)
 
-          puts "Removed #{@system.fs.join(path)}"
+          puts "Removed #{@system.fs.expand_path(path)}"
         end
 
         command 'fs.rmdir', method_name: 'fs_rmdir',
@@ -197,7 +197,7 @@ module Ronin
         def fs_rmdir(path)
           @system.fs.rmdir(path)
 
-          puts "Removed directory #{@system.fs.join(path)}"
+          puts "Removed directory #{@system.fs.expand_path(path)}"
         end
 
         command 'fs.mv', method_name: 'fs_mv',
@@ -218,7 +218,7 @@ module Ronin
         def fs_mv(src,dest)
           @system.fs.move(src,dest)
 
-          puts "Moved #{@system.fs.join(src)} -> #{@fs.join(dest)}"
+          puts "Moved #{@system.fs.expand_path(src)} -> #{@fs.expand_path(dest)}"
         end
 
         command 'fs.link', method_name: 'fs_link',
@@ -239,7 +239,7 @@ module Ronin
         def fs_link(src,dest)
           @system.fs.link(src,dest)
 
-          puts "Linked #{@system.fs.join(src)} -> #{@fs.join(dest)}"
+          puts "Linked #{@system.fs.expand_path(src)} -> #{@fs.expand_path(dest)}"
         end
 
         command 'fs.chown', method_name: 'fs_chown',
@@ -260,7 +260,7 @@ module Ronin
         def fs_chown(user,path)
           @system.fs.chown(user,path)
 
-          puts "Changed ownership of #{@system.fs.join(path)} to #{user}"
+          puts "Changed ownership of #{@system.fs.expand_path(path)} to #{user}"
         end
 
         command 'fs.chgrp', method_name: 'fs_chgrp',
@@ -281,7 +281,7 @@ module Ronin
         def fs_chgrp(group,path)
           @system.fs.chgrp(group,path)
 
-          puts "Changed group ownership of #{@system.fs.join(path)} to #{group}"
+          puts "Changed group ownership of #{@system.fs.expand_path(path)} to #{group}"
         end
 
         command 'fs.chmod', method_name: 'fs_chmod',
@@ -302,7 +302,7 @@ module Ronin
         def fs_chmod(mode,path)
           @system.fs.chmod(mode.to_i(8),path)
 
-          puts "Changed permissions on #{@system.fs.join(path)} to #{mode}"
+          puts "Changed permissions on #{@system.fs.expand_path(path)} to #{mode}"
         end
 
         command 'fs.stat', method_name: 'fs_stat',
