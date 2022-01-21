@@ -44,6 +44,7 @@ module Ronin
           super(**kwargs)
 
           @system = system
+          @files  = []
         end
 
         private
@@ -318,6 +319,28 @@ module Ronin
         #
         def fs_stat(path)
           stat = @system.fs.stat(path)
+        end
+
+        command 'fs.open', method_name: 'file_open',
+                           usage: 'PATH [MODE]',
+                           summary: 'Opens a file for reading or writing'
+
+        #
+        # Opens a file.
+        #
+        # @param [String] path
+        #   The path to the file.
+        #
+        # @param [String] mode
+        #   Optional open mode.
+        #
+        # @see System::FS#open
+        #
+        def fs_open(path,mode="r")
+          file = @system.fs.open(path,mode)
+          @files << file
+
+          puts "Opened file #{file.path}"
         end
 
       end
