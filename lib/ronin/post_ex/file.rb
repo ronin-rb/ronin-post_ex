@@ -33,6 +33,20 @@ module Ronin
     # Additionally, {File} can optionally use the `file_open`, `file_close`,
     # `file_tell`, `file_seek` and `file_stat` methods.
     #
+    # ## Supported API Methods
+    #
+    # * `file_open(path : String, mode : String) => Integer`
+    # * `file_read(fd : Integer, pos : Integer) => String | nil`
+    # * `file_readfile(path : String) => String | nil`
+    # * `file_write(fd : Integer, pos : Integer, data : String) => Integer`
+    # * `file_seek(fd : Integer, new_pos : Integer, whence : File::SEEK_SET | File::SEEK_CUR | File::SEEK_END | File::SEEK_DATA | File::SEEK_HOLE)`
+    # * `file_tell(fd : Integer) => Integer`
+    # * `file_ioctl(command : String | Array<Integer, argument : OBject) => Integer`
+    # * `file_fcntl(command : String | Array<Integer, argument : OBject) => Integer`
+    # * `file_stat(path : String) => Hash{Symbol => Object}`
+
+    # * `file_close(fd : Integer)`
+    #
     class File < Resource
 
       include FakeIO
@@ -137,6 +151,9 @@ module Ronin
       # @param [Object] argument
       #   Argument of the command.
       #
+      # @return [Integer]
+      #   The return value from the `ioctl`.
+      #
       # @raise [RuntimeError]
       #   The API object does not define `file_ioctl`.
       #
@@ -159,6 +176,9 @@ module Ronin
       #
       # @param [Object] argument
       #   Argument of the command.
+      #
+      # @return [Integer]
+      #   The return value from the `fcntl`.
       #
       # @raise [RuntimeError]
       #   The API object does not define `file_fcntl`.
@@ -244,7 +264,8 @@ module Ronin
       # `file_readfile` from the API object.
       #
       # @return [String, nil]
-      #   A block of data from the file.
+      #   A block of data from the file or `nil` if there is no more data to be
+      #   read.
       #
       # @raise [IOError]
       #   The API object does not define `file_read` or `file_readfile`.
