@@ -35,16 +35,16 @@ module Ronin
     #
     # ## Supported API Methods
     #
-    # * `file_open(path : String, mode : String) => Integer`
-    # * `file_read(fd : Integer, pos : Integer) => String | nil`
-    # * `file_readfile(path : String) => String | nil`
-    # * `file_write(fd : Integer, pos : Integer, data : String) => Integer`
+    # * `file_open(path : String, mode : String) -> Integer`
+    # * `file_read(fd : Integer, pos : Integer) -> String | nil`
+    # * `file_readfile(path : String) -> String | nil`
+    # * `file_write(fd : Integer, pos : Integer, data : String) -> Integer`
     # * `file_seek(fd : Integer, new_pos : Integer, whence : File::SEEK_SET | File::SEEK_CUR | File::SEEK_END | File::SEEK_DATA | File::SEEK_HOLE)`
-    # * `file_tell(fd : Integer) => Integer`
-    # * `file_ioctl(command : String | Array<Integer, argument : OBject) => Integer`
-    # * `file_fcntl(command : String | Array<Integer, argument : OBject) => Integer`
-    # * `file_stat(fd : Integer) => Hash{Symbol => Object} | nil`
-    # * `fs_stat(path : String) => Hash{Symbol => Object} | nil`
+    # * `file_tell(fd : Integer) -> Integer`
+    # * `file_ioctl(command : String | Array[Integer], argument : Object) -> Integer`
+    # * `file_fcntl(command : String | Array[Integer], argument : Object) -> Integer`
+    # * `file_stat(fd : Integer) => Hash[Symbol, Object] | nil`
+    # * `fs_stat(path : String) => Hash[Symbol, Object] | nil`
 
     # * `file_close(fd : Integer)`
     #

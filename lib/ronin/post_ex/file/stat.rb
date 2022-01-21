@@ -29,6 +29,11 @@ module Ronin
       # using the `fs_stat` or `file_stat` method defined by the API object to
       # request the remote status information.
       #
+      # ## Supported API Methods
+      #
+      # * `file_stat(fd : Integer) -> Hash[Symbol, Object] | nil`
+      # * `fs_stat(path : String) -> Hash[Symbol, Object] | nil`
+      #
       class Stat
 
         # The path of the file

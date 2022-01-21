@@ -37,22 +37,22 @@ module Ronin
       # The File System resource uses the following control methods,
       # defined by the API object:
       #
-      # * `fs_getcwd() # => String`
-      # * `fs_chdir(path)`
-      # * `fs_readlink(path) # => String`
-      # * `fs_readdir(path) # => [String, ...]`
-      # * `fs_glob(pattern) { |path| ... }`
-      # * `fs_mktemp(basename) # => String`
-      # * `fs_mkdir(new_path)`
-      # * `fs_copy(src,dest)`
-      # * `fs_unlink(path)`
-      # * `fs_rmdir(path)`
-      # * `fs_move(src,dest)`
-      # * `fs_link(src,dest)`
-      # * `fs_chgrp(group,path)`
-      # * `fs_chown(user,path)`
-      # * `fs_chmod(mode,path)`
-      # * `fs_compare(file1,file2) # => Boolean`
+      # * `fs_getcwd() -> String`
+      # * `fs_chdir(path : String)`
+      # * `fs_readlink(path) -> String`
+      # * `fs_readdir(path) -> Array[String]`
+      # * `fs_glob(pattern : String) { |path : String| ... }`
+      # * `fs_mktemp(basename : String) -> String`
+      # * `fs_mkdir(new_path : String)`
+      # * `fs_copy(src : String, dest : String)`
+      # * `fs_unlink(path : String)`
+      # * `fs_rmdir(path : String)`
+      # * `fs_move(src : String, dest : String)`
+      # * `fs_link(src : String, dest : String)`
+      # * `fs_chgrp(group : String, path : String)`
+      # * `fs_chown(user : String, path : String)`
+      # * `fs_chmod(mode : Integer, path : String)`
+      # * `fs_compare(file1 : String, file2 : String) -> Boolean`
       #
       class FS < Resource
 

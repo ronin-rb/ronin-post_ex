@@ -34,27 +34,27 @@ module Ronin
       # The Process resource uses the following API methods, defined by the
       # API object.
       #
-      # * `process_getpid # => Integer`
-      # * `process_getppid # => Integer`
-      # * `process_getuid # => Integer`
-      # * `process_setuid(uid)`
-      # * `process_geteuid # => Integer`
-      # * `process_seteuid(euid)`
-      # * `process_getgid # => Integer`
-      # * `process_setgid(gid)`
-      # * `process_getegid # => Integer`
-      # * `process_setegid(egid)`
-      # * `process_getsid # => Integer`
-      # * `process_setsid(sid) # => Integer`
-      # * `process_environ # => Hash{String => String}`
-      # * `process_getenv(name) # => String`
-      # * `process_setenv(name,value)`
-      # * `process_unsetenv(name)`
-      # * `process_kill(pid,signal)`
-      # * `process_getcwd # => String`
-      # * `process_chdir(path)`
-      # * `process_time => Integer`
-      # * `process_spawn(program,*arguments) # => Integer`
+      # * `process_getpid -> Integer`
+      # * `process_getppid -> Integer`
+      # * `process_getuid -> Integer`
+      # * `process_setuid(uid : Integer)`
+      # * `process_geteuid -> Integer`
+      # * `process_seteuid(euid : Integer)`
+      # * `process_getgid -> Integer`
+      # * `process_setgid(gid : Integer)`
+      # * `process_getegid -> Integer`
+      # * `process_setegid(egid : Integer)`
+      # * `process_getsid -> Integer`
+      # * `process_setsid(sid : Integer) -> Integer`
+      # * `process_environ -> Hash[String, String]`
+      # * `process_getenv(name : String) -> String`
+      # * `process_setenv(name : String, value : String)`
+      # * `process_unsetenv(name : String)`
+      # * `process_kill(pid : Integer, signal : Integer)`
+      # * `process_getcwd -> String`
+      # * `process_chdir(path : String)`
+      # * `process_time -> Integer`
+      # * `process_spawn(program : String, *arguments : Array[String]) -> Integer`
       # * `process_exit`
       #
       class Process < Resource
