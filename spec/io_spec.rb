@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'ronin/post_exploitation/io'
+require 'ronin/post_ex/io'
 
-require 'post_exploitation/classes/fake_io'
+require 'classes/fake_io'
 
-describe PostExploitation::IO do
+describe PostEx::IO do
   let(:expected_blocks) { ["one\n", "two\nthree\n", "four\n"] }
   let(:expected) { expected_blocks.join }
   let(:expected_bytes) { expected_blocks.join.each_byte.to_a }

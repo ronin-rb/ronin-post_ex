@@ -1,10 +1,10 @@
 require 'spec_helper'
-require 'ronin/post_exploitation/mixin'
+require 'ronin/post_ex/mixin'
 
-describe PostExploitation::Mixin do
+describe PostEx::Mixin do
   subject do
     obj = Object.new
-    obj.extend PostExploitation::Mixin
+    obj.extend PostEx::Mixin
     obj
   end
 
