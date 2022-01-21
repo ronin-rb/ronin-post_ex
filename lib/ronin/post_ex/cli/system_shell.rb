@@ -358,6 +358,49 @@ module Ronin
           end
         end
 
+        command 'file.seek', method_name: 'file_seek',
+                             usage: 'FILE_ID POS [SET|CUR|END|DATA|HOLE]',
+                             summary: 'Seeks to a position within the file'
+
+        WHENCE = {
+          'SET'  => File::SEEK_SET,
+          'CUR'  => File::SEEK_CUR,
+          'END'  => File::SEEK_END,
+          'DATA' => File::SEEK_DATA,
+          'HOLE' => File::SEEK_HOLE,
+        }
+
+        #
+        # Seeks to a position within an opened file.
+        #
+        # @param [String] file_id
+        #   The file ID number.
+        #
+        # @param [String] pos
+        #   The position to seek to.
+        #
+        # @param ["SET", "CUR", "END", "DATA", "HOLE", String] whence
+        #   Where to seek relative from.
+        #
+        # @see File#seek
+        #
+        def file_seek(file_id,pos,whence)
+          unless WHENCE.has_key?(whence)
+            print_error "unknown file.seek whence value (#{whence})"
+          end
+
+          file_id = file_id.to_i
+          pos     = pos.to_i
+          whence  = WHENCE[whence]
+
+          if (file = @files[file_id])
+            file.seek(pos,whence)
+            puts file.pos
+          else
+            print_error "unknown file id"
+          end
+        end
+
         command 'file.read', method_name: 'file_read',
                              usage: 'FILE_ID LENGTH',
                              summary: 'Reads LENGTH of data from an opened file'
