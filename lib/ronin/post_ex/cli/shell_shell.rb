@@ -44,7 +44,9 @@ module Ronin
         end
 
         def exec(command)
-          @shell.command(line).each_chunk { |chunk| write(chunk) }
+          @shell.command(command).each_chunk do |chunk|
+            write(chunk)
+          end
         end
 
       end
