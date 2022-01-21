@@ -27,8 +27,8 @@ module Ronin
   module PostEx
     #
     # The {Command} class represents commands being executed on remote
-    # systems. The {Command} class wraps around the `shell_exec` method
-    # defined in the API object.
+    # systems. The {Command} class wraps around the `shell_exec` and
+    # `shell_write` methods defined in the API object.
     #
     class Command < Resource
 
