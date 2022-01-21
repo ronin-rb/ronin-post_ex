@@ -19,8 +19,5 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/resource'
-require 'ronin/post_ex/command'
-require 'ronin/post_ex/file'
-require 'ronin/post_ex/resources'
-require 'ronin/post_ex/mixin'
+require 'ronin/post_ex/system'
+require 'ronin/post_ex/version'
