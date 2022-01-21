@@ -101,13 +101,15 @@ Spawn an interactive command shell:
 
 ```ruby
 system.shell.interact
-$ 
+$
 ```
 
 Spawn an interactive API command shell:
 
 ```ruby
 system.interact
+```
+```
 ronin-post_ex> help
   help [COMMAND]     	Prints the list of commands or additional help
   fs.chdir DIR       	Changes the current working directory
