@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ronin/post_ex/captured_file'
 
-describe CapturedFile do
+describe Ronin::PostEx::CapturedFile do
   let(:path) { '/path/to/file.txt' }
   let(:data) { "foo\nbar\nbaz\n"   }
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ronin/post_ex/system'
 
-describe System do
+describe Ronin::PostEx::System do
   let(:api) { double('Post-Exploitation API Object') }
 
   subject { described_class.new(api) }
@@ -12,33 +12,33 @@ describe System do
     end
 
     it "must initialize #fs" do
-      expect(subject.fs).to be_kind_of(System::FS)
+      expect(subject.fs).to be_kind_of(described_class::FS)
     end
 
     it "must initialize #process" do
-      expect(subject.process).to be_kind_of(System::Process)
+      expect(subject.process).to be_kind_of(described_class::Process)
     end
 
     it "must initialize #shell" do
-      expect(subject.shell).to be_kind_of(System::Shell)
+      expect(subject.shell).to be_kind_of(described_class::Shell)
     end
   end
 
   describe "#fs" do
     it "must return a System::FS object" do
-      expect(subject.fs).to be_kind_of(System::FS)
+      expect(subject.fs).to be_kind_of(described_class::FS)
     end
   end
 
   describe "#process" do
     it "must return a System::Process object" do
-      expect(subject.process).to be_kind_of(System::Process)
+      expect(subject.process).to be_kind_of(described_class::Process)
     end
   end
 
   describe "#shell" do
     it "must return a System::Shell object" do
-      expect(subject.shell).to be_kind_of(System::Shell)
+      expect(subject.shell).to be_kind_of(described_class::Shell)
     end
   end
 
