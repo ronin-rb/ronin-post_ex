@@ -31,6 +31,12 @@ ronin-post_ex is a Ruby API for Post-Exploitation.
     command.
 * Supports interacting with interactive shell commands.
 * Provides interactive command shells for interacting with systems.
+* Supports Linux/BSD/UNIX systems.
+
+## Limitations
+
+* Does not currently support Windows systems.
+* Does not fully support bidirectional fully interactive shell commands.
 
 ## Examples
 
