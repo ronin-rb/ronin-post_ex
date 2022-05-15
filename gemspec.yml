@@ -13,7 +13,7 @@ metadata:
   bug_tracker_uri:   https://github.com/ronin-rb/ronin-post_ex/issues
   changelog_uri:     https://github.com/ronin-rb/ronin-post_ex/blob/master/ChangeLog.md
 
-required_ruby_version: ">= 2.7.0"
+required_ruby_version: ">= 3.0.0"
 
 dependencies:
   fake_io: ~> 0.1
