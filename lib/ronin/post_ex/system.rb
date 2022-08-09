@@ -137,7 +137,6 @@ module Ronin
       end
       resource_method :time, [:sys_time]
 
-
       #
       # Starts an interactive API shell.
       #
