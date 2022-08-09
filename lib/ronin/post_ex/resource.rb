@@ -81,10 +81,9 @@ module Ronin
       #
       # Allows resources to spawn interactive consoles.
       #
-      # @raise [NotImplementedError]
-      #   The console method is not implemented by default.
+      # @abstract
       #
-      def console
+      def interact
         raise(NotImplementedError,"#{self.class} does not provide a console")
       end
 
