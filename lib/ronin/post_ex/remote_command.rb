@@ -36,9 +36,13 @@ module Ronin
       include Enumerable
 
       # The program name
+      #
+      # @return [String]
       attr_reader :program
 
       # The arguments of the program
+      #
+      # @return [Array]
       attr_reader :arguments
 
       #
