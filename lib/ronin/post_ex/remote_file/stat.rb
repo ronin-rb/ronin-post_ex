@@ -71,6 +71,31 @@ module Ronin
         # @return [Integer]
         attr_reader :mode
 
+        # The owner's UID of the file.
+        #
+        # @return [Integer]
+        attr_reader :uid
+
+        # The owner's GID of the file.
+        #
+        # @return [Integer]
+        attr_reader :gid
+
+        # The access time of the file.
+        #
+        # @return [Time, nil]
+        attr_reader :atime
+
+        # The creation time of the file.
+        #
+        # @return [Time]
+        attr_reader :ctime
+
+        # The modification time of the file.
+        #
+        # @return [Time]
+        attr_reader :mtime
+
         #
         # Creates a new File Stat object.
         #
