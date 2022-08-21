@@ -50,6 +50,9 @@ module Ronin
       #
       # Gets or sets the position of the opened directory.
       #
+      # @param [Integer] new_pos
+      #   The new position within the open directory.
+      #
       # @see #seek
       # @see #tell
       #
