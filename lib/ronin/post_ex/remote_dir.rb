@@ -31,6 +31,11 @@ module Ronin
       # The path of the directory
       attr_reader :path
 
+      # The current position in the open directory.
+      #
+      # @return [Integer]
+      attr_reader :pos
+
       #
       # Creates a new Dir object.
       #
@@ -45,23 +50,6 @@ module Ronin
         @entries = entries
         @pos     = 0
         @closed  = false
-      end
-
-      #
-      # Gets or sets the position of the opened directory.
-      #
-      # @param [Integer] new_pos
-      #   The new position within the open directory.
-      #
-      # @see #seek
-      # @see #tell
-      #
-      def pos(new_pos=nil)
-        if new_pos
-          seek(new_pos)
-        else
-          tell
-        end
       end
 
       #
