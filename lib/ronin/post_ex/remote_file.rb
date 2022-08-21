@@ -110,6 +110,9 @@ module Ronin
       # @param [Integer] new_pos
       #   The new position to read from.
       #
+      # @param [Integer] whence
+      #   The origin point to seek from.
+      #
       # @return [Integer]
       #   The new position within the file.
       #
