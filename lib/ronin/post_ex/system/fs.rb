@@ -441,7 +441,7 @@ module Ronin
         #
         # Changes ownership of a file or directory.
         #
-        # @param [user,(user,group)] owner
+        # @param [String, (String,String)] owner
         #   the user and/or group that will own the file or directory.
         #
         # @param [String] path
