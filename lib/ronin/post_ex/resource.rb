@@ -27,6 +27,8 @@ module Ronin
     class Resource
 
       # The object providing control of the Resource
+      #
+      # @return [Object]
       attr_reader :api
 
       #
