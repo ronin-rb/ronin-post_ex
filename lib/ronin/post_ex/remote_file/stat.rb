@@ -37,24 +37,38 @@ module Ronin
       class Stat
 
         # The path of the file
+        #
+        # @return [String]
         attr_reader :path
 
         # The size of the file (in bytes)
+        #
+        # @return [Integer]
         attr_reader :size
 
         # The number of native file-system blocks
+        #
+        # @return [Integer]
         attr_reader :blocks
 
         # The native file-system block size.
+        #
+        # @return [Integer]
         attr_reader :blocksize
 
         # The Inode number
+        #
+        # @return [Integer]
         attr_reader :inode
 
         # The number of hard links to the file
+        #
+        # @return [Integer]
         attr_reader :nlinks
 
         # The mode of the file
+        #
+        # @return [Integer]
         attr_reader :mode
 
         #
