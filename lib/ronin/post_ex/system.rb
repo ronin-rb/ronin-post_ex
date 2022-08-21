@@ -96,17 +96,17 @@ module Ronin
 
       # The File-System resource.
       #
-      # @return [Resources::FS]
+      # @return [System::FS]
       attr_reader :fs
 
       # The Process resource.
       #
-      # @return [Resources::Process]
+      # @return [System::Process]
       attr_reader :process
 
       # The Shell resource.
       #
-      # @return [Resources::Shell]
+      # @return [System::Shell]
       attr_reader :shell
 
       #
