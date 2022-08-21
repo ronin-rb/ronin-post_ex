@@ -36,7 +36,7 @@ module Ronin
       #
       # @param [String] path
       #
-      # @parma [String] contents
+      # @param [String] contents
       #
       def initialize(path,contents)
         @path = path
