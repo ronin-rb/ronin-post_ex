@@ -38,6 +38,9 @@ module Ronin
       #
       class Shell < Resource
 
+        # Command names and thier absolute paths.
+        #
+        # @return {Hash{String => String}]
         attr_reader :paths
 
         #
@@ -149,6 +152,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Arguments to pass to the `ls` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def ls(*arguments,&block)
@@ -161,6 +175,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ls -a` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -175,6 +200,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ls -l` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def ls_l(*arguments,&block)
@@ -187,6 +223,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ls -la` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -259,6 +306,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `cat` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def cat(*arguments,&block)
@@ -271,6 +329,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `head` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -288,6 +357,10 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `head` command.
         #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def head_n(lines,*arguments,&block)
@@ -300,6 +373,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `tail` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -316,6 +400,10 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `tail` command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -361,6 +449,10 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `grep` command.
         #
+        # @return [Array<String>, nil]
+        #   If no block is given, all matching paths and lines will be
+        #   returned.
+        #
         # @see #grep
         #
         def egrep(*arguments,&block)
@@ -373,6 +465,10 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments for the `grep` command.
+        #
+        # @return [Array<String>, nil]
+        #   If no block is given, all matching paths and lines will be
+        #   returned.
         #
         # @see #grep
         #
@@ -457,6 +553,9 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `cp` command.
         #
+        # @return [String]
+        #   Any error messages returned by the `cp` command.
+        #
         # @see #cp
         #
         def cp_r(*arguments)
@@ -469,6 +568,9 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments for the `cp` command.
+        #
+        # @return [String]
+        #   Any error messages returned by the `cp` command.
         #
         # @see #cp
         #
@@ -483,6 +585,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `rsync` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def rsync(*arguments,&block)
@@ -496,6 +609,10 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `rsync` command.
         #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #rsync
         #
         def rsync_a(*arguments,&block)
@@ -508,6 +625,10 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `rsync` command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -525,6 +646,10 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `wget` command.
         #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #wget
         #
         def wget_out(path,*arguments)
@@ -537,6 +662,10 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `curl` command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -553,6 +682,10 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments for the `curl` command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #curl
         #
@@ -581,6 +714,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `rm` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def rm(*arguments,&block)
@@ -594,6 +738,10 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `rm` command.
         #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #rm
         #
         def rm_r(*arguments,&block)
@@ -606,6 +754,10 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments for the `rm` command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #rm
         #
@@ -697,6 +849,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `who` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def who(*arguments,&block)
@@ -709,6 +872,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `w` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -723,6 +897,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `lastlog` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def lastlog(*arguments,&block)
@@ -735,6 +920,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `faillog` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -749,6 +945,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ps` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def ps(*arguments,&block)
@@ -761,6 +968,10 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments for the `ps` command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #ps
         #
@@ -789,6 +1000,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ifconfig` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def ifconfig(*arguments,&block)
@@ -801,6 +1023,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `netstat` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -815,6 +1048,10 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `netstat` command.
         #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #netstat
         #
         def netstat_anp(*arguments,&block)
@@ -828,6 +1065,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ping` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def ping(*arguments,&block)
@@ -840,6 +1088,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `nc` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -856,6 +1115,10 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments for the `nc` command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #nc
         #
@@ -876,6 +1139,10 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `nc` command.
         #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #nc
         #
         def nc_connect(host,port,*arguments,&block)
@@ -888,6 +1155,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `gcc` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -902,6 +1180,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `cc` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def cc(*arguments,&block)
@@ -914,6 +1203,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `perl` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
@@ -928,6 +1228,17 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `python` command.
         #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
+        #
         # @see #exec
         #
         def python(*arguments,&block)
@@ -940,6 +1251,17 @@ module Ronin
         #
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ruby` command.
+        #
+        # @yield [line]
+        #   If a block is given, it will be passed each line of output
+        #   from the command.
+        #
+        # @yieldparam [String] line
+        #   A line of output from the command.
+        #
+        # @return [String, nil]
+        #   If no block is given, the full output of the command will be
+        #   returned.
         #
         # @see #exec
         #
