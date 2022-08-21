@@ -91,14 +91,17 @@ module Ronin
       # @yieldparam [RemoteFile]
       #   The newly created file object.
       #
+      # @return [RemoteFile, nil]
+      #   If no block is given, then the newly opened remote file object will be
+      #   returned. If a block was given, then `nil` will be returned.
+      #
       def self.open(api,path)
         io = new(api,path)
 
         if block_given?
-          value = yield(io)
-
+          yield(io)
           io.close
-          return value
+          return
         else
           return io
         end
