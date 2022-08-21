@@ -379,8 +379,13 @@ module Ronin
         # @param [String] pos
         #   The position to seek to.
         #
-        # @param ["SET", "CUR", "END", "DATA", "HOLE", String] whence
-        #   Where to seek relative from.
+        # @param [String] whence
+        #   Where to seek relative from. Acceptable values are:
+        #   * `"SET"`
+        #   * `"CUR"`
+        #   * `"END"`
+        #   * `"DATA"`
+        #   * `"HOLE"`
         #
         # @see File#seek
         #
