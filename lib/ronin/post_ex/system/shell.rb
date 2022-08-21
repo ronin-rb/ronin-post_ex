@@ -358,6 +358,9 @@ module Ronin
         #
         # Runs `grep -E`.
         #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `grep` command.
+        #
         # @see #grep
         #
         def egrep(*arguments,&block)
@@ -367,6 +370,9 @@ module Ronin
 
         #
         # Runs `grep -F`.
+        #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `grep` command.
         #
         # @see #grep
         #
@@ -448,6 +454,9 @@ module Ronin
         #
         # Runs `cp -r`.
         #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `cp` command.
+        #
         # @see #cp
         #
         def cp_r(*arguments)
@@ -457,6 +466,9 @@ module Ronin
 
         #
         # Runs `cp -a`.
+        #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `cp` command.
         #
         # @see #cp
         #
@@ -480,6 +492,9 @@ module Ronin
 
         #
         # Runs `rsync -a`.
+        #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `rsync` command.
         #
         # @see #rsync
         #
@@ -507,6 +522,9 @@ module Ronin
         # @param [String] path
         #   The path that `wget` will write to.
         #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `wget` command.
+        #
         # @see #wget
         #
         def wget_out(path,*arguments)
@@ -532,6 +550,9 @@ module Ronin
         #
         # @param [String] path
         #   The path that `curl` will write to.
+        #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `curl` command.
         #
         # @see #curl
         #
@@ -570,6 +591,9 @@ module Ronin
         #
         # Runs `rm -r`.
         #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `rm` command.
+        #
         # @see #rm
         #
         def rm_r(*arguments,&block)
@@ -579,6 +603,9 @@ module Ronin
 
         #
         # Runs `rm -rf`.
+        #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `rm` command.
         #
         # @see #rm
         #
@@ -732,6 +759,9 @@ module Ronin
         #
         # Runs `ps aux`.
         #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `ps` command.
+        #
         # @see #ps
         #
         def ps_aux(*arguments,&block)
@@ -782,6 +812,9 @@ module Ronin
         #
         # Runs `netstat -anp`.
         #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `netstat` command.
+        #
         # @see #netstat
         #
         def netstat_anp(*arguments,&block)
@@ -818,6 +851,12 @@ module Ronin
         #
         # Runs `nc -l`.
         #
+        # @param [Integer] port
+        #   The local port to bind to.
+        #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `nc` command.
+        #
         # @see #nc
         #
         def nc_listen(port,*arguments,&block)
@@ -833,6 +872,9 @@ module Ronin
         #
         # @param [Integer] port
         #   The port to connect to.
+        #
+        # @param [Array<String>] arguments
+        #   Additional arguments for the `nc` command.
         #
         # @see #nc
         #
