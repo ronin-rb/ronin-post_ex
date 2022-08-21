@@ -60,7 +60,7 @@ module Ronin
         if new_pos
           seek(new_pos)
         else
-          tell(new_pos)
+          tell
         end
       end
 
