@@ -37,6 +37,10 @@ module Ronin
         # @param [System::Shell] shell
         #   The shell resource.
         #
+        # @param [Hash{Symbol => Object}] kwargs
+        #   Additional keyword arguments for
+        #   `Ronin::Core::CLI::Shell#initialize`.
+        #
         def initialize(shell, **kwargs)
           super(**kwargs)
 
