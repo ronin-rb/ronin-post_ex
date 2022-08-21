@@ -29,14 +29,18 @@ module Ronin
     class CapturedFile < StringIO
 
       # The path to the read file.
+      #
+      # @return [String]
       attr_reader :path
 
       #
       # Initializes the read file.
       #
       # @param [String] path
+      #   The path of the captured file.
       #
       # @param [String] contents
+      #   The contents of the captured file.
       #
       def initialize(path,contents)
         @path = path
