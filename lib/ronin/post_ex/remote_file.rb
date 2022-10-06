@@ -34,7 +34,7 @@ module Ronin
     # ## Supported API Methods
     #
     # * `file_open(path : String, mode : String) -> Integer`
-    # * `file_read(fd : Integer, pos : Integer) -> String | nil`
+    # * `file_read(fd : Integer, length : Integer) -> String | nil`
     # * `file_write(fd : Integer, pos : Integer, data : String) -> Integer`
     # * `file_seek(fd : Integer, new_pos : Integer, whence : File::SEEK_SET | File::SEEK_CUR | File::SEEK_END | File::SEEK_DATA | File::SEEK_HOLE)`
     # * `file_tell(fd : Integer) -> Integer`
@@ -306,6 +306,9 @@ module Ronin
       end
       resource_method :open
 
+      # Default block size to read file data with.
+      BLOCK_SIZE = 4096
+
       #
       # Reads a block from the remote file by calling `file_read` or
       # `fs_readfile` from the API object.
@@ -326,7 +329,7 @@ module Ronin
           @eof = true
           @api.fs_readfile(@path)
         elsif @api.respond_to?(:file_read)
-          @api.file_read(@fd,@pos)
+          @api.file_read(@fd,BLOCK_SIZE)
         else
           raise(IOError,"#{@api.inspect} does not support reading")
         end

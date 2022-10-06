@@ -12,7 +12,7 @@ Gets the current time and returns the UNIX timestamp.
 
 Opens a file and returns the file-descriptor number.
 
-### `file_read(fd : Integer, pos : Integer) -> String | nil`
+### `file_read(fd : Integer, length : Integer) -> String | nil`
 
 Reads from an opened file-descriptor and returns the read data.
 `nil` will be returned if there is no more data to be read.
@@ -158,11 +158,11 @@ Sets the current process's group ID (GID) to the given Integer.
 
 ### `process_getegid -> Integer`
 
-Gets the current process's effective group ID (GID).
+Gets the current process's effective group ID (EGID).
 
 ### `process_setegid(egid : Integer)`
 
-Sets the current process's effective group ID (GID) to the given Integer.
+Sets the current process's effective group ID (EGID) to the given Integer.
 
 ### `process_getsid -> Integer`
 
