@@ -221,6 +221,9 @@ module Ronin
         # @param [String] path
         #   The path to file.
         #
+        # @param [String] mode
+        #   The mode to open the file in.
+        #
         # @yield [file]
         #   If a block is given, it will be passed the newly opened file.
         #   After the block has returned, the file will be closed and
@@ -236,9 +239,9 @@ module Ronin
         #   a {RemoteFile} will be returned. If {#api} defines a `fs_readfile`
         #   method instead, than a {CapturedFile} will be returned.
         #
-        def open(path,&block)
+        def open(path,mode='r',&block)
           if @api.respond_to?(:file_open)
-            RemoteFile.open(@api,expand_path(path),&block)
+            RemoteFile.open(@api,expand_path(path),mode,&block)
           else
             CapturedFile.new(expand_path(path),readfile(path),&block)
           end
