@@ -62,10 +62,10 @@ module Ronin
         #   Additional arguments for the shell command.
         #
         # @example
-        #   run 'ls'
+        #   system.shell.run 'ls'
         #
         # @example with additional arguments:
-        #   run 'ls', '-l'
+        #   system.shell.run 'ls', '-l'
         #
         # @return [String]
         #   The output of the shell command.
@@ -232,7 +232,7 @@ module Ronin
         #   The output of the `file` command.
         #
         # @example
-        #   exploit.shell.file('data.db')
+        #   system.shell.file('data.db')
         #   # => "data.db: SQLite 3.x database"
         #
         def file(*arguments)
@@ -244,7 +244,7 @@ module Ronin
         # Finds a program available to the shell.
         #
         # @param [Array<String>] arguments
-        #   Additional arguments ot pass to the `which` command.
+        #   Additional arguments to pass to the `which` command.
         #
         # @return [String]
         #   The output from the `which` command.
