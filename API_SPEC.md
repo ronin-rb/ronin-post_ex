@@ -202,6 +202,23 @@ Gets the process's current working directory.
 
 Changes the process's current working directory.
 
+### `process_popen(command : String) -> Integer`
+
+Opens a new process using the given command string.
+The file descriptor of the new process will be returned.
+
+### `process_read(fd : Integer, length : Integer) -> String`
+
+Reads data from the file descriptor returned by `process_popen`.
+
+### `process_write(fd : Integer, data : String)`
+
+Writes data to the file descriptor returned by `process_popen`.
+
+### `process_close(fd : Integer)`
+
+Closes the file descriptor of a remote process opened via `process_popen`.
+
 ### `process_spawn(program : String, *arguments : Array[String]) -> Integer`
 
 Spawns a new process using the given program and additional arguments.

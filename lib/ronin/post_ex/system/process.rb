@@ -18,6 +18,7 @@
 #
 
 require 'ronin/post_ex/resource'
+require 'ronin/post_ex/remote_process'
 
 require 'time'
 
@@ -51,6 +52,10 @@ module Ronin
       # * `process_kill(pid : Integer, signal : Integer)`
       # * `process_getcwd -> String`
       # * `process_chdir(path : String)`
+      # * `process_popen(command : String) -> Integer`
+      # * `process_read(fd : Integer, length : Integer) -> String`
+      # * `process_write(fd : Integer, data : String)`
+      # * `process_close(fd : Integer)`
       # * `process_spawn(program : String, *arguments : Array[String]) -> Integer`
       # * `process_exit`
       #
@@ -375,6 +380,25 @@ module Ronin
         resource_method :chdir, [:process_chdir]
 
         alias cwd= chdir
+
+        #
+        # Opens a new process.
+        #
+        # @param [String] command
+        #   The command string to execute.
+        #
+        # @return [RemoteProcess]
+        #   The newly opened remote process.
+        #
+        # @note
+        #   Requires the `process_popen` method be defined by the API object.
+        #
+        # @api public
+        #
+        def popen(command)
+          RemoteProcess.new(@api,command)
+        end
+        resource_method :spawn, [:process_popen]
 
         #
         # Executes a program as a separate child process.

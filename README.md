@@ -31,7 +31,7 @@ exploits.
     shell..
   * {Ronin::PostEx::RemoteFile} - allows reading/writing files.
   * {Ronin::PostEx::RemoteDir} - allows reading the contents of directories.
-  * {Ronin::PostEx::RemoteCommand} - allows reading/writing to an running
+  * {Ronin::PostEx::RemoteProcess} - allows reading/writing to an running
     command.
 * Supports interacting with interactive shell commands.
 * Provides interactive command shells for interacting with systems.

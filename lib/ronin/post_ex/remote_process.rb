@@ -24,48 +24,40 @@ require 'fake_io'
 module Ronin
   module PostEx
     #
-    # The {RemoteCommand} class represents commands being executed on remote
-    # systems. The {RemoteCommand} class wraps around the `shell_exec` and
-    # `shell_write` methods defined in the API object.
+    # The {RemoteProcess} class represents a command being executed on a remote
+    # system. The {RemoteProcess} class wraps around the `process_popen` and
+    # `process_read`, `process_write`, and `process_close` methods defined in
+    # the API object.
     #
-    class RemoteCommand < Resource
+    class RemoteProcess < Resource
 
       include FakeIO
       include Enumerable
 
-      # The program name
+      # The command string.
       #
       # @return [String]
-      attr_reader :program
-
-      # The arguments of the program
-      #
-      # @return [Array]
-      attr_reader :arguments
+      attr_reader :command
 
       #
-      # Creates a new Command.
+      # Creates a new remote process.
       #
       # @param [#shell_exec] api
       #   The object controlling command execution.
       #
-      # @param [String] program
-      #   The program to run.
-      #
-      # @param [Array] arguments
-      #   The arguments to run with.
+      # @param [String] command
+      #   The command to run.
       #
       # @raise [NotImplementedError]
       #   The API object does not define `shell_exec`.
       #
-      def initialize(api,program,*arguments)
-        unless api.respond_to?(:shell_exec)
-          raise(NotImplementedError,"#{api.inspect} must define #shell_exec for #{self.class}")
+      def initialize(api,command)
+        unless api.respond_to?(:process_popen)
+          raise(NotImplementedError,"#{api.inspect} must define #process_popen for #{self.class}")
         end
 
-        @api       = api
-        @program   = program
-        @arguments = arguments
+        @api     = api
+        @command = command
 
         super()
       end
@@ -73,33 +65,29 @@ module Ronin
       #
       # Reopens the command.
       #
-      # @param [String] program
-      #   The new program to run.
+      # @param [String] command
+      #   The new command to run.
       #
-      # @param [Array] arguments
-      #   The new arguments to run with.
-      #
-      # @return [RemoteCommand]
+      # @return [RemoteProcess]
       #   The new command.
       #
-      def reopen(program,*arguments)
+      def reopen(command)
         close
 
-        @program = program
-        @arguments = arguments
+        @command = command
 
         return open
       end
-      resource_method :reopen, [:shell_exec]
+      resource_method :reopen, [:process_popen]
 
       #
       # Converts the command to a `String`.
       #
       # @return [String]
-      #   The program name and arguments.
+      #   The process'es command.
       #
       def to_s
-        ([@program] + @arguments).join(' ')
+        @command
       end
 
       #
@@ -118,12 +106,15 @@ module Ronin
       # Executes and opens the command for reading.
       #
       # @return [Enumerator]
-      #   The enumerator that wraps around `shell_exec`.
+      #   The enumerator that wraps around `process_popen`.
       #
       def io_open
-        @api.enum_for(:shell_exec,@program,*@arguments)
+        @api.enum_for(:process_popen,@command)
       end
-      resource_method :open, [:shell_exec]
+      resource_method :open, [:process_popen]
+
+      # Default block size to read process output with.
+      BLOCK_SIZE = 4096
 
       #
       # Reads a line of output from the command.
@@ -135,10 +126,8 @@ module Ronin
       #   The end of the output stream has been reached.
       #
       def io_read
-        begin
-          @fd.next
-        rescue StopIteration
-          raise(EOFError,"end of command")
+        if @api.respond_to?(:process_read)
+          @api.process_write(@fd,BLOCK_SIZE)
         end
       end
       resource_method :read
@@ -153,13 +142,27 @@ module Ronin
       #   The number of bytes writen.
       #
       def io_write(data)
-        if @api.respond_to?(:shell_write)
-          @api.shell_write(data)
+        if @api.respond_to?(:process_write)
+          @api.process_write(@fd,data)
         else
           raise(IOError,"#{@api.inspect} does not support writing to the shell")
         end
       end
-      resource_method :write, [:shell_write]
+      resource_method :write, [:process_write]
+
+      #
+      # Attempts calling `process_close` from the API object to close
+      # the file.
+      #
+      # @note
+      #   This method may use the `process_close` method, if {#api} defines it.
+      #
+      def io_close
+        if @api.respond_to?(:process_close)
+          @api.process_close(@fd)
+        end
+      end
+      resource_method :close
 
     end
   end
