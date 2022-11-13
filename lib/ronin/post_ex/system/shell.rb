@@ -18,7 +18,6 @@
 #
 
 require 'ronin/post_ex/resource'
-require 'ronin/post_ex/remote_command'
 require 'ronin/post_ex/cli/shell_shell'
 
 require 'date'
@@ -31,15 +30,14 @@ module Ronin
       #
       # ## Supported API Methods
       #
-      # * `shell_exec(program : String, *arguments : Array[String]) { |data : String| ... }`
-      # * `shell_write(data : String)`
+      # * `shell_exec(command : String) -> String`
       #
       class Shell < Resource
 
-        # Command names and thier absolute paths.
+        # Persistent environment variables for the shell.
         #
         # @return {Hash{String => String}]
-        attr_reader :paths
+        attr_reader :env
 
         #
         # Initializes the Shell resource.
@@ -50,58 +48,48 @@ module Ronin
         def initialize(api)
           super(api)
 
-          @paths = {}
+          @cwd = nil
+          @env = {}
         end
 
         #
-        # Creates a command to later execute.
+        # Executes a shell command and returns it's output.
         #
-        # @param [String] program
-        #   The program name or path to execute.
-        #
-        # @param [Array<String>] arguments
-        #   Additional arguments to run the program with.
-        #
-        # @return [RemoteCommand]
-        #   The newly created command.
-        #
-        def command(program,*arguments)
-          program = (@paths[program.scan(/^[^\s]+/).first] || program)
-
-          return RemoteCommand.new(@api,program,*arguments)
-        end
-        resource_method :command, [:shell_exec]
-
-        #
-        # Executes a command and reads the resulting output.
-        #
-        # @param [String] program
-        #   The program name or path to execute.
+        # @param [String] command
+        #   The shell command to execute.
         #
         # @param [Array<String>] arguments
-        #   Additional arguments to run the program with.
+        #   Additional arguments for the shell command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
+        # @example
+        #   run 'ls'
         #
-        # @yieldparam [String] line
-        #   A line of output from the command.
+        # @example with additional arguments:
+        #   run 'ls', '-l'
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The output of the shell command.
         #
-        def exec(program,*arguments)
-          cmd = command(program,*arguments)
-
-          if block_given?
-            cmd.each { |line| yield line.chomp }
-          else
-            cmd.read
+        def run(command,*arguments)
+          unless arguments.empty?
+            command = "#{command} #{Shellwords.shelljoin(arguments)}"
           end
+
+          unless @env.empty?
+            env_vars = @env.map { |key,value|
+              "#{key}=#{Shellwords.shellescape(value)}"
+            }.join(' ')
+
+            command = "env #{env_vars} #{command}"
+          end
+
+          if @cwd
+            command = "cd #{@cwd} && #{command}"
+          end
+
+          return @api.shell_exec(command)
         end
-        resource_method :exec, [:shell_exec]
+        resource_method :run, [:shell_exec]
 
         #
         # Executes a command and prints the resulting output.
@@ -110,12 +98,12 @@ module Ronin
         #   The program name or path to execute.
         #
         # @param [Array<String>] arguments
-        #   Additional arguments to run the program with.
+        #   Additional arguments for the shell command.
         #
         # @return [nil]
         #
         def system(command,*arguments)
-          exec(command,*arguments) { |line| puts line }
+          puts(run(command,*arguments))
         end
         resource_method :system, [:shell_exec]
 
@@ -129,7 +117,7 @@ module Ronin
         #   Any error messages.
         #
         def cd(path)
-          command('cd',path).first
+          @pwd = File.expand_path(path,pwd)
         end
         resource_method :cd, [:shell_exec]
 
@@ -140,7 +128,7 @@ module Ronin
         #   The path of the current working directory.
         #
         def pwd
-          exec('pwd').chomp
+          @pwd ||= run('pwd').chomp
         end
         resource_method :pwd, [:shell_exec]
 
@@ -150,21 +138,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Arguments to pass to the `ls` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def ls(*arguments,&block)
-          exec('ls',*arguments,&block)
+        def ls(*arguments)
+          run('ls',*arguments)
         end
         resource_method :ls, [:shell_exec]
 
@@ -174,21 +154,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ls -a` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def ls_a(*arguments,&block)
-          exec('ls','-a',*arguments,&block)
+        def ls_a(*arguments)
+          run('ls','-a',*arguments)
         end
         resource_method :ls_a, [:shell_exec]
 
@@ -198,21 +170,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ls -l` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def ls_l(*arguments,&block)
-          exec('ls','-l',*arguments,&block)
+        def ls_l(*arguments)
+          run('ls','-l',*arguments)
         end
         resource_method :ls_l, [:shell_exec]
 
@@ -222,21 +186,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ls -la` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def ls_la(*arguments,&block)
-          exec('ls','-la',*arguments,&block)
+        def ls_la(*arguments)
+          run('ls','-la',*arguments)
         end
         resource_method :ls_la, [:shell_exec]
 
@@ -257,9 +213,9 @@ module Ronin
         # @return [Array<String>, nil]
         #   If no block is given, all found paths will be returned.
         #
-        def find(*arguments)
-          if block_given?
-            exec('find',*arguments) { |line| yield line.chomp }
+        def find(*arguments,&block)
+          if block
+            run('find',*arguments).each_line(chomp: true,&block)
           else
             enum_for(__method__,*arguments).to_a
           end
@@ -280,7 +236,7 @@ module Ronin
         #   # => "data.db: SQLite 3.x database"
         #
         def file(*arguments)
-          command('file',*arguments).first
+          run('file',*arguments)
         end
         resource_method :file, [:shell_exec]
 
@@ -294,7 +250,7 @@ module Ronin
         #   The output from the `which` command.
         #
         def which(*arguments)
-          command('which',*arguments).first
+          run('which',*arguments)
         end
         resource_method :which, [:shell_exec]
 
@@ -304,21 +260,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `cat` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def cat(*arguments,&block)
-          exec('cat',*arguments,&block)
+        def cat(*arguments)
+          run('cat',*arguments)
         end
         resource_method :cat, [:shell_exec]
 
@@ -328,21 +276,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `head` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def head(*arguments,&block)
-          exec('head',*arguments,&block)
+        def head(*arguments)
+          run('head',*arguments)
         end
         resource_method :head, [:shell_exec]
 
@@ -355,14 +295,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `head` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def head_n(lines,*arguments,&block)
-          head('-n',lines,*arguments,&block)
+        def head_n(lines,*arguments)
+          head('-n',lines,*arguments)
         end
         resource_method :head_n, [:shell_exec]
 
@@ -372,21 +311,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `tail` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def tail(*arguments,&block)
-          exec('tail',*arguments,&block)
+        def tail(*arguments)
+          run('tail',*arguments)
         end
         resource_method :tail, [:shell_exec]
 
@@ -399,14 +330,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `tail` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def tail_n(lines,*arguments,&block)
-          tail('-n',lines,*arguments,&block)
+        def tail_n(lines,*arguments)
+          tail('-n',lines,*arguments)
         end
         resource_method :tail_n, [:shell_exec]
 
@@ -430,9 +360,9 @@ module Ronin
         #   If no block is given, all matching paths and lines will be
         #   returned.
         #
-        def grep(*arguments,&block)
+        def grep(*arguments)
           if block_given?
-            exec('grep',*arguments) do |line|
+            run('grep',*arguments).each_line(chomp: true) do |line|
               yield(*line.split(':',2))
             end
           else
@@ -485,7 +415,7 @@ module Ronin
         #   Any error messages returned by the `touch` command.
         #
         def touch(*arguments)
-          command('touch',*arguments).first
+          run('touch',*arguments)
         end
         resource_method :touch, [:shell_exec]
 
@@ -499,7 +429,7 @@ module Ronin
         #   The path of the new tempfile.
         #
         def mktemp(*arguments)
-          command('mktemp',*arguments).first.chomp
+          run('mktemp',*arguments).chomp
         end
         resource_method :mktemp, [:shell_exec]
 
@@ -527,7 +457,7 @@ module Ronin
         #   Any error messages returned by the `mkdir` command.
         #
         def mkdir(*arguments)
-          command('mkdir',*arguments).first
+          run('mkdir',*arguments)
         end
         resource_method :mkdir, [:shell_exec]
 
@@ -541,7 +471,7 @@ module Ronin
         #   Any error messages returned by the `cp` command.
         #
         def cp(*arguments)
-          command('cp',*arguments).first
+          run('cp',*arguments)
         end
         resource_method :cp, [:shell_exec]
 
@@ -583,21 +513,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `rsync` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def rsync(*arguments,&block)
-          exec('rsync',*arguments,&block)
+        def rsync(*arguments)
+          run('rsync',*arguments)
         end
         resource_method :rsync, [:shell_exec]
 
@@ -607,14 +529,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `rsync` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #rsync
         #
-        def rsync_a(*arguments,&block)
-          rsync('-a',*arguments,&block)
+        def rsync_a(*arguments)
+          rsync('-a',*arguments)
         end
         resource_method :rsync_a, [:shell_exec]
 
@@ -624,14 +545,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `rsync` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
         def wget(*arguments)
-          exec('wget','-q',*arguments)
+          run('wget','-q',*arguments)
         end
         resource_method :wget, [:shell_exec]
 
@@ -644,9 +564,8 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `wget` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #wget
         #
@@ -661,14 +580,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `curl` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
         def curl(*arguments)
-          exec('curl','-s',*arguments)
+          run('curl','-s',*arguments)
         end
         resource_method :curl, [:shell_exec]
 
@@ -681,9 +599,8 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `curl` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #curl
         #
@@ -702,7 +619,7 @@ module Ronin
         #   Any error messages returned by the `rmdir` command.
         #
         def rmdir(*arguments)
-          command('rmdir',*arguments).first
+          run('rmdir',*arguments)
         end
         resource_method :rmdir, [:shell_exec]
 
@@ -719,14 +636,13 @@ module Ronin
         # @yieldparam [String] line
         #   A line of output from the command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def rm(*arguments,&block)
-          exec('rm',*arguments,&block)
+        def rm(*arguments)
+          run('rm',*arguments)
         end
         resource_method :rm, [:shell_exec]
 
@@ -736,14 +652,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `rm` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #rm
         #
-        def rm_r(*arguments,&block)
-          rm('-r',*arguments,&block)
+        def rm_r(*arguments)
+          rm('-r',*arguments)
         end
         resource_method :rm_r, [:shell_exec]
 
@@ -753,27 +668,15 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `rm` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #rm
         #
-        def rm_rf(*arguments,&block)
-          rm('-rf',*arguments,&block)
+        def rm_rf(*arguments)
+          rm('-rf',*arguments)
         end
         resource_method :rm_rf, [:shell_exec]
-
-        #
-        # Gets the current time and date from the shell.
-        #
-        # @return [Date]
-        #   The current data returned by the shell.
-        #
-        def date
-          Date.parse(exec('date'))
-        end
-        resource_method :date, [:shell_exec]
 
         #
         # Gets the current time from the shell.
@@ -782,9 +685,20 @@ module Ronin
         #   The current time returned by the shell.
         #
         def time
-          date.to_time
+          Time.parse(run('date').chomp)
         end
         resource_method :time, [:shell_exec]
+
+        #
+        # Gets the current time and date from the shell.
+        #
+        # @return [Date]
+        #   The current data returned by the shell.
+        #
+        def date
+          time.to_date
+        end
+        resource_method :date, [:shell_exec]
 
         #
         # The ID information of the current user.
@@ -795,7 +709,7 @@ module Ronin
         def id
           hash = {}
 
-          exec('id').split(' ').each do |name_value|
+          run('id').split.each do |name_value|
             name, value = name_value.split('=',2)
 
             hash[name.to_sym] = value
@@ -812,7 +726,7 @@ module Ronin
         #   The UID of the current user.
         #
         def uid
-          exec('id','-u').to_i
+          run('id','-u').to_i
         end
         resource_method :uid, [:shell_exec]
 
@@ -823,7 +737,7 @@ module Ronin
         #   The GID of the current user.
         #
         def gid
-          exec('id','-g').to_i
+          run('id','-g').to_i
         end
         resource_method :gid, [:shell_exec]
 
@@ -837,7 +751,7 @@ module Ronin
         #   The name of the current user returned by the `whoami` command.
         #
         def whoami(*arguments)
-          exec('whoami',*arguments).chomp
+          run('whoami',*arguments).chomp
         end
         resource_method :whoami, [:shell_exec]
 
@@ -847,21 +761,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `who` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def who(*arguments,&block)
-          exec('who',*arguments,&block)
+        def who(*arguments)
+          run('who',*arguments)
         end
         resource_method :who, [:shell_exec]
 
@@ -871,21 +777,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `w` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def w(*arguments,&block)
-          exec('w',*arguments,&block)
+        def w(*arguments)
+          run('w',*arguments)
         end
         resource_method :w, [:shell_exec]
 
@@ -895,21 +793,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `lastlog` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def lastlog(*arguments,&block)
-          exec('lastlog',*arguments,&block)
+        def lastlog(*arguments)
+          run('lastlog',*arguments)
         end
         resource_method :lastlog, [:shell_exec]
 
@@ -926,14 +816,13 @@ module Ronin
         # @yieldparam [String] line
         #   A line of output from the command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def faillog(*arguments,&block)
-          exec('faillog',*arguments,&block)
+        def faillog(*arguments)
+          run('faillog',*arguments)
         end
         resource_method :faillog, [:shell_exec]
 
@@ -943,21 +832,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ps` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def ps(*arguments,&block)
-          exec('ps',*arguments,&block)
+        def ps(*arguments)
+          run('ps',*arguments)
         end
         resource_method :ps, [:shell_exec]
 
@@ -967,14 +848,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `ps` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #ps
         #
-        def ps_aux(*arguments,&block)
-          ps('aux',*arguments,&block)
+        def ps_aux(*arguments)
+          ps('aux',*arguments)
         end
         resource_method :ps_aux, [:shell_exec]
 
@@ -988,7 +868,7 @@ module Ronin
         #   Output from the `kill` command.
         #
         def kill(*arguments)
-          command('kill',*arguments).first
+          run('kill',*arguments)
         end
         resource_method :kill, [:shell_exec]
 
@@ -998,21 +878,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ifconfig` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def ifconfig(*arguments,&block)
-          exec('ifconfig',*arguments,&block)
+        def ifconfig(*arguments)
+          run('ifconfig',*arguments)
         end
         resource_method :ifconfig, [:shell_exec]
 
@@ -1022,21 +894,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `netstat` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def netstat(*arguments,&block)
-          exec('netstat',*arguments,&block)
+        def netstat(*arguments)
+          run('netstat',*arguments)
         end
         resource_method :netstat, [:shell_exec]
 
@@ -1046,14 +910,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments for the `netstat` command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #netstat
         #
-        def netstat_anp(*arguments,&block)
-          netstat('-anp',*arguments,&block)
+        def netstat_anp(*arguments)
+          netstat('-anp',*arguments)
         end
         resource_method :netstat_anp, [:shell_exec]
 
@@ -1070,83 +933,15 @@ module Ronin
         # @yieldparam [String] line
         #   A line of output from the command.
         #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def ping(*arguments,&block)
-          exec('ping',*arguments,&block)
+        def ping(*arguments)
+          run('ping',*arguments)
         end
         resource_method :ping, [:shell_exec]
-
-        #
-        # Runs net-cat.
-        #
-        # @param [Array<String>] arguments
-        #   Additional arguments to pass to the `nc` command.
-        #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
-        #
-        # @see #exec
-        #
-        def nc(*arguments,&block)
-          exec('nc',*arguments,&block)
-        end
-        resource_method :nc, [:shell_exec]
-
-        #
-        # Runs `nc -l`.
-        #
-        # @param [Integer] port
-        #   The local port to bind to.
-        #
-        # @param [Array<String>] arguments
-        #   Additional arguments for the `nc` command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
-        #
-        # @see #nc
-        #
-        def nc_listen(port,*arguments,&block)
-          nc('-l',port,*arguments,&block)
-        end
-        resource_method :nc_listen, [:shell_exec]
-
-        #
-        # Connects to a host using net-cat.
-        #
-        # @param [String] host
-        #   The host to connect to.
-        #
-        # @param [Integer] port
-        #   The port to connect to.
-        #
-        # @param [Array<String>] arguments
-        #   Additional arguments for the `nc` command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
-        #
-        # @see #nc
-        #
-        def nc_connect(host,port,*arguments,&block)
-          nc(host,port,*arguments,&block)
-        end
-        resource_method :nc_connect, [:shell_exec]
 
         #
         # Compiles some C source-code with `gcc`.
@@ -1154,21 +949,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `gcc` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def gcc(*arguments,&block)
-          exec('gcc',*arguments,&block)
+        def gcc(*arguments)
+          run('gcc',*arguments)
         end
         resource_method :gcc, [:shell_exec]
 
@@ -1178,21 +965,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `cc` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def cc(*arguments,&block)
-          exec('cc',*arguments,&block)
+        def cc(*arguments)
+          run('cc',*arguments)
         end
         resource_method :cc, [:shell_exec]
 
@@ -1202,21 +981,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `perl` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def perl(*arguments,&block)
-          exec('perl',*arguments,&block)
+        def perl(*arguments)
+          run('perl',*arguments)
         end
         resource_method :perl, [:shell_exec]
 
@@ -1226,21 +997,13 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `python` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def python(*arguments,&block)
-          exec('python',*arguments,&block)
+        def python(*arguments)
+          run('python',*arguments)
         end
         resource_method :python, [:shell_exec]
 
@@ -1250,31 +1013,15 @@ module Ronin
         # @param [Array<String>] arguments
         #   Additional arguments to pass to the `ruby` command.
         #
-        # @yield [line]
-        #   If a block is given, it will be passed each line of output
-        #   from the command.
-        #
-        # @yieldparam [String] line
-        #   A line of output from the command.
-        #
-        # @return [String, nil]
-        #   If no block is given, the full output of the command will be
-        #   returned.
+        # @return [String]
+        #   The full output of the command.
         #
         # @see #exec
         #
-        def ruby(*arguments,&block)
-          exec('ruby',*arguments,&block)
+        def ruby(*arguments)
+          run('ruby',*arguments)
         end
         resource_method :ruby, [:shell_exec]
-
-        #
-        # Exits the shell.
-        #
-        def exit
-          exec('exit')
-        end
-        resource_method :exit, [:shell_exec]
 
         #
         # Starts an interactive Shell console.

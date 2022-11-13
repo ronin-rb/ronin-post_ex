@@ -230,12 +230,7 @@ Exits the current process.
 
 ## Shell Functions
 
-### `shell_exec(program : String, *arguments : Array[String]) { |data : String| ... }`
+### `shell_exec(command : String) -> String`
 
-Executes a new shell command using the given program name and additional
-arguments. The method will then yield the data outputted by the shell command.
-
-### `shell_write(data : String)`
-
-Writes the given data to the shell.
+Executes the given shell command and returns it's output.
 

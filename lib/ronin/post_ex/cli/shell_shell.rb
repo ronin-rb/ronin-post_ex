@@ -52,9 +52,7 @@ module Ronin
         #   The command string.
         #
         def exec(command)
-          @shell.command(command).each_chunk do |chunk|
-            write(chunk)
-          end
+          puts @shell.run(command)
         end
 
       end
