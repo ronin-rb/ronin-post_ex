@@ -17,13 +17,15 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+require 'ronin/post_ex/sessions/session'
+
 module Ronin
   module PostEx
     module Sessions
       #
       # Provides a post-exploitation session which wraps around an RPC client.
       #
-      class RPC
+      class RPCSession < Session
 
         #
         # Initializes the RPC session.
