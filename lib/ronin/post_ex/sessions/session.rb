@@ -34,6 +34,14 @@ module Ronin
           @name || raise(NotImplementedError,"#{self.class}#name was not set")
         end
 
+        #
+        # Closes the session.
+        #
+        # @abstract
+        #
+        def close
+        end
+
       end
     end
   end
