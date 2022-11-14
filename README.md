@@ -114,7 +114,7 @@ system.shell.interact
 $
 ```
 
-Spawn an interactive API command shell:
+Spawn an interactive post-exploitation system shell:
 
 ```ruby
 system.interact
