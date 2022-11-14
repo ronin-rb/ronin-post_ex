@@ -33,8 +33,8 @@ module Ronin
       #
       # # Supported API Methods
       #
-      # The File System resource uses the following control methods,
-      # defined by the API object:
+      # The File System resource uses the following post-exploitation methods,
+      # defined by the {#session} object:
       #
       # * `fs_getcwd() -> String`
       # * `fs_chdir(path : String)`
@@ -63,11 +63,12 @@ module Ronin
         #   The path of the current working directory.
         #
         # @note
-        #   May call the `fs_getcwd` method, if defined by the API object.
+        #   May call the `fs_getcwd` method, if defined by the {#session}
+        #   object.
         #
         def getcwd
-          if @api.respond_to?(:fs_getcwd)
-            @cwd = @api.fs_getcwd
+          if @session.respond_to?(:fs_getcwd)
+            @cwd = @session.fs_getcwd
           end
 
           return @cwd
@@ -87,14 +88,15 @@ module Ronin
         #   The new current working directory.
         #
         # @note
-        #   May call the `fs_chdir` method, if defined by the API object.
+        #   May call the `fs_chdir` method, if defined by the {#session}
+        #   object.
         #
         def chdir(path)
           path = expand_path(path)
           old_cwd = @cwd
 
-          @cwd = if @api.respond_to?(:fs_chdir)
-                   @api.fs_chdir(path)
+          @cwd = if @session.respond_to?(:fs_chdir)
+                   @session.fs_chdir(path)
                  else
                    path
                  end
@@ -135,10 +137,11 @@ module Ronin
         #   The contents of the file.
         #
         # @note
-        #   Requires the `fs_readfile` method be defined by the API object.
+        #   Requires the `fs_readfile` method be defined by the {#session}
+        #   object.
         #
         def readfile(path)
-          @api.fs_readfile(path)
+          @session.fs_readfile(path)
         end
         resource_method :readfile, [:fs_readfile]
 
@@ -152,10 +155,11 @@ module Ronin
         #   The destination of the link.
         #
         # @note
-        #   Requires the `fs_readlink` method be defined by the API object.
+        #   Requires the `fs_readlink` method be defined by the {#session}
+        #   object.
         #
         def readlink(path)
-          @api.fs_readlink(path)
+          @session.fs_readlink(path)
         end
         resource_method :readlink, [:fs_readlink]
 
@@ -169,11 +173,12 @@ module Ronin
         #   The opened directory.
         #
         # @note
-        #   Requires the `fs_readdir` method be defined by the API object.
+        #   Requires the `fs_readdir` method be defined by the {#session}
+        #   object.
         #
         def readdir(path)
           path    = expand_path(path)
-          entries = @api.fs_readdir(path)
+          entries = @session.fs_readdir(path)
 
           return RemoteDir.new(path,entries)
         end
@@ -204,11 +209,11 @@ module Ronin
         #   end
         #
         # @note
-        #   Requires the `fs_glob` method be defined by the API object.
+        #   Requires the `fs_glob` method be defined by the {#session} object.
         #
         def glob(pattern,&block)
           path  = expand_path(pattern)
-          paths = @api.fs_glob(pattern)
+          paths = @session.fs_glob(pattern)
 
           paths.each(&block) if block
           return paths
@@ -230,18 +235,20 @@ module Ronin
         #   `nil` will be returned.
         #
         # @yieldparam [RemoteFile, CapturedFile] file
-        #   The temporarily opened file. If {#api} defines the `file_open`, then
-        #   a {RemoteFile} will be returned. If {#api} defines a `fs_readfile`
-        #   method instead, than a {CapturedFile} will be returned.
+        #   The temporarily opened file. If {#session} defines the `file_open`,
+        #   then a {RemoteFile} will be returned. If {#session} defines a
+        #   `fs_readfile` method instead, than a {CapturedFile} will be
+        #   returned.
         #
         # @return [RemoteFile, CapturedFile, nil]
-        #   The newly opened file. If {#api} defines the `file_open`, then
-        #   a {RemoteFile} will be returned. If {#api} defines a `fs_readfile`
-        #   method instead, than a {CapturedFile} will be returned.
+        #   The newly opened file. If {#session} defines the `file_open`, then
+        #   a {RemoteFile} will be returned. If {#session} defines a
+        #   `fs_readfile` method instead, than a {CapturedFile} will be
+        #   returned.
         #
         def open(path,mode='r',&block)
-          if @api.respond_to?(:file_open)
-            RemoteFile.open(@api,expand_path(path),mode,&block)
+          if @session.respond_to?(:file_open)
+            RemoteFile.open(@session,expand_path(path),mode,&block)
           else
             CapturedFile.new(expand_path(path),readfile(path),&block)
           end
@@ -311,10 +318,10 @@ module Ronin
         #   The newly opened tempfile.
         #
         # @note
-        #   Requires the `fs_mktemp` method be defined by the API object.
+        #   Requires the `fs_mktemp` method be defined by the {#session} object.
         #
         def tmpfile(basename,&block)
-          open(@api.fs_mktemp(basename),&block)
+          open(@session.fs_mktemp(basename),&block)
         end
         resource_method :tmpfile, [:fs_mktemp]
 
@@ -328,10 +335,10 @@ module Ronin
         #   Specifies that the directory was successfully created.
         #
         # @note
-        #   Requires the `fs_mkdir` method be defined by the API object.
+        #   Requires the `fs_mkdir` method be defined by the {#session} object.
         #
         def mkdir(path)
-          @api.fs_mkdir(path)
+          @session.fs_mkdir(path)
           return true
         end
         resource_method :mkdir, [:fs_mkdir]
@@ -349,10 +356,10 @@ module Ronin
         #   Specifies that the file was successfully copied.
         #
         # @note
-        #   Requires the `fs_copy` method be defined by the API object.
+        #   Requires the `fs_copy` method be defined by the {#session} object.
         #
         def copy(path,new_path)
-          @api.fs_copy(expand_path(path),expand_path(new_path))
+          @session.fs_copy(expand_path(path),expand_path(new_path))
           return true
         end
         resource_method :copy, [:fs_copy]
@@ -367,10 +374,10 @@ module Ronin
         #   Specifies that the file was successfully removed.
         #
         # @note
-        #   Requires the `fs_unlink` method be defined by the API object.
+        #   Requires the `fs_unlink` method be defined by the {#session} object.
         #
         def unlink(path)
-          @api.fs_unlink(expand_path(path))
+          @session.fs_unlink(expand_path(path))
           return true
         end
         resource_method :unlink, [:fs_unlink]
@@ -387,10 +394,10 @@ module Ronin
         #   Specifies that the directory was successfully removed.
         #
         # @note
-        #   Requires the `fs_rmdir` method be defined by the API object.
+        #   Requires the `fs_rmdir` method be defined by the {#session} object.
         #
         def rmdir(path)
-          @api.fs_rmdir(expand_path(path))
+          @session.fs_rmdir(expand_path(path))
           return true
         end
         resource_method :rmdir, [:fs_rmdir]
@@ -408,10 +415,10 @@ module Ronin
         #   Specifies that the file or directory was successfully moved.
         #
         # @note
-        #   Requires the `fs_move` method be defined by the API object.
+        #   Requires the `fs_move` method be defined by the {#session} object.
         #
         def move(path,new_path)
-          @api.fs_move(expand_path(path),expand_path(new_path))
+          @session.fs_move(expand_path(path),expand_path(new_path))
           return true
         end
         resource_method :move, [:fs_move]
@@ -431,10 +438,10 @@ module Ronin
         #   Specifies that the symbolic link was successfully created.
         #
         # @note
-        #   Requires the `fs_link` method be defined by the API object.
+        #   Requires the `fs_link` method be defined by the {#session} object.
         #
         def link(path,new_path)
-          @api.fs_link(path,new_path)
+          @session.fs_link(path,new_path)
           return true
         end
         resource_method :link, [:fs_link]
@@ -458,14 +465,14 @@ module Ronin
         #   exploit.fs.chown(['alice', 'users'], 'one.html')
         #
         # @note
-        #   Requires the `fs_chown` method be defined by the API object.
+        #   Requires the `fs_chown` method be defined by the {#session} object.
         #
         def chown(owner,path)
           user, group = owner
 
           chgrp(group,path) if group
 
-          @api.fs_chown(user,expand_path(path))
+          @session.fs_chown(user,expand_path(path))
           return true
         end
         resource_method :chown, [:fs_chown]
@@ -486,10 +493,10 @@ module Ronin
         #   exploit.fs.chgrp('www', 'one.html')
         #
         # @note
-        #   Requires the `fs_chgrp` method be defined by the API object.
+        #   Requires the `fs_chgrp` method be defined by the {#session} object.
         #
         def chgrp(group,path)
-          @api.fs_chgrp(group,expand_path(path))
+          @session.fs_chgrp(group,expand_path(path))
           return true
         end
         resource_method :chgrp, [:fs_chgrp]
@@ -510,10 +517,10 @@ module Ronin
         #   exploit.fs.chmod(0665, 'one.html')
         #
         # @note
-        #   Requires the `fs_chmod` method be defined by the API object.
+        #   Requires the `fs_chmod` method be defined by the {#session} object.
         #
         def chmod(mode,path)
-          @api.fs_chmod(mode,expand_path(path))
+          @session.fs_chmod(mode,expand_path(path))
           return true
         end
         resource_method :chmod, [:fs_chmod]
@@ -530,7 +537,7 @@ module Ronin
         # @see RemoteFile::Stat#initialize
         #
         def stat(path)
-          RemoteFile::Stat.new(@api,expand_path(path))
+          RemoteFile::Stat.new(@session,expand_path(path))
         end
         resource_method :stat, [:fs_stat]
 
@@ -547,10 +554,11 @@ module Ronin
         #   Specifies whether the two files are identical.
         #
         # @note
-        #   Requires the `fs_compare` method be defined by the API object.
+        #   Requires the `fs_compare` method be defined by the {#session}
+        #   object.
         #
         def compare(path,other_path)
-          @api.fs_compare(path,other_path)
+          @session.fs_compare(path,other_path)
         end
         resource_method :compare, [:fs_compare]
 

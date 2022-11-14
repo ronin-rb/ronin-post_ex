@@ -52,8 +52,9 @@ module Ronin
       #
       # Creates a new remote controlled File object.
       #
-      # @param [#file_read, #file_write] api
-      #   The API object that defines the `file_read` and `file_write` methods.
+      # @param [Sessions::Session#file_read, Sessions::Session#file_write] session
+      #   The session object that defines the `file_read` and `file_write`
+      #   methods.
       #
       # @param [String] path
       #   The path of the remote file.
@@ -62,10 +63,12 @@ module Ronin
       #   The mode to open the file in.
       #
       # @note
-      #   This method may use the `file_open` method, if it is defined by `api`.
+      #   This method may use the `file_open` method, if it is defined by
+      #   {#session}.
       #
-      def initialize(api,path,mode='r')
-        @api  = api
+      def initialize(session,path,mode='r')
+        @session = session
+
         @path = path.to_s
         @mode = mode.to_s
 
@@ -75,8 +78,8 @@ module Ronin
       #
       # Opens a file.
       #
-      # @param [#file_read] api
-      #   The object controlling remote files.
+      # @param [Sessions::Session#file_read, Sessions::Session#file_write] session
+      #   The session object controlling remote files.
       #
       # @param [String] path
       #   The path of the remote file.
@@ -92,8 +95,8 @@ module Ronin
       #   If no block is given, then the newly opened remote file object will be
       #   returned. If a block was given, then `nil` will be returned.
       #
-      def self.open(api,path)
-        io = new(api,path)
+      def self.open(session,path)
+        io = new(session,path)
 
         if block_given?
           yield(io)
@@ -117,13 +120,13 @@ module Ronin
       #   The new position within the file.
       #
       # @note This method may use the `file_seek` API method, if it is defined
-      # by {#api}.
+      # by {#session}.
       #
       def seek(new_pos,whence=SEEK_SET)
         clear_buffer!
 
-        if @api.respond_to?(:file_seek)
-          @api.file_seek(@fd,new_pos,whence)
+        if @session.respond_to?(:file_seek)
+          @session.file_seek(@fd,new_pos,whence)
         end
 
         @pos = new_pos
@@ -138,11 +141,11 @@ module Ronin
       #
       # @note
       #   This method may use the `file_tell` API method, if it is defined by
-      #   {#api}.
+      #   {#session}.
       #
       def tell
-        if @api.respond_to?(:file_tell)
-          @pos = @api.file_tell(@fd)
+        if @session.respond_to?(:file_tell)
+          @pos = @session.file_tell(@fd)
         else
           @pos
         end
@@ -170,15 +173,15 @@ module Ronin
       # @note This method requires the `file_ioctl` API method.
       #
       def ioctl(command,argument)
-        unless @api.respond_to?(:file_ioctl)
-          raise(NotImplementedError,"#{@api.inspect} does not define file_ioctl")
+        unless @session.respond_to?(:file_ioctl)
+          raise(NotImplementedError,"#{@session.inspect} does not define file_ioctl")
         end
 
         if @fd == nil
           raise(RuntimeError,"file_ioctl requires a file-descriptor")
         end
 
-        return @api.file_ioctl(@fd,command,argument)
+        return @session.file_ioctl(@fd,command,argument)
       end
       resource_method :ioctl, [:file_ioctl]
 
@@ -200,15 +203,15 @@ module Ronin
       # @note This method requires the `file_fnctl` API method.
       #
       def fcntl(command,argument)
-        unless @api.respond_to?(:file_fcntl)
-          raise(NotImplementedError,"#{@api.inspect} does not define file_fcntl")
+        unless @session.respond_to?(:file_fcntl)
+          raise(NotImplementedError,"#{@session.inspect} does not define file_fcntl")
         end
 
         if @fd == nil
           raise(RuntimeError,"file_ioctl requires a file-descriptor")
         end
 
-        return @api.file_fcntl(@fd,command,argument)
+        return @session.file_fcntl(@fd,command,argument)
       end
       resource_method :fcntl, [:file_fcntl]
 
@@ -223,7 +226,7 @@ module Ronin
       #
       # @note
       #   This method may use the `file_close` and `file_open` API methods,
-      #   if they are defined by {#api}.
+      #   if they are defined by {#session}.
       #
       def reopen(path)
         close
@@ -243,9 +246,9 @@ module Ronin
       #
       def stat
         if @fd
-          Stat.new(@api, fd: @fd)
+          Stat.new(@session, fd: @fd)
         else
-          Stat.new(@api, path: @path)
+          Stat.new(@session, path: @path)
         end
       end
       resource_method :stat, [:file_stat]
@@ -256,11 +259,11 @@ module Ronin
       # @return [self]
       #
       # @note This method may use the `file_flush` API method, if it is defined
-      # by {#api}.
+      # by {#session}.
       #
       def flush
-        if @api.respond_to?(:file_flush)
-          @api.file_flush
+        if @session.respond_to?(:file_flush)
+          @session.file_flush
         end
 
         return self
@@ -296,11 +299,12 @@ module Ronin
       #   The file descriptor returned by `file_open`.
       #
       # @note
-      #   This method may use the `file_open` API method, if {#api} defines it.
+      #   This method may use the `file_open` API method, if {#session} defines
+      #   it.
       #
       def io_open
-        if @api.respond_to?(:file_open)
-          @api.file_open(@path,@mode)
+        if @session.respond_to?(:file_open)
+          @session.file_open(@path,@mode)
         end
       end
       resource_method :open
@@ -323,10 +327,10 @@ module Ronin
       #   This method requires either the `file_read` API methods.
       #
       def io_read
-        if @api.respond_to?(:file_read)
-          @api.file_read(@fd,BLOCK_SIZE)
+        if @session.respond_to?(:file_read)
+          @session.file_read(@fd,BLOCK_SIZE)
         else
-          raise(IOError,"#{@api.inspect} does not support reading")
+          raise(IOError,"#{@session.inspect} does not support reading")
         end
       end
       resource_method :read, [:file_read]
@@ -347,10 +351,10 @@ module Ronin
       # @note This method requires the `file_write` API method.
       #
       def io_write(data)
-        if @api.respond_to?(:file_write)
-          @pos += @api.file_write(@fd,@pos,data)
+        if @session.respond_to?(:file_write)
+          @pos += @session.file_write(@fd,@pos,data)
         else
-          raise(IOError,"#{@api.inspect} does not support writing to files")
+          raise(IOError,"#{@session.inspect} does not support writing to files")
         end
       end
       resource_method :write, [:file_write]
@@ -359,11 +363,12 @@ module Ronin
       # Attempts calling `file_close` from the API object to close
       # the file.
       #
-      # @note This method may use the `file_close` method, if {#api} defines it.
+      # @note This method may use the `file_close` method, if {#session} defines
+      # it.
       #
       def io_close
-        if @api.respond_to?(:file_close)
-          @api.file_close(@fd)
+        if @session.respond_to?(:file_close)
+          @session.file_close(@fd)
         end
       end
       resource_method :close

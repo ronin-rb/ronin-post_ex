@@ -1,14 +1,15 @@
 require 'spec_helper'
 require 'ronin/post_ex/system'
+require 'ronin/post_ex/sessions/session'
 
 describe Ronin::PostEx::System do
-  let(:api) { double('Post-Exploitation API Object') }
+  let(:session) { Ronin::PostEx::Sessions::Session.new }
 
-  subject { described_class.new(api) }
+  subject { described_class.new(session) }
 
   describe "#initialize" do
-    it "must set #api" do
-      expect(subject.api).to be(api)
+    it "must set #session" do
+      expect(subject.session).to be(session)
     end
 
     it "must initialize #fs" do
@@ -47,7 +48,7 @@ describe Ronin::PostEx::System do
     let(:time)           { Time.at(unix_timestamp) }
 
     it "must call the 'sys_time' API function and return a Time object" do
-      expect(api).to receive(:sys_time).and_return(unix_timestamp)
+      expect(session).to receive(:sys_time).and_return(unix_timestamp)
 
       expect(subject.time).to eq(time)
     end

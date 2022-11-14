@@ -26,7 +26,7 @@ module Ronin
   module PostEx
     class System < Resource
       #
-      # Provides access to an interactive shell and executing shell commands.
+      # Provides access to a system's shell and executing shell commands.
       #
       # ## Supported API Methods
       #
@@ -42,11 +42,11 @@ module Ronin
         #
         # Initializes the Shell resource.
         #
-        # @param [#shell_exec] api
-        #   The API object that defines the `shell_exec` method.
+        # @param [#shell_exec] session
+        #   The {#session} object that defines the `shell_exec` method.
         #
-        def initialize(api)
-          super(api)
+        def initialize(session)
+          super(session)
 
           @cwd = nil
           @env = {}
@@ -87,7 +87,7 @@ module Ronin
             command = "cd #{@cwd} && #{command}"
           end
 
-          return @api.shell_exec(command)
+          return @session.shell_exec(command)
         end
         resource_method :run, [:shell_exec]
 

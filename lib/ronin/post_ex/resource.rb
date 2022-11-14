@@ -20,33 +20,34 @@
 module Ronin
   module PostEx
     #
-    # A base-class for all Post-Exploitation Resources.
+    # A base-class for all post-exploitation resources.
     #
     class Resource
 
-      # The object providing control of the Resource
+      # The object providing control of the resource.
       #
-      # @return [Object]
-      attr_reader :api
+      # @return [Sessions::Session]
+      attr_reader :session
 
       #
       # Creates a new Resource.
       #
-      # @param [Object] api
+      # @param [Object] session
       #   The object controlling the Resource.
       #
-      def initialize(api)
-        @api = api
+      def initialize(session)
+        @session = session
       end
 
       #
-      # Determines whether the API object supports the Resource method(s).
+      # Determines whether the {#session} object supports the resource's
+      # method(s).
       #
       # @param [Array<Symbol>] method_names
       #   The name of the Resource method.
       #
       # @return [Boolean]
-      #   Specifies whether the API object supports the method.
+      #   Specifies whether the {#session} object supports the method.
       #
       # @example
       #   fs.supports?(:read, :write)
@@ -57,10 +58,10 @@ module Ronin
       def supports?(*method_names)
         method_names.all? do |method_name|
           method_name = method_name.to_sym
-          api_methods = self.class.resource_methods[method_name]
+          session_methods = self.class.resource_methods[method_name]
 
-          api_methods && api_methods.all? { |api_method|
-            @api.respond_to?(api_method)
+          session_methods && session_methods.all? { |session_method|
+            @session.respond_to?(session_method)
           }
         end
       end
@@ -103,13 +104,13 @@ module Ronin
 
       #
       # Specifies that a Resource method requires certain methods define by the
-      # API object.
+      # {#session} object.
       #
       # @param [Symbol] method_name
       #   The name of the Resource method.
       #
       # @param [Array<Symbol>] control_methods
-      #   The methods that must be defined by the API object.
+      #   The methods that must be defined by the {#session} object.
       #
       # @api semipublic
       #
@@ -130,8 +131,8 @@ module Ronin
       #   The method is not defined by the controlling object.
       #
       def requires_method!(name)
-        unless @api.respond_to?(name)
-          raise(NotImplementedError,"#{@api.inspect} does not define #{name}")
+        unless @session.respond_to?(name)
+          raise(NotImplementedError,"#{@session.inspect} does not define #{name}")
         end
 
         return true

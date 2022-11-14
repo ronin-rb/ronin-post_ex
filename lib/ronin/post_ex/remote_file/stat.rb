@@ -97,7 +97,7 @@ module Ronin
         #
         # Creates a new File Stat object.
         #
-        # @param [#fs_stat] api
+        # @param [Sessions::Session##fs_stat] session
         #   The object controlling file-system stat.
         #
         # @param [String] path
@@ -117,25 +117,25 @@ module Ronin
         #   The remote file does not exist.
         #
         # @note
-        #   This method requires `api` define the `fs_stat` API method.
+        #   This method requires `session` define the `fs_stat` API method.
         #
-        def initialize(api,path: nil, fd: nil)
+        def initialize(session, path: nil, fd: nil)
           if path
-            unless api.respond_to?(:fs_stat)
-              raise(NotImplementedError,"#{api.inspect} does not define #fs_stat")
+            unless session.respond_to?(:fs_stat)
+              raise(NotImplementedError,"#{session.inspect} does not define #fs_stat")
             end
           elsif fd
-            unless api.respond_to?(:file_stat)
-              raise(NotImplementedError,"#{api.inspect} does not define #file_stat")
+            unless session.respond_to?(:file_stat)
+              raise(NotImplementedError,"#{session.inspect} does not define #file_stat")
             end
           else
             raise(ArgumentError,"#{self.class}#initialize must be given either the path: or fd: keyword argument")
           end
 
-          @api  = api
-          @path = path.to_s
+          @session = session
+          @path    = path.to_s
 
-          unless (stat = @api.fs_stat(@path))
+          unless (stat = @session.fs_stat(@path))
             raise(Errno::ENOENT,"No such file or directory #{@path.dump}")
           end
 

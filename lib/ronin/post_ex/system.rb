@@ -27,8 +27,8 @@ module Ronin
   module PostEx
     #
     # Represents a successfully compromised system. The {System} class will
-    # wraps around another object which defines syscall-like Post-Exploitation
-    # API to read/write files, run commands, etc.
+    # wraps around a session object which defines syscall-like post-exploitation
+    # API for reading/writing files, run commands, etc.
     #
     # ## Supported API Functions
     #
@@ -36,28 +36,52 @@ module Ronin
     #
     # ## Example
     #
-    # Define the client which defines the Post-Exploitation API methods:
+    # Define the session class which defines the Post-Exploitation API methods:
     #
-    #     class RATClient
+    #     require 'base64'
     #     
-    #       # ...
-    #     
-    #       def fs_read(path)
-    #         rpc_call("fs_read",path)
+    #     class SimpleRATSession < Ronin::PostEx::Sessions::Session
+    #
+    #       def initialize(socket)
+    #         @socket = socket
     #       end
     #     
+    #       def call(name,*args)
+    #         @socket.puts("#{name} #{args.join(' ')}")
+    #
+    #         Base64.strict_decode64(@socket.gets(chomp: true)(
+    #       end
+    #
     #       def shell_exec(command)
-    #         rpc_call("shell_exec",command)
+    #         call('EXEC',command)
     #       end
     #
-    #       # ...
-    #     
+    #       def fs_readfile(path)
+    #         call('READ',path)
+    #       end
+    #
+    #       def process_pid
+    #         call('PID').to_i
+    #       end
+    #
+    #       def process_getuid
+    #         call('UID').to_i
+    #       end
+    #
+    #       def process_environ
+    #         Hash[
+    #           call('ENV').each_line(chomp: true).map { |line|
+    #             line.split('=',2)
+    #           }
+    #         ]
+    #       end
+    #
     #     end
     #
     # Initialize a new {System} object that wraps around the client:
     #
-    #     rat_client = RATClient.new(host,port)
-    #     system = Ronin::PostEx::System.new(rat_client)
+    #     session = SimpleRATSession.new(socket)
+    #     system  = Ronin::PostEx::System.new(session)
     #
     # Interact with the system's remote files as if they were local files:
     #
@@ -87,11 +111,6 @@ module Ronin
     #
     class System < Resource
 
-      # The object which defines the Post-Exploitation API methods.
-      #
-      # @return [Object]
-      attr_reader :api
-
       # The File-System resource.
       #
       # @return [System::FS]
@@ -110,15 +129,15 @@ module Ronin
       #
       # Initializes the system.
       #
-      # @param [Object] api
+      # @param [Object] session
       #   The object which defines the Post-Exploitation API methods.
       #
-      def initialize(api)
-        @api = api
+      def initialize(session)
+        super(session)
 
-        @fs      = FS.new(@api)
-        @process = Process.new(@api)
-        @shell   = Shell.new(@api)
+        @fs      = FS.new(session)
+        @process = Process.new(session)
+        @shell   = Shell.new(session)
       end
 
       #
@@ -128,15 +147,15 @@ module Ronin
       #   The current time.
       #
       # @note
-      #   Requires the `sys_time` method be defined by the API object.
+      #   Requires the `sys_time` method be defined by the {#session} object.
       #
       def time
-        Time.at(@api.sys_time.to_i)
+        Time.at(@session.sys_time.to_i)
       end
       resource_method :time, [:sys_time]
 
       #
-      # Starts an interactive API shell.
+      # Starts an interactive post-exploitation system shell.
       #
       def interact
         CLI::SystemShell.start(self)
