@@ -142,6 +142,15 @@ module Ronin
         CLI::SystemShell.start(self)
       end
 
+      #
+      # Exits the process.
+      #
+      # @see Process#exit
+      #
+      def exit
+        @process.exit
+      end
+
     end
   end
 end
