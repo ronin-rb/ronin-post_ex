@@ -757,16 +757,13 @@ module Ronin
         # Executes a new shell command using the given program name and
         # additional arguments.
         #
-        # @param [String] command_name
-        #   The command name to execute.
-        #
-        # @param [Array<String>] arguments
-        #   Additional command line arguments.
+        # @param [String] command
+        #   The command to execute.
         #
         # @note calls the `shell.exec` RPC function.
         #
-        def shell_exec(command_name,*arguments)
-          call('shell.exec',command_name,*arguments)
+        def shell_exec(command)
+          call('shell.exec',command)
         end
 
         #
