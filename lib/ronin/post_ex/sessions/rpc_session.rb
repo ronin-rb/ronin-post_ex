@@ -766,18 +766,6 @@ module Ronin
           call('shell.exec',command)
         end
 
-        #
-        # Writes data to the shell.
-        #
-        # @param [String] data
-        #   The data to write to the shell.
-        #
-        # @note calls the `shell.write` RPC function.
-        #
-        def shell_write(data)
-          call('shell.write',data)
-        end
-
       end
     end
   end
