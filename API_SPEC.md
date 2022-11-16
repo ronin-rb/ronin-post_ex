@@ -194,14 +194,6 @@ Un-sets an environment variable.
 
 Kills another process using the given Process ID (POD) and the signal number.
 
-### `process_getcwd -> String`
-
-Gets the process's current working directory.
-
-### `process_chdir(path : String)`
-
-Changes the process's current working directory.
-
 ### `process_popen(command : String) -> Integer`
 
 Opens a new process using the given command string.

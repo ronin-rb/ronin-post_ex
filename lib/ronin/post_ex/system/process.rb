@@ -50,8 +50,6 @@ module Ronin
       # * `process_setenv(name : String, value : String)`
       # * `process_unsetenv(name : String)`
       # * `process_kill(pid : Integer, signal : Integer)`
-      # * `process_getcwd -> String`
-      # * `process_chdir(path : String)`
       # * `process_popen(command : String) -> Integer`
       # * `process_read(fd : Integer, length : Integer) -> String`
       # * `process_write(fd : Integer, data : String)`
@@ -361,43 +359,6 @@ module Ronin
           @session.process_kill(pid,signal)
         end
         resource_method :kill, [:process_kill]
-
-        #
-        # Gets the working directory of the current process.
-        #
-        # @return [String]
-        #   The current working directory.
-        #
-        # @note
-        #   Requires the `process_getcwd` method be defined by the {#session}
-        #   object.
-        #
-        def getcwd
-          @session.process_getcwd
-        end
-        resource_method :getcwd, [:process_getcwd]
-
-        alias cwd getcwd
-
-        #
-        # Changes the working directory of the current process.
-        #
-        # @param [String] path
-        #   The new working directory.
-        #
-        # @return [String]
-        #   The new current working directory.
-        #
-        # @note
-        #   Requires the `process_chdir` method be defined by the {#session}
-        #   object.
-        #
-        def chdir(path)
-          @session.process_chdir(path)
-        end
-        resource_method :chdir, [:process_chdir]
-
-        alias cwd= chdir
 
         #
         # Opens a new process.

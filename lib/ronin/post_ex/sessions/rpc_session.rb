@@ -723,30 +723,6 @@ module Ronin
         end
 
         #
-        # Gets the process's current working directory for the current process.
-        #
-        # @return [String]
-        #   The current working directory.
-        #
-        # @note calls the `process.getcwd` RPC function.
-        #
-        def process_getcwd
-          call('process.getcwd')
-        end
-
-        #
-        # Changes the process's current working directory.
-        #
-        # @param [String] path
-        #   The new current working directory for the current process.
-        #
-        # @note calls the `process.chddir` RPC functions.
-        #
-        def process_chdir(path)
-          call('process.chdir',path)
-        end
-
-        #
         # Spawns a new process using the given program and additional arguments.
         #
         # @param [String] program
