@@ -27,6 +27,13 @@ module Ronin
       #
       class RPCSession < Session
 
+        # The RPC client object.
+        #
+        # @return [#call]
+        #
+        # @api private
+        attr_reader :client
+
         #
         # Initializes the RPC session.
         #
