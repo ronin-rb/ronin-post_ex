@@ -144,7 +144,7 @@ module Ronin
         # @note calls the `file.seek` RPC function.
         #
         def file_seek(fd,new_pos,whence)
-          call('file.seek',fd,pos,data)
+          call('file.seek',fd,new_pos,whence)
         end
 
         #
