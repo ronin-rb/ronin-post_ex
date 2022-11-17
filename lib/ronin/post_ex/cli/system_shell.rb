@@ -45,8 +45,6 @@ module Ronin
           @files  = []
         end
 
-        private
-
         command 'fs.chdir', method_name: 'fs_chdir',
                             usage: 'DIR',
                             summary: 'Changes the current working directory'
