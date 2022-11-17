@@ -385,7 +385,7 @@ module Ronin
         #   * `"DATA"`
         #   * `"HOLE"`
         #
-        # @see File#seek
+        # @see RemoteFile#seek
         #
         def file_seek(file_id,pos,whence='SET')
           unless WHENCE.has_key?(whence)
@@ -417,7 +417,7 @@ module Ronin
         # @param [String] length
         #   The length of data to read.
         #
-        # @see File#read
+        # @see RemoteFile#read
         #
         def file_read(file_id,length)
           file_id = file_id.to_i
@@ -443,7 +443,7 @@ module Ronin
         # @param [String] data
         #   The data to write.
         #
-        # @see File#write
+        # @see RemoteFile#write
         #
         def file_write(file_id,data)
           file_id = file_id.to_i
@@ -466,7 +466,7 @@ module Ronin
         # @param [String] file_id
         #   The file ID number.
         #
-        # @see File#close
+        # @see RemoteFile#close
         #
         def file_close(file_id)
           file_id = file_id.to_i
