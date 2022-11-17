@@ -51,7 +51,6 @@ module Ronin
       # * `fs_chgrp(group : String, path : String)`
       # * `fs_chown(user : String, path : String)`
       # * `fs_chmod(mode : Integer, path : String)`
-      # * `fs_compare(file1 : String, file2 : String) -> Boolean`
       # * `fs_stat(path : String) => Hash[Symbol, Object] | nil`
       #
       class FS < Resource
@@ -540,29 +539,6 @@ module Ronin
           RemoteFile::Stat.new(@session,expand_path(path))
         end
         resource_method :stat, [:fs_stat]
-
-        #
-        # Compares the contents of two files.
-        #
-        # @param [String] path
-        #   The path of the first file.
-        #
-        # @param [String] other_path
-        #   The path of the second file.
-        #
-        # @return [Boolean]
-        #   Specifies whether the two files are identical.
-        #
-        # @note
-        #   Requires the `fs_compare` method be defined by the {#session}
-        #   object.
-        #
-        def compare(path,other_path)
-          @session.fs_compare(path,other_path)
-        end
-        resource_method :compare, [:fs_compare]
-
-        alias cmp compare
 
         #
         # Tests whether a file or directory exists.

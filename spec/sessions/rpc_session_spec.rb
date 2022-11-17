@@ -295,17 +295,6 @@ describe Ronin::PostEx::Sessions::RPCSession do
     end
   end
 
-  describe "#fs_compare" do
-    let(:file1) { double('file1') }
-    let(:file2) { double('file2') }
-
-    it "must call 'fs.compare' with file1 and file2 arguments" do
-      expect(rpc_client).to receive(:call).with('fs.compare',file1,file2).and_return(response)
-
-      expect(subject.fs_compare(file1,file2)).to be(response)
-    end
-  end
-
   describe "#fs_stat" do
     let(:path) { double('path') }
 

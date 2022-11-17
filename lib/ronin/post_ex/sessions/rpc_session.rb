@@ -291,8 +291,9 @@ module Ronin
         # @param [String] path
         #   The remote path to read.
         #
-        # @return [String]
-        #   The destination of the remote symbolic link.
+        # @return [String, nil]
+        #   The destination of the remote symbolic link or `nil` if the symbolic
+        #   link could not be read.
         #
         # @note calls the `fs.readlink` RPC function.
         #
@@ -471,25 +472,6 @@ module Ronin
         #
         def fs_chmod(mode,path)
           call('fs.chmod',mode,path)
-        end
-
-        #
-        # Compares one remote file with another remote file and returns whether
-        # they are the same.
-        #
-        # @param [String] file1
-        #   The file to the first remote file.
-        #
-        # @param [String] file2
-        #   The file to the second remote file.
-        #
-        # @return [Boolean]
-        #   Indicates whether the two remote files are identical or not.
-        #
-        # @note calls the `fs.compare` RPC function.
-        #
-        def fs_compare(file1,file2)
-          call('fs.compare',file1,file2)
         end
 
         #

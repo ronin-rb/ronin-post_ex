@@ -113,10 +113,6 @@ Changes the user ownership of a file or directory.
 
 Changes the permissions on a file or directory.
 
-### `fs_compare(file1 : String, file2 : String) -> Boolean`
-
-Compares one file with another file and returns whether they are the same.
-
 ### `fs_stat(path : String) => Hash[Symbol, Object] | nil`
 
 Queries file information from the given path and returns a Hash of file
