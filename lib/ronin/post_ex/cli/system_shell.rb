@@ -480,6 +480,22 @@ module Ronin
           end
         end
 
+        command 'shell.exec', method_name: 'shell_exec',
+                              usage: 'COMMAND',
+                              summary: 'Executes the command in a shell'
+
+        #
+        # Executes a shell command.
+        #
+        # @param [String] command
+        #   The command to execute.
+        #
+        # @see System::Shell#run
+        #
+        def shell_exec(command)
+          print @system.shell.run(command)
+        end
+
       end
     end
   end
