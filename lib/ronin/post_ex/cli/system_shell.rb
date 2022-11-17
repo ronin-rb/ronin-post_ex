@@ -18,6 +18,7 @@
 #
 
 require 'ronin/core/cli/command_shell'
+require 'ronin/post_ex/cli/shell_shell'
 
 module Ronin
   module PostEx
@@ -767,7 +768,7 @@ module Ronin
         # @see ShellShell
         #
         def shell
-          ShellSehll.start(@system.shell)
+          ShellShell.start(@system.shell)
         end
 
       end
