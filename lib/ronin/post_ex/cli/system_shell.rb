@@ -481,9 +481,272 @@ module Ronin
           end
         end
 
+        command 'process.pid', method_name: 'process_pid',
+                               summary: "Prints the process'es PID"
+
+        #
+        # Prints the process'es PID.
+        #
+        # @see System::Process#getpid
+        #
+        def process_pid
+          puts @system.process.getpid
+        end
+
+        command 'process.ppid', method_name: 'process_ppid',
+                               summary: "Prints the process'es PPID"
+
+        #
+        # Prints the process'es PPID.
+        #
+        # @see System::Process#getppid
+        #
+        def process_ppid
+          puts @system.process.getppid
+        end
+
+        command 'process.uid', method_name: 'process_uid',
+                               summary: "Prints the process'es UID"
+
+        #
+        # Prints the process'es UID.
+        #
+        # @see System::Process#getuid
+        #
+        def process_uid
+          puts @system.process.getuid
+        end
+
+        command 'process.setuid', method_name: 'process_setuid',
+                                  usage: 'UID',
+                                  summary: "Sets the process'es UID"
+
+        #
+        # Sets the process'es UID.
+        #
+        # @param [String] new_uid
+        #
+        # @see System::Process#setuid
+        #
+        def process_setuid(new_uid)
+          @system.process.setuid(new_uid.to_i)
+        end
+
+        command 'process.euid', method_name: 'process_euid',
+                                usage: 'EUID',
+                                summary: "Prints the process'es EUID"
+
+        #
+        # Prints the process'es EUID.
+        #
+        # @see System::Process#geteuid
+        #
+        def process_euid
+          puts @system.process.geteuid
+        end
+
+        command 'process.seteuid', method_name: 'process_seteuid',
+                                  usage: 'EUID',
+                                  summary: "Sets the process'es EUID"
+
+        #
+        # Sets the process'es EUID.
+        #
+        # @param [String] new_euid
+        #
+        # @see System::Process#seteuid
+        #
+        def process_seteuid(new_euid)
+          @system.process.seteuid(new_euid.to_i)
+        end
+
+        command 'process.gid', method_name: 'process_gid',
+                               usage: 'COMMAND',
+                               summary: "Prints the process'es GID"
+
+        #
+        # Prints the process'es GID.
+        #
+        # @see System::Process#getgid
+        #
+        def process_gid
+          puts @system.process.getgid
+        end
+
+        command 'process.setgid', method_name: 'process_setgid',
+                                  usage: 'GID',
+                                  summary: "Sets the process'es GID"
+
+        #
+        # Sets the process'es GID.
+        #
+        # @param [String] new_gid
+        #
+        # @see System::Process#setgid
+        #
+        def process_setgid(new_gid)
+          @system.process.setgid(new_gid.to_i)
+        end
+
+        command 'process.egid', method_name: 'process_egid',
+                                summary: "Prints the process'es EGID"
+
+        #
+        # Prints the process'es EGID.
+        #
+        # @see System::Process#getegid
+        #
+        def process_egid
+          puts @system.process.getegid
+        end
+
+        command 'process.setegid', method_name: 'process_setegid',
+                                   usage: 'EGID',
+                                   summary: "Sets the process'es EGID"
+
+        #
+        # Sets the process'es EGID.
+        #
+        # @param [String] new_egid
+        #
+        # @see System::Process#setegid
+        #
+        def process_setegid(new_egid)
+          @system.process.setegid(new_egid.to_i)
+        end
+
+        command 'process.sid', method_name: 'process_sid',
+                               summary: "Prints the process'es SID"
+
+        #
+        # Prints the process'es SID.
+        #
+        # @see System::Process#getsid
+        #
+        def process_sid
+          puts @system.process.getsid
+        end
+
+        command 'process.setsid', method_name: 'process_setsid',
+                                  usage: 'SID',
+                                  summary: "Prints the process'es SID"
+
+        #
+        # Sets the process'es SID.
+        #
+        # @param [String] new_sid
+        #
+        # @see System::Process#setsid
+        #
+        def process_setsid(new_sid)
+          @system.process.setsid(new_sid.to_i)
+        end
+
+        command 'process.env', method_name: 'process_env',
+                               summary: "Prints the process'es environment variables"
+
+        #
+        # Prints the process'es environment variables.
+        #
+        # @see System::Process#environ
+        #
+        def process_env
+          @system.process.env.each do |name,value|
+            puts "#{name}=#{value}"
+          end
+        end
+
+        command 'process.getenv', method_name: 'process_getenv',
+                                  usage: 'NAME',
+                                  summary: 'Prints an environment variable from the process'
+
+        #
+        # Prints a specific environment variable from the process.
+        #
+        # @param [String] name
+        #   The environment variable name.
+        #
+        # @see System::Process#getenv
+        #
+        def process_getenv(name)
+          puts @system.process.getenv(name)
+        end
+
+        command 'process.setenv', method_name: 'process_setenv',
+                                  usage: 'NAME=VALUE',
+                                  summary: 'Sets an environment variable for the process'
+
+        #
+        # Sets a specific environment variable from the process.
+        #
+        # @param [String] name_and_value
+        #   The environment variable name.
+        #
+        # @see System::Process#getenv
+        #
+        def process_setenv(name_and_value)
+          name, value = name_and_value.split('=',2)
+
+          @system.process.setenv(name,value)
+        end
+
+        command 'process.unsetenv', method_name: 'process_getenv',
+                                    usage: 'NAME',
+                                    summary: 'Unsets an environment variable for the process'
+
+        #
+        # Unsets a process environment variable.
+        #
+        # @param [String] name
+        #   The environment variable to unset.
+        #
+        # @see System::Process#unsetenv
+        #
+        def process_unsetenv(name)
+          @system.process.unsetenv(name)
+        end
+
+        command 'process.kill', method_name: 'process_kill',
+                                usage: 'PID [SIGNAL]',
+                                summary: 'Kills a process'
+
+        #
+        # Kills a process.
+        #
+        # @param [String] pid
+        #   The process PID to kill.
+        #
+        # @param [String] signal
+        #   The signal to send the process.
+        #
+        def process_kill(pid,signal='KILL')
+          @system.process.kill(pid.to_i,signal)
+        end
+
+        command 'process.spawn', method_name: 'process_spawn',
+                                 usage: 'PROGRAM [ARGS ...]',
+                                 summary: 'Spawns a new process'
+
+        #
+        # Spawns a new process.
+        #
+        # @param [String] program
+        #   The program name.
+        #
+        # @param [Array<String>] arguments
+        #   Additional command arguments.
+        #
+        # @see System::Process#spawn
+        #
+        def process_spawn(program,*arguments)
+          pid = @system.process.spawn(program,*arguments)
+
+          puts "PID: #{pid}"
+        end
+
         command 'shell.exec', method_name: 'shell_exec',
                               usage: 'COMMAND',
-                              summary: 'Executes the command in a shell'
+                              summary: 'Executes a command in the shell'
 
         #
         # Executes a shell command.
