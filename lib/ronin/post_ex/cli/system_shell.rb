@@ -494,7 +494,7 @@ module Ronin
         # @see System::Shell#run
         #
         def shell_exec(command)
-          print @system.shell.run(command)
+          puts @system.shell.run(command)
         end
 
       end
