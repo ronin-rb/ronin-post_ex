@@ -52,7 +52,11 @@ module Ronin
         #   The command string.
         #
         def exec(command)
-          puts @shell.run(command)
+          if command == 'exit'
+            exit
+          else
+            puts @shell.run(command)
+          end
         end
 
       end
