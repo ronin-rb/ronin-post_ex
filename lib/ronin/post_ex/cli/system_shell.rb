@@ -497,6 +497,18 @@ module Ronin
           puts @system.shell.run(command)
         end
 
+        command 'shell', method_name: 'shell',
+                         summary: 'Spawns an interactive command shell'
+
+        #
+        # Spawns an interactive command sub-shell.
+        #
+        # @see ShellShell
+        #
+        def shell
+          ShellSehll.start(@system.shell)
+        end
+
       end
     end
   end
