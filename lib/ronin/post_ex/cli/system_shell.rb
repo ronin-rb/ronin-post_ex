@@ -474,7 +474,7 @@ module Ronin
 
           if (file = @files[file_id])
             file.close
-            @files[file_id] = nil
+            @files.delete(file_id)
             puts "Closed file ##{file_id}"
           else
             print_error "unknown file id"
