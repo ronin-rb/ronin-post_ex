@@ -473,6 +473,7 @@ module Ronin
           length  = length.to_i
 
           if (file = @files[file_id])
+            file.close
             @files[file_id] = nil
             puts "Closed file ##{file_id}"
           else
