@@ -42,21 +42,21 @@ module Ronin
       #
       # Creates a new remote process.
       #
-      # @param [#shell_exec] api
+      # @param [Sessions::Session] session
       #   The object controlling command execution.
       #
       # @param [String] command
       #   The command to run.
       #
       # @raise [NotImplementedError]
-      #   The API object does not define `shell_exec`.
+      #   The session object does not define `process_popen`.
       #
-      def initialize(api,command)
-        unless api.respond_to?(:process_popen)
-          raise(NotImplementedError,"#{api.inspect} must define #process_popen for #{self.class}")
+      def initialize(session,command)
+        unless session.respond_to?(:process_popen)
+          raise(NotImplementedError,"#{session.inspect} must define #process_popen for #{self.class}")
         end
 
-        @api     = api
+        @session = session
         @command = command
 
         super()
@@ -109,7 +109,7 @@ module Ronin
       #   The enumerator that wraps around `process_popen`.
       #
       def io_open
-        @api.enum_for(:process_popen,@command)
+        @session.enum_for(:process_popen,@command)
       end
       resource_method :open, [:process_popen]
 
@@ -126,8 +126,8 @@ module Ronin
       #   The end of the output stream has been reached.
       #
       def io_read
-        if @api.respond_to?(:process_read)
-          @api.process_write(@fd,BLOCK_SIZE)
+        if @session.respond_to?(:process_read)
+          @session.process_write(@fd,BLOCK_SIZE)
         end
       end
       resource_method :read
@@ -142,10 +142,10 @@ module Ronin
       #   The number of bytes writen.
       #
       def io_write(data)
-        if @api.respond_to?(:process_write)
-          @api.process_write(@fd,data)
+        if @session.respond_to?(:process_write)
+          @session.process_write(@fd,data)
         else
-          raise(IOError,"#{@api.inspect} does not support writing to the shell")
+          raise(IOError,"#{@session.inspect} does not support writing to the shell")
         end
       end
       resource_method :write, [:process_write]
@@ -155,11 +155,11 @@ module Ronin
       # the file.
       #
       # @note
-      #   This method may use the `process_close` method, if {#api} defines it.
+      #   This method may use the `process_close` method, if {#session} defines it.
       #
       def io_close
-        if @api.respond_to?(:process_close)
-          @api.process_close(@fd)
+        if @session.respond_to?(:process_close)
+          @session.process_close(@fd)
         end
       end
       resource_method :close
