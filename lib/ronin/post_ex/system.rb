@@ -33,6 +33,7 @@ module Ronin
     # ## Supported API Functions
     #
     # * `sys_time -> Integer`
+    # * `sys_hostname -> String`
     #
     # ## Example
     #
@@ -153,6 +154,20 @@ module Ronin
         Time.at(@session.sys_time.to_i)
       end
       resource_method :time, [:sys_time]
+
+      #
+      # Gets the system's hostname.
+      #
+      # @return [String]
+      #   The system's local hostname.
+      #
+      # @note
+      #   Requires the `sys_hostname` method be defined by the {#session}
+      #   object.
+      #
+      def hostname
+        @session.sys_hotname
+      end
 
       #
       # Starts an interactive post-exploitation system shell.
