@@ -22,6 +22,14 @@ describe Ronin::PostEx::Sessions::RPCSession do
     end
   end
 
+  describe "#sys_hostname" do
+    it "must call 'sys.time'" do
+      expect(rpc_client).to receive(:call).with('sys.hostname').and_return(response)
+
+      expect(subject.sys_hostname).to be(response)
+    end
+  end
+
   describe "#file_open" do
     let(:path) { '/path/to/file' }
 

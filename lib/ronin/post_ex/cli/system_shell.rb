@@ -771,6 +771,30 @@ module Ronin
           ShellShell.start(@system.shell)
         end
 
+        command 'sys.time', method_name: 'sys_time',
+                            summary: "Prints the system's current time"
+
+        #
+        # Prints the system's current time.
+        #
+        # @see System#time
+        #
+        def sys_time
+          puts @system.time
+        end
+
+        command 'sys.hostname', method_name: 'sys_hostname',
+                            summary: "Prints the system's hostname"
+
+        #
+        # Prints the system's hostname.
+        #
+        # @see System#hostname
+        #
+        def sys_hostname
+          puts @system.hostname
+        end
+
       end
     end
   end

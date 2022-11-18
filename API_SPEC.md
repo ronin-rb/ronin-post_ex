@@ -6,6 +6,10 @@
 
 Gets the current time and returns the UNIX timestamp.
 
+### `sys_hostname -> String`
+
+Gets the system's hostname.
+
 ## File Functions
 
 ### `file_open(path : String, mode : String) -> Integer`

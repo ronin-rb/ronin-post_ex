@@ -171,6 +171,17 @@ module Ronin
         end
 
         #
+        # Gets the system's hostname.
+        #
+        # @return [String]
+        #
+        # @note executes the `echo $HOSTNAME` command.
+        #
+        def sys_hostname
+          shell_exec("echo $HOSTNAME").chomp
+        end
+
+        #
         # @group File-System methods
         #
 

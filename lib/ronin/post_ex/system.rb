@@ -166,7 +166,7 @@ module Ronin
       #   object.
       #
       def hostname
-        @session.sys_hotname
+        @session.sys_hostname
       end
 
       #

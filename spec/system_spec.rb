@@ -53,4 +53,14 @@ describe Ronin::PostEx::System do
       expect(subject.time).to eq(time)
     end
   end
+
+  describe "#hostname" do
+    let(:hostname) { 'computer' }
+
+    it "must call the 'sys_hostname' API function and return the hostname" do
+      expect(session).to receive(:sys_hostname).and_return(hostname)
+
+      expect(subject.hostname).to eq(hostname)
+    end
+  end
 end

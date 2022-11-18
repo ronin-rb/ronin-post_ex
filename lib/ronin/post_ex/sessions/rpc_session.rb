@@ -77,6 +77,17 @@ module Ronin
         end
 
         #
+        # Gets the system's hostname.
+        #
+        # @return [String]
+        #
+        # @note calls the `sys.hostname` RPC function.
+        #
+        def sys_hostname
+          call('sys.hostname')
+        end
+
+        #
         # @group File Methods
         #
 

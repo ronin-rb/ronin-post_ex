@@ -93,6 +93,17 @@ describe Ronin::PostEx::Sessions::ShellSession do
     end
   end
 
+  describe "#sys_hostname" do
+    let(:hostname) { 'computer'      }
+    let(:output)   { "#{hostname}\n" }
+
+    it "must run the 'echo $HOSTNAME' and parse the output as an Integer" do
+      expect(subject).to receive(:shell_exec).with('echo $HOSTNAME').and_return(output)
+
+      expect(subject.sys_hostname).to eq(hostname)
+    end
+  end
+
   describe "#fs_getcwd" do
     let(:pwd)    { '/current/directory' }
     let(:output) { "#{pwd}\n" }
