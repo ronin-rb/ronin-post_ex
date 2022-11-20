@@ -363,8 +363,8 @@ module Ronin
           'SET'  => File::SEEK_SET,
           'CUR'  => File::SEEK_CUR,
           'END'  => File::SEEK_END,
-          'DATA' => File::SEEK_DATA,
-          'HOLE' => File::SEEK_HOLE
+          'DATA' => (defined?(File::SEEK_DATA) && File::SEEK_DATA) || 3,
+          'HOLE' => (defined?(File::SEEK_HOLE) && File::SEEK_HOLE) || 4
         }
 
         #
