@@ -156,8 +156,14 @@ module Ronin
         # @param [Integer] new_pos
         #   The new position to seek to.
         #
-        # @param [File::SEEK_SET, File::SEEK_CUR, File::SEEK_END, File::SEEK_DATA, File::SEEK_HOLE] whence
-        #   How the position should be interpreted.
+        # @param [String] whence
+        #   How the position should be interpreted. Must be one of the
+        #   following String values:
+        #   * `"SEEK_SET"` - seek from beginning of file.
+        #   * `"SEEK_CUR"` - seek from current position.
+        #   * `"SEEK_END"` - seek from end of file.
+        #   * `"SEEK_DATA"` - seek to next data.
+        #   * `"SEEK_HOLE"` - seek to next hole.
         #
         # @note calls the `file.seek` RPC function.
         #

@@ -36,7 +36,7 @@ module Ronin
     # * `file_open(path : String, mode : String) -> Integer`
     # * `file_read(fd : Integer, length : Integer) -> String | nil`
     # * `file_write(fd : Integer, pos : Integer, data : String) -> Integer`
-    # * `file_seek(fd : Integer, new_pos : Integer, whence : File::SEEK_SET | File::SEEK_CUR | File::SEEK_END | File::SEEK_DATA | File::SEEK_HOLE)`
+    # * `file_seek(fd : Integer, new_pos : Integer, whence : String)`
     # * `file_tell(fd : Integer) -> Integer`
     # * `file_ioctl(fd : Integer, command : String | Array[Integer], argument : Object) -> Integer`
     # * `file_fcntl(fd : Integer, command : String | Array[Integer], argument : Object) -> Integer`
@@ -107,6 +107,32 @@ module Ronin
         end
       end
 
+      # Seeks from beginning of file.
+      SEEK_SET  = File::SEEK_SET
+
+      # Seeks from current position.
+      SEEK_CUR  = File::SEEK_CUR
+
+      # Seeks from end of file.
+      SEEK_END  = File::SEEK_END
+
+      # Seeks to next data.
+      SEEK_DATA = (defined?(File::SEEK_DATA) && File::SEEK_DATA) || 3
+
+      # Seeks to next hole.
+      SEEK_HOLE = (defined?(File::SEEK_HOLE) && File::SEEK_HOLE) || 4
+
+      # Mapping of `SEEK_*` constants to their String values.
+      #
+      # @api private
+      WHENCE = {
+        SEEK_SET  => 'SEEK_SET',
+        SEEK_CUR  => 'SEEK_CUR',
+        SEEK_END  => 'SEEK_END',
+        SEEK_DATA => 'SEEK_DATA',
+        SEEK_HOLE => 'SEEK_HOLE'
+      }
+
       #
       # Sets the position in the file to read.
       #
@@ -119,14 +145,21 @@ module Ronin
       # @return [Integer]
       #   The new position within the file.
       #
+      # @raise [ArgumentError]
+      #   An invalid whence value was given.
+      #
       # @note This method may use the `file_seek` API method, if it is defined
       # by {#session}.
       #
       def seek(new_pos,whence=SEEK_SET)
         clear_buffer!
 
+        unless WHENCE.has_key?(whence)
+          raise(ArgumentError,"invalid whence value: #{whence.inspect}")
+        end
+
         if @session.respond_to?(:file_seek)
-          @session.file_seek(@fd,new_pos,whence)
+          @session.file_seek(@fd,new_pos,WHENCE[whence])
         end
 
         @pos = new_pos

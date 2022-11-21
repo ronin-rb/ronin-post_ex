@@ -19,6 +19,7 @@
 
 require 'ronin/core/cli/command_shell'
 require 'ronin/post_ex/cli/shell_shell'
+require 'ronin/post_ex/remote_file'
 
 module Ronin
   module PostEx
@@ -356,15 +357,16 @@ module Ronin
         end
 
         command 'file.seek', method_name: 'file_seek',
-                             usage: 'FILE_ID POS [WHENCE]',
+                             usage: 'FILE_ID POS [SEEK_SET | SEEK_CUR | SEEK_END | SEEK_DATA | SEEK_HOLE]',
                              summary: 'Seeks to a position within the file'
 
+        # Mapping of String whence values to Integer values.
         WHENCE = {
-          'SET'  => File::SEEK_SET,
-          'CUR'  => File::SEEK_CUR,
-          'END'  => File::SEEK_END,
-          'DATA' => (defined?(File::SEEK_DATA) && File::SEEK_DATA) || 3,
-          'HOLE' => (defined?(File::SEEK_HOLE) && File::SEEK_HOLE) || 4
+          'SEEK_SET'  => RemoteFile::SEEK_SET,
+          'SEEK_CUR'  => RemoteFile::SEEK_CUR,
+          'SEEK_END'  => RemoteFile::SEEK_END,
+          'SEEK_DATA' => RemoteFile::SEEK_DATA,
+          'SEEK_HOLE' => RemoteFile::SEEK_HOLE
         }
 
         #
@@ -386,7 +388,7 @@ module Ronin
         #
         # @see RemoteFile#seek
         #
-        def file_seek(file_id,pos,whence='SET')
+        def file_seek(file_id,pos,whence='SEEK_SET')
           unless WHENCE.has_key?(whence)
             print_error "unknown file.seek whence value (#{whence}), must be #{WHENCE.keys.join(', ')}"
             return false

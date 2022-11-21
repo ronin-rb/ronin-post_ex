@@ -25,9 +25,16 @@ Reads from an opened file-descriptor and returns the read data.
 
 Writes data to the opened file-descriptor.
 
-### `file_seek(fd : Integer, new_pos : Integer, whence : File::SEEK_SET | File::SEEK_CUR | File::SEEK_END | File::SEEK_DATA | File::SEEK_HOLE)`
+### `file_seek(fd : Integer, new_pos : Integer, whence : String)`
 
-Seeks to a position within the file.
+Seeks to a position within the file. The `whence` argument must be one of the
+following strings:
+
+* `"SEEK_SET"` - seek from beginning of file.
+* `"SEEK_CUR"` - seek from current position.
+* `"SEEK_END"` - seek from end of file.
+* `"SEEK_DATA"` - seek to next data.
+* `"SEEK_HOLE"` - seek to next hole.
 
 ### `file_tell(fd : Integer) -> Integer`
 
