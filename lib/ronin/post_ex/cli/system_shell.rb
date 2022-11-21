@@ -89,7 +89,7 @@ module Ronin
         # @see System::FS#read
         #
         def fs_readfile(path)
-          write(@system.fs.readfile(path))
+          stdout.write(@system.fs.readfile(path))
         end
 
         command 'fs.readlink', method_name: 'fs_readlink',
@@ -426,7 +426,7 @@ module Ronin
           length  = length.to_i
 
           if (file = @files[file_id])
-            write(file.read(length))
+            stdout.write(file.read(length))
           else
             print_error "unknown file id"
           end
