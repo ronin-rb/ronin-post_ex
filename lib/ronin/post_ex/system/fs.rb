@@ -20,7 +20,6 @@
 require 'ronin/post_ex/resource'
 require 'ronin/post_ex/remote_file'
 require 'ronin/post_ex/remote_file/stat'
-require 'ronin/post_ex/captured_file'
 require 'ronin/post_ex/remote_dir'
 
 require 'hexdump'
@@ -233,24 +232,15 @@ module Ronin
         #   After the block has returned, the file will be closed and
         #   `nil` will be returned.
         #
-        # @yieldparam [RemoteFile, CapturedFile] file
-        #   The temporarily opened file. If {#session} defines the `file_open`,
-        #   then a {RemoteFile} will be returned. If {#session} defines a
-        #   `fs_readfile` method instead, than a {CapturedFile} will be
-        #   returned.
+        # @yieldparam [RemoteFile] file
+        #   The temporarily opened remote file.
         #
-        # @return [RemoteFile, CapturedFile, nil]
-        #   The newly opened file. If {#session} defines the `file_open`, then
-        #   a {RemoteFile} will be returned. If {#session} defines a
-        #   `fs_readfile` method instead, than a {CapturedFile} will be
+        # @return [RemoteFile, nil]
+        #   If no block was given, then the newly opened remote file will be
         #   returned.
         #
         def open(path,mode='r',&block)
-          if @session.respond_to?(:file_open)
-            RemoteFile.open(@session,expand_path(path),mode,&block)
-          else
-            CapturedFile.new(expand_path(path),readfile(path),&block)
-          end
+          RemoteFile.open(@session,expand_path(path),mode,&block)
         end
         resource_method :open
 
