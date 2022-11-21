@@ -44,7 +44,9 @@ module Ronin
           super(**kwargs)
 
           @system = system
-          @files  = []
+
+          @files = {}
+          @next_file_id = 1
         end
 
         command 'fs.chdir', method_name: 'fs_chdir',
@@ -335,10 +337,13 @@ module Ronin
         # @see System::FS#open
         #
         def fs_open(path,mode="r")
-          file = @system.fs.open(path,mode)
-          @files << file
+          file    = @system.fs.open(path,mode)
+          file_id = @next_file_id
 
-          puts "Opened file #{file.path}"
+          @files[file_id] = file
+          @next_file_id  += 1
+
+          puts "Opened file ##{file_id} for #{file.path}"
         end
 
         command 'files', summary: 'Lists opened files'
@@ -402,7 +407,7 @@ module Ronin
             file.seek(pos,whence)
             puts file.pos
           else
-            print_error "unknown file id"
+            print_error "unknown file id: #{file_id}"
           end
         end
 
@@ -428,7 +433,7 @@ module Ronin
           if (file = @files[file_id])
             stdout.write(file.read(length))
           else
-            print_error "unknown file id"
+            print_error "unknown file id: #{file_id}"
           end
         end
 
@@ -454,7 +459,7 @@ module Ronin
           if (file = @files[file_id])
             puts file.write(length)
           else
-            print_error "unknown file id"
+            print_error "unknown file id: #{file_id}"
           end
         end
 
@@ -477,9 +482,10 @@ module Ronin
           if (file = @files[file_id])
             file.close
             @files.delete(file_id)
-            puts "Closed file ##{file_id}"
+
+            puts "Closed file ##{file_id} for #{file.path}"
           else
-            print_error "unknown file id"
+            print_error "unknown file id: #{file_id}"
           end
         end
 
