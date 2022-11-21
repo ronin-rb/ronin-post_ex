@@ -239,6 +239,8 @@ module Ronin
         #   If no block was given, then the newly opened remote file will be
         #   returned.
         #
+        # @see RemoteFile.open
+        #
         def open(path,mode='r',&block)
           RemoteFile.open(@session,expand_path(path),mode,&block)
         end
