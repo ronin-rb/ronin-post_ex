@@ -43,6 +43,7 @@ module Ronin
     # * `file_stat(fd : Integer) => Hash[Symbol, Object] | nil`
 
     # * `file_close(fd : Integer)`
+    # * `fs_readfile(path : String) -> String | nil`
     # * `fs_stat(path : String) => Hash[Symbol, Object] | nil`
     #
     class RemoteFile < Resource
@@ -354,14 +355,18 @@ module Ronin
       #   read.
       #
       # @raise [IOError]
-      #   The API object does not define `file_read`.
+      #   The API object does not define `file_read` or `fs_readfile`.
       #
       # @note
-      #   This method requires either the `file_read` API methods.
+      #   This method requires either the `fs_readfile` or `file_read` API
+      #   methods.
       #
       def io_read
         if @session.respond_to?(:file_read)
           @session.file_read(@fd,BLOCK_SIZE)
+        elsif @api.respond_to?(:fs_readfile)
+          @eof = true
+          @api.fs_readfile(@path)
         else
           raise(IOError,"#{@session.inspect} does not support reading")
         end
