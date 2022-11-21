@@ -321,9 +321,9 @@ module Ronin
           stat = @system.fs.stat(path)
         end
 
-        command 'fs.open', method_name: 'fs_open',
-                           usage: 'PATH [MODE]',
-                           summary: 'Opens a file for reading or writing'
+        command 'file.open', method_name: 'file_open',
+                             usage: 'PATH [MODE]',
+                             summary: 'Opens a file for reading or writing'
 
         #
         # Opens a file.
@@ -336,7 +336,7 @@ module Ronin
         #
         # @see System::FS#open
         #
-        def fs_open(path,mode="r")
+        def file_open(path,mode="r")
           file    = @system.fs.open(path,mode)
           file_id = @next_file_id
 
