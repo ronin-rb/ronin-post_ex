@@ -4,7 +4,9 @@ RONIN_URI = 'https://github.com/ronin-rb'
 
 gemspec
 
-gem 'jruby-openssl',	'~> 0.7', platforms: :jruby
+platform :jruby do
+  gem 'jruby-openssl',	'~> 0.7'
+end
 
 # gem 'fake_io', '~> 0.1', github: 'postmodern/fake_io.rb',
 #                          branch: 'main'
@@ -31,6 +33,6 @@ group :development do
   gem 'yard-spellcheck', require: false
 
   gem 'dead_end',        require: false
-  gem 'sord',            require: false
-  gem 'stackprof',       require: false
+  gem 'sord',            require: false, platform: :mri
+  gem 'stackprof',       require: false, platform: :mri
 end
