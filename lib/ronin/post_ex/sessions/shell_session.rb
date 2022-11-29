@@ -296,17 +296,17 @@ module Ronin
         #
         # @note executes the `mkdir <path>` command.
         #
-        def fs_mkdir(path)
-          command_exec('mkdir',path)
+        def fs_mkdir(new_path)
+          command_exec('mkdir',new_path)
         end
 
         #
         # Copies a source file to the destination path.
         #
-        # @param [String] src
+        # @param [String] path
         #   The source file.
         #
-        # @param [String] dest
+        # @param [String] new_path
         #   The destination path.
         #
         # @note executes the `cp -r <path> <new_path>` command.
@@ -342,10 +342,10 @@ module Ronin
         #
         # Moves or renames a remote source file to a new destination path.
         #
-        # @param [String] src
+        # @param [String] path
         #   The source file path.
         #
-        # @param [String] dest
+        # @param [String] new_path
         #   The destination file path.
         #
         # @note executes the `mv <path> <new_path>` command.
