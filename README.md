@@ -7,8 +7,7 @@
 * [Source](https://github.com/ronin-rb/ronin-post_ex)
 * [Issues](https://github.com/ronin-rb/ronin-post_ex/issues)
 * [Documentation](https://ronin-rb.dev/docs/ronin-post_ex/frames)
-* [Slack](https://ronin-rb.slack.com) |
-  [Discord](https://discord.gg/6WAb3PsVX9) |
+* [Discord](https://discord.gg/6WAb3PsVX9) |
   [Twitter](https://twitter.com/ronin_rb)
 
 ## Description
