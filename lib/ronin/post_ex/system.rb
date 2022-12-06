@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # ronin-post_ex - a Ruby API for Post-Exploitation.
 #
