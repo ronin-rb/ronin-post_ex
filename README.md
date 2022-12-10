@@ -16,7 +16,7 @@
 ronin-post_ex is a Ruby API for Post-Exploitation.
 
 This library is used by [ronin-payloads], [ronin-c2], and [ronin-exploits]
-to provide a Post-Exploitation API around payloads, C2 sessions, and even
+to provide a Post-Exploitation API around payloads, C2 sessions, or even
 exploits.
 
 ## Features
