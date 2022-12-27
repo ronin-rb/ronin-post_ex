@@ -38,7 +38,7 @@ module Ronin
 
         # The IO object used to communicate with the shell.
         #
-        # @return [TCPSocket, IO]
+        # @return [Socket, IO]
         #
         # @api private
         attr_reader :io
@@ -46,7 +46,7 @@ module Ronin
         #
         # Initializes the shell session.
         #
-        # @param [TCPSocet, IO] io
+        # @param [Socet, IO] io
         #   The IO object used to communicate with the shell.
         #
         def initialize(io)
