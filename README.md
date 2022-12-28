@@ -47,6 +47,28 @@ research and development.
 
 ## Examples
 
+### Bind Shell
+
+```ruby
+session = Ronin::PostEx::Sessions::BindShell.connect(host,port)
+system  = session.system
+
+system.shell.ls('/')
+# "..."
+```
+
+### Reverse Shell
+
+```ruby
+session = Ronin::PostEx::Sessions::ReverseShell.listen(host,port)
+system  = session.system
+
+system.shell.ls('/')
+# "..."
+```
+
+### Custom Session Class
+
 Define a custom session class which defines the
 [Post-Exploitation API methods][API Spec]:
 
@@ -54,6 +76,10 @@ Define a custom session class which defines the
 class RATSession < Ronin::PostEx::Sessions::Session
 
   def initialize(host,port)
+    # ...
+  end
+
+  def rpc_call(method,*arguments)
     # ...
   end
 
@@ -70,14 +96,10 @@ class RATSession < Ronin::PostEx::Sessions::Session
 end
 
 session = RATSession.new
+system  = session.system
 ```
 
-Initialize a new {Ronin::PostEx::System} object that wraps around the session:
-
-```ruby
-session = RATSession.new(host,port)
-system  = Ronin::PostEx::System.new(session)
-```
+### System
 
 Interact with the system's remote files as if they were local files:
 
