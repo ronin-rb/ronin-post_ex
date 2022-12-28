@@ -47,12 +47,15 @@ research and development.
 
 ## Examples
 
-Define the client which defines the [Post-Exploitation API methods][API Spec]:
+Define a custom session class which defines the
+[Post-Exploitation API methods][API Spec]:
 
 ```ruby
-class RATClient
+class RATSession < Ronin::PostEx::Sessions::Session
 
-  # ...
+  def initialize(host,port)
+    # ...
+  end
 
   def fs_read(path)
     rpc_call("fs_read",path)
@@ -65,13 +68,15 @@ class RATClient
   # ...
 
 end
+
+session = RATSession.new
 ```
 
-Initialize a new {Ronin::PostEx::System} object that wraps around the client:
+Initialize a new {Ronin::PostEx::System} object that wraps around the session:
 
 ```ruby
-rat_client = RATClient.new(host,port)
-system = Ronin::PostEx::System.new(rat_client)
+session = RATSession.new(host,port)
+system  = Ronin::PostEx::System.new(session)
 ```
 
 Interact with the system's remote files as if they were local files:
