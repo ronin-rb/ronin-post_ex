@@ -28,6 +28,20 @@ module Ronin
       class BindShell < ShellSession
 
         #
+        # Initializes the bind shell.
+        #
+        # @param [TCPSocket, UDPSocket] socket
+        #   The underlying socket for the bind shell session.
+        #
+        def initialize(socket)
+          super(socket)
+
+          addrinfo = socket.remote_address
+
+          @name = "#{addrinfo.ip_address}:#{addrinfo.ip_port}"
+        end
+
+        #
         # Connects to a remote bind shell.
         #
         # @param [String] host
