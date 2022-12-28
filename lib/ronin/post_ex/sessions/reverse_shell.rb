@@ -54,9 +54,11 @@ module Ronin
           server_socket = TCPServer.new(port,host)
           server_socket.listen(1)
 
-          new(server_socket.accept)
-        ensure
-          server_socket.close
+          begin
+            new(server_socket.accept)
+          ensure
+            server_socket.close
+          end
         end
 
       end
