@@ -18,28 +18,14 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/sessions/shell_session'
+require 'ronin/post_ex/sessions/remote_shell_session'
 
 require 'socket'
 
 module Ronin
   module PostEx
     module Sessions
-      class ReverseShell < ShellSession
-
-        #
-        # Initializes the reverse shell.
-        #
-        # @param [TCPSocket, UDPSocket] socket
-        #   The underlying socket for the reverse shell session.
-        #
-        def initialize(socket)
-          super(socket)
-
-          addrinfo = socket.local_address
-
-          @name = "#{addrinfo.ip_address}:#{addrinfo.ip_port}"
-        end
+      class ReverseShell < RemoteShellSession
 
         #
         # Listens for and accepts a reverse shell connection.

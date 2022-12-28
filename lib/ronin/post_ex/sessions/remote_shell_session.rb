@@ -18,29 +18,25 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/sessions/remote_shell_session'
-
-require 'socket'
+require 'ronin/post_ex/sessions/shell_session'
 
 module Ronin
   module PostEx
     module Sessions
-      class BindShell < RemoteShellSession
+      class RemoteShellSession < ShellSession
 
         #
-        # Connects to a remote bind shell.
+        # Initializes the remote shell session.
         #
-        # @param [String] host
-        #   The host to connect to.
+        # @param [TCPSocket, UDPSocket] socket
+        #   The underlying socket for the remote shell session.
         #
-        # @param [Integer] port
-        #   The port to connect to.
-        #
-        # @return [BindShell]
-        #   The new bind shell session.
-        #
-        def self.connect(host,port)
-          new(TCPSocket.new(host,port))
+        def initialize(socket)
+          super(socket)
+
+          addrinfo = socket.remote_address
+
+          @name = "#{addrinfo.ip_address}:#{addrinfo.ip_port}"
         end
 
       end
