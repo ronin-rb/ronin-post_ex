@@ -23,6 +23,9 @@ require 'ronin/post_ex/sessions/shell_session'
 module Ronin
   module PostEx
     module Sessions
+      #
+      # Session base class for all other remote shell sessions.
+      #
       class RemoteShellSession < ShellSession
 
         #

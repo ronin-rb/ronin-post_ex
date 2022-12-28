@@ -25,6 +25,17 @@ require 'socket'
 module Ronin
   module PostEx
     module Sessions
+      #
+      # Session class for interacting with reverse shells.
+      #
+      # ## Examples
+      #
+      #     session = Ronin::PostEx::Sessions::ReverseShell.listen(host,port)
+      #     system  = session.system
+      #     
+      #     system.shell.ls('/')
+      #     # => "..."
+      #
       class ReverseShell < RemoteShellSession
 
         #

@@ -25,6 +25,17 @@ require 'socket'
 module Ronin
   module PostEx
     module Sessions
+      #
+      # Session class for interacting with bind shells.
+      #
+      # ## Examples
+      #
+      #     session = Ronin::PostEx::Sessions::BindShell.connect(host,port)
+      #     system  = session.system
+      #     
+      #     system.shell.ls('/')
+      #     # => "..."
+      #
       class BindShell < RemoteShellSession
 
         #

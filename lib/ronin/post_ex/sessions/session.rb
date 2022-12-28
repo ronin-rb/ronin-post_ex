@@ -23,6 +23,9 @@ require 'ronin/post_ex/system'
 module Ronin
   module PostEx
     module Sessions
+      #
+      # Base class for all post-exploitation session classes.
+      #
       class Session
 
         #
