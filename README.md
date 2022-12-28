@@ -39,6 +39,9 @@ research and development.
 * Supports interacting with interactive shell commands.
 * Provides interactive command shells for interacting with systems.
 * Supports Linux/BSD/UNIX systems.
+* Provides common post-exploitation session classes for interacting with shells,
+  bind shells, and reverse shells.
+* Supports defining custom post-exploitation session classes.
 
 ## Limitations
 
