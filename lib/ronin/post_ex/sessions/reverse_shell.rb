@@ -28,6 +28,20 @@ module Ronin
       class ReverseShell < ShellSession
 
         #
+        # Initializes the reverse shell.
+        #
+        # @param [TCPSocket, UDPSocket] socket
+        #   The underlying socket for the reverse shell session.
+        #
+        def initialize(socket)
+          super(socket)
+
+          addrinfo = socket.local_address
+
+          @name = "#{addrinfo.ip_address}:#{addrinfo.ip_port}"
+        end
+
+        #
         # Listens for and accepts a reverse shell connection.
         #
         # @param [String, nil] host
