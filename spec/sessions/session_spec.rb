@@ -38,4 +38,14 @@ describe Ronin::PostEx::Sessions::Session do
       end
     end
   end
+
+  describe "#to_s" do
+    let(:name) { "host:port" }
+
+    it "must call #name" do
+      expect(subject).to receive(:name).and_return(name)
+
+      expect(subject.to_s).to be(name)
+    end
+  end
 end

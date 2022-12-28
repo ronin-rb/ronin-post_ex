@@ -43,6 +43,16 @@ module Ronin
         def close
         end
 
+        #
+        # Converts the session to a String.
+        #
+        # @return [String]
+        #   The session's {#name}.
+        #
+        def to_s
+          name
+        end
+
       end
     end
   end
