@@ -18,6 +18,8 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+require 'ronin/post_ex/system'
+
 module Ronin
   module PostEx
     module Sessions
@@ -33,6 +35,15 @@ module Ronin
         #
         def name
           @name || raise(NotImplementedError,"#{self.class}#name was not set")
+        end
+
+        #
+        # The remote system connected to the session.
+        #
+        # @return [System]
+        #
+        def system
+          @system ||= System.new(self)
         end
 
         #

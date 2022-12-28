@@ -39,6 +39,16 @@ describe Ronin::PostEx::Sessions::Session do
     end
   end
 
+  describe "#system" do
+    it "must return a Ronin::PostEx::System object" do
+      expect(subject.system).to be_kind_of(Ronin::PostEx::System)
+    end
+
+    it "must return the same object each time" do
+      expect(subject.system).to be(subject.system)
+    end
+  end
+
   describe "#to_s" do
     let(:name) { "host:port" }
 
