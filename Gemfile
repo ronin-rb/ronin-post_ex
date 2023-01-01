@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-RONIN_URI = 'https://github.com/ronin-rb'
-
 gemspec
 
 platform :jruby do
@@ -15,7 +13,7 @@ end
 #                              branch: 'main'
 
 # Ronin dependencies
-gem 'ronin-core',     '~> 0.1', git: "#{RONIN_URI}/ronin-core.git",
+gem 'ronin-core',     '~> 0.1', github: "ronin-rb/ronin-core",
                                 branch: 'main'
 
 group :development do
