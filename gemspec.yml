@@ -19,7 +19,7 @@ dependencies:
   fake_io: ~> 0.1
   hexdump: ~> 1.0
   # Ronin dependencies:
-  ronin-core: ~> 0.1
+  ronin-core: ~> 0.1.0.beta1
 
 development_dependencies:
   bundler: ~> 2.0
