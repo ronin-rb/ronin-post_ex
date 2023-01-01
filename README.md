@@ -57,7 +57,7 @@ session = Ronin::PostEx::Sessions::BindShell.connect(host,port)
 system  = session.system
 
 system.shell.ls('/')
-# "..."
+# => "..."
 ```
 
 ### Reverse Shell
@@ -67,7 +67,7 @@ session = Ronin::PostEx::Sessions::ReverseShell.listen(host,port)
 system  = session.system
 
 system.shell.ls('/')
-# "..."
+# => "..."
 ```
 
 ### Custom Session Class
