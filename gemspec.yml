@@ -8,7 +8,7 @@ homepage: https://ronin-rb.dev/
 has_yard: true
 
 metadata:
-  documentation_uri: https://rubydoc.info/gems/ronin-post_ex
+  documentation_uri: https://ronin-rb.dev/docs/ronin-post_ex
   source_code_uri:   https://github.com/ronin-rb/ronin-post_ex
   bug_tracker_uri:   https://github.com/ronin-rb/ronin-post_ex/issues
   changelog_uri:     https://github.com/ronin-rb/ronin-post_ex/blob/master/ChangeLog.md
