@@ -140,7 +140,7 @@ module Ronin
       #   The data to write to the shell.
       #
       # @return [Integer]
-      #   The number of bytes writen.
+      #   The number of bytes written.
       #
       def io_write(data)
         if @session.respond_to?(:process_write)

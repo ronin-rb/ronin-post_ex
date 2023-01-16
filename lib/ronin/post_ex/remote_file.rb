@@ -382,7 +382,7 @@ module Ronin
       #   The data to write.
       #
       # @return [Integer]
-      #   The number of bytes writen.
+      #   The number of bytes written.
       #
       # @raise [IOError]
       #   The API object does not define `file_write`.

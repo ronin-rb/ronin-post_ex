@@ -494,7 +494,7 @@ module Ronin
         resource_method :chgrp, [:fs_chgrp]
 
         #
-        # Changes permissions on one or more file or directorie.
+        # Changes permissions on one or more file or directory.
         #
         # @param [Integer] mode
         #   The new mode for the file or directory.
