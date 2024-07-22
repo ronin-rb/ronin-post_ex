@@ -1,7 +1,7 @@
 name: ronin-post_ex
 summary: Ruby API for Post-Exploitation
 description: ronin-post_ex is a Ruby API for Post-Exploitation.
-license: LGPL-3.0
+license: LGPL-3.0-or-later
 authors: Postmodern
 email: postmodern.mod3@gmail.com
 homepage: https://ronin-rb.dev/
