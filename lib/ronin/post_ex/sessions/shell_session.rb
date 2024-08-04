@@ -18,7 +18,7 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/sessions/session'
+require_relative 'session'
 
 require 'shellwords'
 require 'base64'

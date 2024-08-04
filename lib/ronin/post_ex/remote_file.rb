@@ -18,8 +18,8 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/remote_file/stat'
-require 'ronin/post_ex/resource'
+require_relative 'remote_file/stat'
+require_relative 'resource'
 
 require 'fake_io'
 require 'set'

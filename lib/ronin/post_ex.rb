@@ -18,5 +18,5 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/system'
-require 'ronin/post_ex/version'
+require_relative 'post_ex/system'
+require_relative 'post_ex/version'

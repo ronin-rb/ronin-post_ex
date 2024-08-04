@@ -18,7 +18,7 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/sessions/shell_session'
+require_relative 'shell_session'
 
 module Ronin
   module PostEx

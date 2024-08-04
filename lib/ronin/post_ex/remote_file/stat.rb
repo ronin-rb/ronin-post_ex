@@ -18,7 +18,7 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/resource'
+require_relative '../resource'
 
 module Ronin
   module PostEx

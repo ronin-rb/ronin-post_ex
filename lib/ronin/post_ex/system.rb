@@ -18,11 +18,11 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/resource'
-require 'ronin/post_ex/system/fs'
-require 'ronin/post_ex/system/process'
-require 'ronin/post_ex/system/shell'
-require 'ronin/post_ex/cli/system_shell'
+require_relative 'resource'
+require_relative 'system/fs'
+require_relative 'system/process'
+require_relative 'system/shell'
+require_relative 'cli/system_shell'
 
 module Ronin
   module PostEx

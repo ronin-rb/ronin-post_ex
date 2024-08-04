@@ -19,8 +19,9 @@
 #
 
 require 'ronin/core/cli/command_shell'
-require 'ronin/post_ex/cli/shell_shell'
-require 'ronin/post_ex/remote_file'
+
+require_relative 'shell_shell'
+require_relative '../remote_file'
 
 module Ronin
   module PostEx

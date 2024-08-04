@@ -18,8 +18,8 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/resource'
-require 'ronin/post_ex/remote_process'
+require_relative '../resource'
+require_relative '../remote_process'
 
 require 'time'
 

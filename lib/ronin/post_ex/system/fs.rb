@@ -18,10 +18,10 @@
 # along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/post_ex/resource'
-require 'ronin/post_ex/remote_file'
-require 'ronin/post_ex/remote_file/stat'
-require 'ronin/post_ex/remote_dir'
+require_relative '../resource'
+require_relative '../remote_file'
+require_relative '../remote_file/stat'
+require_relative '../remote_dir'
 
 require 'hexdump'
 
