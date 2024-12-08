@@ -38,41 +38,45 @@ module Ronin
     #
     # ## Example
     #
-    # Define the session class which defines the Post-Exploitation API methods:
+    # Define the session class which defines the Post-Exploitation Session API
+    # methods:
     #
+    #     require 'ronin/post_ex/sessions/session'
     #     require 'base64'
     #     
-    #     class SimpleRATSession < Ronin::PostEx::Sessions::Session
+    #     class MyRatSession < Ronin::PostEx::Sessions::Session
     #
     #       def initialize(socket)
     #         @socket = socket
     #       end
     #     
-    #       def call(name,*args)
+    #       def send_command(name,*args)
+    #         # send the command line
     #         @socket.puts("#{name} #{args.join(' ')}")
     #
-    #         Base64.strict_decode64(@socket.gets(chomp: true)(
+    #         # read and Base64 decode the response line
+    #         Base64.strict_decode64(@socket.gets(chomp: true))
     #       end
     #
     #       def shell_exec(command)
-    #         call('EXEC',command)
+    #         send_command('EXEC',command)
     #       end
     #
     #       def fs_readfile(path)
-    #         call('READ',path)
+    #         send_command('READ',path)
     #       end
     #
     #       def process_pid
-    #         call('PID').to_i
+    #         send_command('PID').to_i
     #       end
     #
     #       def process_getuid
-    #         call('UID').to_i
+    #         send_command('UID').to_i
     #       end
     #
     #       def process_environ
     #         Hash[
-    #           call('ENV').each_line(chomp: true).map { |line|
+    #           send_command('ENV').each_line(chomp: true).map { |line|
     #             line.split('=',2)
     #           }
     #         ]
@@ -82,7 +86,7 @@ module Ronin
     #
     # Initialize a new {System} object that wraps around the client:
     #
-    #     session = SimpleRATSession.new(socket)
+    #     session = MyRatSession.new(socket)
     #     system  = Ronin::PostEx::System.new(session)
     #
     # Interact with the system's remote files as if they were local files:

@@ -153,30 +153,51 @@ Define a custom session class which defines the
 [Post-Exploitation Session API methods][API Spec]:
 
 ```ruby
-class RATSession < Ronin::PostEx::Sessions::Session
+require 'ronin/post_ex/sessions/session'
+require 'base64'
 
-  def initialize(host,port)
-    # ...
+class MyRatSession < Ronin::PostEx::Sessions::Session
+
+  def initialize(socket)
+    @socket = socket
   end
 
-  def rpc_call(method,*arguments)
-    # ...
-  end
+  def send_command(name,*args)
+    # send the command line
+    @socket.puts("#{name} #{args.join(' ')}")
 
-  def fs_read(path)
-    rpc_call("fs_read",path)
+    # read and Base64 decode the response line
+    Base64.strict_decode64(@socket.gets(chomp: true))
   end
 
   def shell_exec(command)
-    rpc_call("shell_exec",command)
+    send_command('EXEC',command)
   end
 
-  # ...
+  def fs_readfile(path)
+    send_command('READ',path)
+  end
+
+  def process_pid
+    send_command('PID').to_i
+  end
+
+  def process_getuid
+    send_command('UID').to_i
+  end
+
+  def process_environ
+    Hash[
+      send_command('ENV').each_line(chomp: true).map { |line|
+        line.split('=',2)
+      }
+    ]
+  end
 
 end
 
-session = RATSession.new
-system  = session.system
+session = MyRatSession.new(socket)
+system  = Ronin::PostEx::System.new(session)
 ```
 
 ## Requirements
