@@ -38,7 +38,7 @@ research and development.
 * Provides many different session handlers:
   * {Ronin::PostEx::Sessions::BindShell} - interacts with bind shells.
   * {Ronin::PostEx::Sessions::ReverseShell} - interacts with reverse shells.
-  * Supports defining [custom session handler classes](#custom-session-class).
+  * Supports defining [custom session handler classes](#custom-session-classes).
 * Provides interactive RPC and command-line shells for interacting with
   compromised systems.
 * Currently only supports interacting with Linux/BSD/UNIX systems.
@@ -70,7 +70,7 @@ system.shell.ls('/')
 # => "..."
 ```
 
-### Custom Session Class
+### Custom Session Classes
 
 Define a custom session class which defines the
 [Post-Exploitation API methods][API Spec]:
