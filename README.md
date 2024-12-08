@@ -54,7 +54,7 @@ research and development.
 
 ```ruby
 session = Ronin::PostEx::Sessions::BindShell.connect(host,port)
-system  = session.system
+system  = Ronin::PostEx::System.new(session)
 
 system.shell.ls('/')
 # => "bin\nboot\ndev\netc\nhome\nlib\nlib64\nlost+found\nmedia\nmnt\nopt\nproc\nroot\nrun\nsbin\nsnap\nsrv\nsys\ntmp\nusr\nvar\n"
@@ -64,7 +64,7 @@ system.shell.ls('/')
 
 ```ruby
 session = Ronin::PostEx::Sessions::ReverseShell.listen(host,port)
-system  = session.system
+system  = Ronin::PostEx::System.new(session)
 
 system.shell.ls('/')
 # => "bin\nboot\ndev\netc\nhome\nlib\nlib64\nlost+found\nmedia\nmnt\nopt\nproc\nroot\nrun\nsbin\nsnap\nsrv\nsys\ntmp\nusr\nvar\n"
