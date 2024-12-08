@@ -122,28 +122,51 @@ system.interact
 ```
 ```
 ronin-post_ex> help
-  help [COMMAND]                	Prints the list of commands or additional help
-  fs.chdir DIR                  	Changes the current working directory
-  fs.pwd                        	Prints the current working directory
-  fs.readfile FILE              	Reads the contents of a given FILE
-  fs.readlink SYMLINK           	Reads the destination path of a symlink
-  fs.readdir DIR                	Reads the contents of a given directory
-  fs.hexdump FILE               	Hexdumps a given file
-  fs.copy SRC DEST              	Copies the SRC file to the DEST path
-  fs.unlink FILE                	Deletes a given file
-  fs.rmdir DIR                  	Removes a given directory
-  fs.mv SRC DEST                	Moves or renames a given file or directory
-  fs.link SRC DEST              	Creates a link from the source to the destination
-  fs.chown USER PATH            	Changes the owner of a given file or directory
-  fs.chgrp GROUP PATH           	Changes the group of a given file or directory
-  fs.chmod MODE PATH            	Changes the permission mode of a given file or directory
-  fs.stat PATH                  	Prints file system information about a given file or directory
-  fs.open PATH [MODE]           	Opens a file for reading or writing
-  files                         	Lists opened files
-  file.seek FILE_ID POS [WHENCE]	Seeks to a position within the file
-  file.read FILE_ID LENGTH      	Reads LENGTH of data from an opened file
-  file.write FILE_ID DATA       	Writes data to an opened file
-  file.close FILE_ID            	Closes an open file
+  help [COMMAND]                                                                	Prints the list of commands or additional help
+  quit                                                                          	Exits the shell
+  fs.chdir DIR                                                                  	Changes the current working directory
+  fs.pwd                                                                        	Prints the current working directory
+  fs.readfile FILE                                                              	Reads the contents of a given FILE
+  fs.readlink SYMLINK                                                           	Reads the destination path of a symlink
+  fs.readdir DIR                                                                	Reads the contents of a given directory
+  fs.hexdump FILE                                                               	Hexdumps a given file
+  fs.copy SRC DEST                                                              	Copies the SRC file to the DEST path
+  fs.unlink FILE                                                                	Deletes a given file
+  fs.rmdir DIR                                                                  	Removes a given directory
+  fs.mv SRC DEST                                                                	Moves or renames a given file or directory
+  fs.link SRC DEST                                                              	Creates a link from the source to the destination
+  fs.chown USER PATH                                                            	Changes the owner of a given file or directory
+  fs.chgrp GROUP PATH                                                           	Changes the group of a given file or directory
+  fs.chmod MODE PATH                                                            	Changes the permission mode of a given file or directory
+  fs.stat PATH                                                                  	Prints file system information about a given file or directory
+  file.open PATH [MODE]                                                         	Opens a file for reading or writing
+  files                                                                         	Lists opened files
+  file.seek FILE_ID POS [SEEK_SET | SEEK_CUR | SEEK_END | SEEK_DATA | SEEK_HOLE]	Seeks to a position within the file
+  file.read FILE_ID LENGTH                                                      	Reads LENGTH of data from an opened file
+  file.write FILE_ID DATA                                                       	Writes data to an opened file
+  file.close FILE_ID                                                            	Closes an open file
+  process.pid                                                                   	Prints the process'es PID
+  process.ppid                                                                  	Prints the process'es PPID
+  process.uid                                                                   	Prints the process'es UID
+  process.setuid UID                                                            	Sets the process'es UID
+  process.euid EUID                                                             	Prints the process'es EUID
+  process.seteuid EUID                                                          	Sets the process'es EUID
+  process.gid COMMAND                                                           	Prints the process'es GID
+  process.setgid GID                                                            	Sets the process'es GID
+  process.egid                                                                  	Prints the process'es EGID
+  process.setegid EGID                                                          	Sets the process'es EGID
+  process.sid                                                                   	Prints the process'es SID
+  process.setsid SID                                                            	Prints the process'es SID
+  process.env                                                                   	Prints the process'es environment variables
+  process.getenv NAME                                                           	Prints an environment variable from the process
+  process.setenv NAME=VALUE                                                     	Sets an environment variable for the process
+  process.unsetenv NAME                                                         	Unsets an environment variable for the process
+  process.kill PID [SIGNAL]                                                     	Kills a process
+  process.spawn PROGRAM [ARGS ...]                                              	Spawns a new process
+  shell.exec COMMAND                                                            	Executes a command in the shell
+  shell                                                                         	Spawns an interactive command shell
+  sys.time                                                                      	Prints the system's current time
+  sys.hostname                                                                  	Prints the system's hostname
 ronin-post_ex> 
 ```
 
