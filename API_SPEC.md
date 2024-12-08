@@ -1,6 +1,18 @@
-# Post-Exploitation API Specification
+# Post-Exploitation Session API Spec
+
+[ronin-post_ex] defines a standard Ruby API for interacting with and sending
+commands to post-exploitation sessions (ex: reverse shell or JSON RPC).
+This API is set of Ruby methods that represent various stdlib functions
+(ex: opening a file, reading from a file, executing a command, etc) that
+any [Ronin::PostEx::Sessions] class should define. These methods have specific
+argument types as well as a specific return type.
+
+[ronin-post_ex]: https://github.com/ronin-rb/ronin-post_ex#readme
+[Ronin::PostEx::Sessions]: https://ronin-rb.dev/docs/ronin-post_ex/Ronin/PostEx/Sessions.html
 
 ## Sys Functions
+
+Global system functions.
 
 ### `sys_time -> Integer`
 
@@ -11,6 +23,8 @@ Gets the current time and returns the UNIX timestamp.
 Gets the system's hostname.
 
 ## File Functions
+
+Functions for interacting with individual files.
 
 ### `file_open(path : String, mode : String) -> Integer`
 
@@ -58,6 +72,8 @@ file metadata.
 Closes an opened file-descriptor.
 
 ## File-System Functions
+
+File-System related functions.
 
 ### `fs_getcwd() -> String`
 
@@ -130,6 +146,8 @@ Queries file information from the given path and returns a Hash of file
 metadata.
 
 ## Process Functions
+
+Functions for interacting with the current process or managing other processes.
 
 ### `process_getpid -> Integer`
 
@@ -228,6 +246,8 @@ The process ID (PID) of the new process will be returned.
 Exits the current process.
 
 ## Shell Functions
+
+Functions for running shell commands.
 
 ### `shell_exec(command : String) -> String`
 
