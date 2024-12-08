@@ -139,8 +139,8 @@ ronin-post_ex> help
   fs.chgrp GROUP PATH                                                           	Changes the group of a given file or directory
   fs.chmod MODE PATH                                                            	Changes the permission mode of a given file or directory
   fs.stat PATH                                                                  	Prints file system information about a given file or directory
-  file.open PATH [MODE]                                                         	Opens a file for reading or writing
   files                                                                         	Lists opened files
+  file.open PATH [MODE]                                                         	Opens a file for reading or writing
   file.seek FILE_ID POS [SEEK_SET | SEEK_CUR | SEEK_END | SEEK_DATA | SEEK_HOLE]	Seeks to a position within the file
   file.read FILE_ID LENGTH                                                      	Reads LENGTH of data from an opened file
   file.write FILE_ID DATA                                                       	Writes data to an opened file

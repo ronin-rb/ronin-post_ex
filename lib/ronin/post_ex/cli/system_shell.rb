@@ -323,6 +323,21 @@ module Ronin
           stat = @system.fs.stat(path)
         end
 
+        command 'files', summary: 'Lists opened files'
+
+        #
+        # Lists opened files.
+        #
+        def files
+          @files.each_with_index do |file,index|
+            if file
+              id = index + 1
+
+              puts "  [#{id}] #{file.path}"
+            end
+          end
+        end
+
         command 'file.open', method_name: 'file_open',
                              usage: 'PATH [MODE]',
                              summary: 'Opens a file for reading or writing'
@@ -346,21 +361,6 @@ module Ronin
           @next_file_id  += 1
 
           puts "Opened file ##{file_id} for #{file.path}"
-        end
-
-        command 'files', summary: 'Lists opened files'
-
-        #
-        # Lists opened files.
-        #
-        def files
-          @files.each_with_index do |file,index|
-            if file
-              id = index + 1
-
-              puts "  [#{id}] #{file.path}"
-            end
-          end
         end
 
         command 'file.seek', method_name: 'file_seek',
