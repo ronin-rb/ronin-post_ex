@@ -70,38 +70,6 @@ system.shell.ls('/')
 # => "..."
 ```
 
-### Custom Session Classes
-
-Define a custom session class which defines the
-[Post-Exploitation API methods][API Spec]:
-
-```ruby
-class RATSession < Ronin::PostEx::Sessions::Session
-
-  def initialize(host,port)
-    # ...
-  end
-
-  def rpc_call(method,*arguments)
-    # ...
-  end
-
-  def fs_read(path)
-    rpc_call("fs_read",path)
-  end
-
-  def shell_exec(command)
-    rpc_call("shell_exec",command)
-  end
-
-  # ...
-
-end
-
-session = RATSession.new
-system  = session.system
-```
-
 ### System
 
 Interact with the system's remote files as if they were local files:
@@ -177,6 +145,38 @@ ronin-post_ex> help
   file.write FILE_ID DATA       	Writes data to an opened file
   file.close FILE_ID            	Closes an open file
 ronin-post_ex> 
+```
+
+### Custom Session Classes
+
+Define a custom session class which defines the
+[Post-Exploitation Session API methods][API Spec]:
+
+```ruby
+class RATSession < Ronin::PostEx::Sessions::Session
+
+  def initialize(host,port)
+    # ...
+  end
+
+  def rpc_call(method,*arguments)
+    # ...
+  end
+
+  def fs_read(path)
+    rpc_call("fs_read",path)
+  end
+
+  def shell_exec(command)
+    rpc_call("shell_exec",command)
+  end
+
+  # ...
+
+end
+
+session = RATSession.new
+system  = session.system
 ```
 
 ## Requirements
