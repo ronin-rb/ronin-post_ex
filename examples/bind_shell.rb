@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'bundler/setup'
-require 'ronin/post_ex/sessions/shell_session'
+require 'ronin/post_ex/sessions/bind_shell'
 require 'ronin/post_ex/system'
 require 'socket'
 
@@ -13,7 +13,7 @@ socket = begin
            exit(-1)
          end
 
-session = Ronin::PostEx::Sessions::ShellSession.new(socket)
+session = Ronin::PostEx::Sessions::BindShell.new(socket)
 system  = Ronin::PostEx::System.new(session)
 
 system.interact
