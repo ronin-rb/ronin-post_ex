@@ -17,6 +17,7 @@ metadata:
 required_ruby_version: ">= 3.0.0"
 
 dependencies:
+  base64: ~> 0.1
   fake_io: ~> 0.1
   hexdump: ~> 1.0
   # Ronin dependencies:

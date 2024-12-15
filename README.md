@@ -226,6 +226,7 @@ system  = Ronin::PostEx::System.new(session)
 ## Requirements
 
 * [Ruby] >= 3.0.0
+* [base64] ~> 0.1
 * [fake_io] ~> 0.1
 * [hexdump] ~> 1.0
 * [ronin-core] ~> 0.1
@@ -279,6 +280,7 @@ along with ronin-post_ex.  If not, see <https://www.gnu.org/licenses/>.
 [Ruby]: https://www.ruby-lang.org
 [ronin-rb]: https://ronin-rb.dev
 
+[base64]: https://github.com/ruby/base64#readme
 [fake_io]: https://github.com/postmodern/fake_io.rb#readme
 [hexdump]: https://github.com/postmodern/hexdump.rb#readme
 [ronin-core]: https://github.com/ronin-rb/ronin-core#readme
