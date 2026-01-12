@@ -2,7 +2,7 @@
 #
 # ronin-post_ex - a Ruby API for Post-Exploitation.
 #
-# Copyright (c) 2007-2024 Hal Brodigan (postmodern.mod3 at gmail.com)
+# Copyright (c) 2007-2026 Hal Brodigan (postmodern.mod3 at gmail.com)
 #
 # ronin-post_ex is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published
